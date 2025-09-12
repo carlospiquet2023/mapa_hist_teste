@@ -427,18 +427,32 @@ function criarMarcadores() {
         }).addTo(map);
 
         // Popup com informações completas
-        marcador.bindPopup(`
+        let popupContent = `
             <div style="font-family: 'Inter', sans-serif; max-width: 320px;">
                 <h3 style="color: #333; margin-bottom: 5px; font-size: 1.1rem; font-weight: 600;">${ponto.nome}</h3>
                 <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">📅 ${ponto.periodo}</p>
-                <p style="color: #444; font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px;">${ponto.descricao}</p>
+                <p style="color: #444; font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px;">${ponto.descricao}</p>`;
+        
+        // Adicionar imagem específica para Centro Cultural PGE-RJ
+        if (ponto.id === 24) {
+            popupContent += `
+                <div style="text-align: center; margin: 10px 0;">
+                    <img src="https://i.imgur.com/jlkagUO.jpeg" 
+                         alt="Centro Cultural PGE-RJ" 
+                         style="width: 100%; max-width: 280px; height: 180px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                </div>`;
+        }
+        
+        popupContent += `
                 <button onclick="mostrarDetalhes(${ponto.id})" 
                         style="background: #FFD700; color: #333; border: none; padding: 8px 16px; 
                                border-radius: 6px; cursor: pointer; font-size: 0.85rem; margin-top: 5px; font-weight: 500;">
                     📖 Ver Detalhes Completos
                 </button>
             </div>
-        `);
+        `;
+        
+        marcador.bindPopup(popupContent);
 
         // Evento de clique
         marcador.on('click', () => {
@@ -462,26 +476,59 @@ function mostrarDetalhes(id) {
     // Mostrar informações na sidebar
     const infoSection = document.getElementById('infoSection');
     infoSection.style.display = 'block';
-    infoSection.innerHTML = `
-        <div class="info-panel">
-            <h3 class="info-title">${ponto.nome}</h3>
-            <p class="info-subtitle">${ponto.categoria.charAt(0).toUpperCase() + ponto.categoria.slice(1)}</p>
-            <p class="info-description">${ponto.descricao}</p>
-            
-            <div class="curiosities-grid">
-                ${ponto.curiosidades.map(curiosidade => `
-                    <div class="curiosity-item">
-                        <p class="curiosity-text">${curiosidade}</p>
-                    </div>
-                `).join('')}
+    
+    // Conteúdo específico para Centro Cultural PGE-RJ
+    if (id === 24) {
+        infoSection.innerHTML = `
+            <div class="info-panel">
+                <h3 class="info-title">${ponto.nome}</h3>
+                <p class="info-subtitle">📅 ${ponto.periodo}</p>
+                <p class="info-description">${ponto.descricao}</p>
+                
+                <!-- Imagem do Centro Cultural PGE-RJ -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="https://i.imgur.com/jlkagUO.jpeg" 
+                         alt="Centro Cultural PGE-RJ - Antigo Convento do Carmo" 
+                         style="width: 100%; max-width: 350px; height: 250px; border-radius: 12px; box-shadow: 0 8px 25px rgba(26,188,156,0.4); object-fit: cover;">
+                </div>
+                
+                <div class="curiosities-grid">
+                    ${ponto.curiosidades.map(curiosidade => `
+                        <div class="curiosity-item">
+                            <p class="curiosity-text">${curiosidade}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <button class="back-btn" onclick="voltarInicio()">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar
+                </button>
             </div>
-            
-            <button class="back-btn" onclick="voltarInicio()">
-                <i class="fas fa-arrow-left"></i>
-                Voltar
-            </button>
-        </div>
-    `;
+        `;
+    } else {
+        // Conteúdo padrão para outros pontos
+        infoSection.innerHTML = `
+            <div class="info-panel">
+                <h3 class="info-title">${ponto.nome}</h3>
+                <p class="info-subtitle">${ponto.categoria.charAt(0).toUpperCase() + ponto.categoria.slice(1)}</p>
+                <p class="info-description">${ponto.descricao}</p>
+                
+                <div class="curiosities-grid">
+                    ${ponto.curiosidades.map(curiosidade => `
+                        <div class="curiosity-item">
+                            <p class="curiosity-text">${curiosidade}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <button class="back-btn" onclick="voltarInicio()">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar
+                </button>
+            </div>
+        `;
+    }
 }
 
 // ===== FUNÇÕES DE NAVEGAÇÃO =====
