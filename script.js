@@ -556,12 +556,12 @@ function criarMarcadores() {
             })
         }).addTo(map);
 
-        // Popup com informações completas
+        // Popup com informações completas - contraste garantido usando !important no CSS
         let popupContent = `
             <div style="font-family: 'Inter', sans-serif; max-width: 320px;">
-                <h3 style="color: #fafafa; margin-bottom: 5px; font-size: 1.1rem; font-weight: 600;">${ponto.nome}</h3>
-                <p style="color: #e5e5e5; font-size: 0.9rem; margin-bottom: 10px;">📅 ${ponto.periodo}</p>
-                <p style="color: #f0f0f0; font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px;">${ponto.descricao}</p>`;
+                <h3 style="margin-bottom: 5px; font-size: 1.1rem; font-weight: 600;">${ponto.nome}</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 10px;">📅 ${ponto.periodo}</p>
+                <p style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px;">${ponto.descricao}</p>`;
         
         // Adicionar imagem específica para Centro Cultural PGE-RJ
         if (ponto.id === 24) {
@@ -575,8 +575,7 @@ function criarMarcadores() {
         
         popupContent += `
                 <button onclick="mostrarDetalhes(${ponto.id})" 
-                        style="background: #FFD700; color: #333; border: none; padding: 8px 16px; 
-                               border-radius: 6px; cursor: pointer; font-size: 0.85rem; margin-top: 5px; font-weight: 500;">
+                        style="width: 100%; padding: 10px 16px; margin-top: 8px; font-size: 0.9rem;">
                     📖 Ver Detalhes Completos
                 </button>
             </div>
