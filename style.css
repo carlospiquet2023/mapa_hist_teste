@@ -911,13 +911,13 @@ body {
         z-index: 9999 !important;
     }
     
-    /* Map takes MAIS espaço - MAIOR VISUALIZAÇÃO: Aumentado mapa */
+    /* Map takes MENOS espaço - REDUZIDO: Para dar mais espaço aos botões */
     .main-content {
         grid-area: main !important;
         margin-top: 0 !important;
-        /* usa svh para contabilizar UI do navegador no mobile real - AUMENTADO altura do mapa */
-        height: calc(100svh - var(--header-height) - 250px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        height: calc(100dvh - var(--header-height) - 250px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        /* usa svh para contabilizar UI do navegador no mobile real - REDUZIDO altura do mapa drasticamente */
+        height: calc(100svh - var(--header-height) - 420px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100dvh - var(--header-height) - 420px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
         max-height: none !important; /* remove o limite máximo para o mapa ocupar todo o espaço disponível */
         overflow: hidden !important;
         position: relative !important;
@@ -932,21 +932,21 @@ body {
         position: relative !important; /* para posicionamento absoluto do rodapé */
     }
     
-    /* Bottom panel for controls - REDUZIDA: Mais compacta */
+    /* Bottom panel for controls - AMPLIADA: Maior área para os botões */
     .sidebar {
         grid-area: sidebar !important;
         position: fixed !important;
         bottom: var(--safe-area-inset-bottom) !important;
         left: 0 !important;
         right: 0 !important;
-        max-height: 250px !important; /* altura REDUZIDA para dar mais espaço ao mapa */
-        min-height: 230px !important; /* altura mínima também REDUZIDA */
+        max-height: 420px !important; /* altura AUMENTADA para mostrar mais botões */
+        min-height: 400px !important; /* altura mínima também AUMENTADA */
         overflow-y: auto !important;
-        border-top: 2px solid rgba(255,215,0,0.3) !important;
+        border-top: 2px solid rgba(255,215,0,0.5) !important; /* borda mais visível */
         border-right: none !important;
         background: var(--surface-dark) !important;
         backdrop-filter: blur(15px) !important;
-        padding: var(--space-1) var(--mobile-padding) var(--space-12) var(--mobile-padding) !important; /* padding inferior aumentado para o rodapé */
+        padding: var(--space-3) var(--mobile-padding) var(--space-12) var(--mobile-padding) !important; /* padding superior aumentado para melhor espaçamento */
         z-index: var(--z-sidebar) !important;
     }
     
@@ -963,10 +963,10 @@ body {
     }
     
     .filter-btn {
-        padding: var(--space-4) var(--space-2);
+        padding: var(--space-3) var(--space-2);
         font-size: 0.85rem;
         border-radius: var(--radius-lg);
-        min-height: 52px;
+        min-height: 44px; /* botões mais compactos */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -991,9 +991,9 @@ body {
         margin-bottom: var(--space-2);
     }
     
-    /* Seções com espaçamento mínimo para interface ultra compacta */
+    /* Seções com espaçamento para interface mais organizada */
     .section {
-        margin-bottom: 2px;
+        margin-bottom: 8px; /* aumentado para melhor organização visual */
     }
     
     /* App-like map container - já definido acima (#map) */
