@@ -885,12 +885,12 @@ body {
         z-index: 9999 !important;
     }
     
-    /* Map takes main space - AJUSTADO: Menor altura para dar mais espaço aos controles */
+    /* Map takes main space - REDUZIDO AINDA MAIS: Mapa bem menor para dar prioridade aos controles */
     .main-content {
         grid-area: main !important;
         margin-top: var(--header-height) !important;
-        height: calc(100vh - var(--header-height) - 260px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        height: calc(100dvh - var(--header-height) - 260px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100vh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100dvh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
         overflow: hidden !important;
         position: relative !important;
     }
@@ -902,15 +902,15 @@ body {
         border-radius: 0 !important;
     }
     
-    /* Bottom panel for controls - AMPLIADO: Mais espaço para controles */
+    /* Bottom panel for controls - MUITO AMPLIADO: Controles agora têm prioridade */
     .sidebar {
         grid-area: sidebar !important;
         position: fixed !important;
         bottom: var(--safe-area-inset-bottom) !important;
         left: 0 !important;
         right: 0 !important;
-        max-height: 260px !important;
-        min-height: 240px !important;
+        max-height: 320px !important;
+        min-height: 300px !important;
         overflow-y: auto !important;
         border-top: 2px solid rgba(255,215,0,0.3) !important;
         border-right: none !important;
@@ -925,38 +925,45 @@ body {
         display: none;
     }
     
-    /* Touch-friendly controls in bottom panel - MELHORADO: Com mais espaço */
+    /* Touch-friendly controls in bottom panel - OTIMIZADO: Com muito mais espaço */
     .filter-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: var(--space-3);
         margin-bottom: var(--space-4);
     }
     
     .filter-btn {
-        padding: var(--space-3) var(--space-2);
+        padding: var(--space-4) var(--space-2);
         font-size: 0.85rem;
         border-radius: var(--radius-lg);
-        min-height: 48px;
+        min-height: 52px;
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
         font-weight: 500;
+        line-height: 1.2;
     }
     
-    /* Search section styling - MELHORADO: Mais espaçado */
+    /* Search section styling - MUITO MELHORADO: Mais espaço e visibilidade */
     .section h3 {
-        font-size: 1rem;
-        margin-bottom: var(--space-3);
+        font-size: 1.1rem;
+        margin-bottom: var(--space-4);
         color: var(--accent-400);
         font-weight: 600;
     }
     
-    /* Search input melhorado */
+    /* Search input muito melhorado */
     .search-input {
-        min-height: 48px;
-        font-size: 0.9rem;
-        padding: var(--space-3) var(--space-4) var(--space-3) var(--space-12);
+        min-height: 52px;
+        font-size: 1rem;
+        padding: var(--space-4) var(--space-4) var(--space-4) var(--space-12);
+        margin-bottom: var(--space-4);
+    }
+    
+    /* Seções com melhor espaçamento */
+    .section {
+        margin-bottom: var(--space-5);
     }
     
     /* App-like map container */
@@ -1046,17 +1053,17 @@ body {
         font-weight: 600;
     }
     
-    /* Maximize map space - AJUSTADO: Proporção melhor entre mapa e controles */
+    /* Maximize map space - REDUZIDO AINDA MAIS: Mapa compacto para priorizar controles */
     .main-content {
         margin-top: 50px;
-        height: calc(100vh - 50px - 200px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
-        height: calc(100dvh - 50px - 200px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        height: calc(100vh - 50px - 240px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        height: calc(100dvh - 50px - 240px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
     }
     
-    /* Compact bottom panel - OTIMIZADO: Altura ideal para controles */
+    /* Compact bottom panel - AMPLIADO: Mais espaço mesmo em telas pequenas */
     .sidebar {
-        max-height: 200px;
-        min-height: 180px;
+        max-height: 240px;
+        min-height: 220px;
         padding: var(--space-3) var(--mobile-padding);
     }
     
