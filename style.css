@@ -38,7 +38,7 @@
     --app-height: 100vh;
     
     /* Dimensões de layout */
-    --header-height: 60px;
+    --header-height: 40px; /* Reduzido para o mapa subir mais */
     --mobile-padding: 16px;
     
     /* === PALETA DE CORES === */
@@ -213,11 +213,12 @@ body {
     background: var(--surface-darker);
     backdrop-filter: blur(24px) saturate(180%);
     border-bottom: 1px solid var(--glass-border);
-    padding: var(--space-4) var(--space-6);
+    padding: var(--space-2) var(--space-6); /* Padding vertical reduzido */
     display: flex;
     align-items: center;
     justify-content: space-between;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: var(--header-height); /* Altura fixa reduzida */
 }
 
 .header::before {
@@ -855,9 +856,9 @@ body {
         overflow: hidden;
     }
     
-    /* Fixed header at top */
+    /* Fixed header at top - REDUZIDO */
     .header {
-        padding: var(--space-3) var(--mobile-padding) !important;
+        padding: var(--space-2) var(--mobile-padding) !important; /* Padding reduzido */
         background: var(--surface-darker) !important;
         backdrop-filter: blur(20px) !important;
         border-bottom: 1px solid rgba(255,215,0,0.2) !important;
@@ -866,7 +867,7 @@ body {
         left: 0 !important;
         right: 0 !important;
         z-index: var(--z-header) !important;
-        height: var(--header-height) !important;
+        height: var(--header-height) !important; /* Altura já reduzida nas variáveis */
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
@@ -910,13 +911,13 @@ body {
         z-index: 9999 !important;
     }
     
-    /* Map takes MENOS espaço - EQUILIBRANDO: Mais espaço para os botões */
+    /* Map takes MAIS espaço - MAIOR VISUALIZAÇÃO: Aumentado mapa */
     .main-content {
         grid-area: main !important;
         margin-top: 0 !important;
-        /* usa svh para contabilizar UI do navegador no mobile real - reduzido altura do mapa */
-        height: calc(100svh - var(--header-height) - 300px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        height: calc(100dvh - var(--header-height) - 300px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        /* usa svh para contabilizar UI do navegador no mobile real - AUMENTADO altura do mapa */
+        height: calc(100svh - var(--header-height) - 250px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100dvh - var(--header-height) - 250px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
         max-height: none !important; /* remove o limite máximo para o mapa ocupar todo o espaço disponível */
         overflow: hidden !important;
         position: relative !important;
@@ -931,15 +932,15 @@ body {
         position: relative !important; /* para posicionamento absoluto do rodapé */
     }
     
-    /* Bottom panel for controls - AUMENTADA: Mais espaço para os botões e rodapé */
+    /* Bottom panel for controls - REDUZIDA: Mais compacta */
     .sidebar {
         grid-area: sidebar !important;
         position: fixed !important;
         bottom: var(--safe-area-inset-bottom) !important;
         left: 0 !important;
         right: 0 !important;
-        max-height: 300px !important; /* altura AUMENTADA para mais espaço para os botões */
-        min-height: 280px !important; /* altura mínima também AUMENTADA */
+        max-height: 250px !important; /* altura REDUZIDA para dar mais espaço ao mapa */
+        min-height: 230px !important; /* altura mínima também REDUZIDA */
         overflow-y: auto !important;
         border-top: 2px solid rgba(255,215,0,0.3) !important;
         border-right: none !important;
