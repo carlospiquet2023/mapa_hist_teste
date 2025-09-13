@@ -274,8 +274,8 @@ Overlay de vídeo que cobre toda a tela na inicialização
     top: 20px;
     right: 20px;
     display: flex;
-    gap: 10px;
-    z-index: 10;
+    gap: 15px;
+    z-index: 30; /* Aumentado para garantir que esteja acima de outros elementos */
 }
 
 .video-controls button {
@@ -287,15 +287,34 @@ Overlay de vídeo que cobre toda a tela na inicialização
     color: white;
     font-size: 18px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Melhorias para touch */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .video-controls button:hover {
     background: rgba(0, 0, 0, 0.9);
     transform: scale(1.1);
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 768px) {
+    .video-controls {
+        top: 15px;
+        right: 15px;
+        gap: 15px;
+    }
+    
+    .video-controls button {
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
+    }
 }
 
 .video-controls button:active {

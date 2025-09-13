@@ -171,43 +171,102 @@ function initVideoIntro() {
 
     // Controle de som - cicla entre diferentes volumes
     let volumeLevel = 1; // 0 = mudo, 1 = baixo (50%), 2 = alto (100%)
+    let isVolumeChanging = false; // Flag para prevenir múltiplos cliques
     
-    soundToggle.addEventListener('click', () => {
-        switch(volumeLevel) {
-            case 0: // Mudo → Volume baixo (50%)
-                video.muted = false;
-                video.volume = 0.5;
-                soundIcon.className = 'fas fa-volume-down';
-                soundToggle.className = 'sound-toggle volume-medium';
-                soundToggle.title = 'Volume Médio (50%) - Clique para aumentar';
-                volumeLevel = 1;
-                console.log('Volume ajustado para 50%');
-                break;
-            case 1: // Volume baixo → Volume alto (100%)
-                video.volume = 1.0;
-                soundIcon.className = 'fas fa-volume-up';
-                soundToggle.className = 'sound-toggle volume-high';
-                soundToggle.title = 'Volume Alto (100%) - Clique para silenciar';
-                volumeLevel = 2;
-                console.log('Volume ajustado para 100%');
-                break;
-            case 2: // Volume alto → Mudo
-                video.muted = true;
-                video.volume = 0;
-                soundIcon.className = 'fas fa-volume-mute';
-                soundToggle.className = 'sound-toggle volume-mute';
-                soundToggle.title = 'Sem Som - Clique para ativar';
-                volumeLevel = 0;
-                console.log('Volume silenciado');
-                break;
-        }
+    soundToggle.addEventListener('click', (e) => {
+        // Previne cliques rápidos consecutivos
+        if (isVolumeChanging) return;
+        isVolumeChanging = true;
+        
+        // Evita propagação do evento que pode estar causando problemas
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Função para atualizar o volume
+        const updateVolume = () => {
+            switch(volumeLevel) {
+                case 0: // Mudo → Volume baixo (50%)
+                    video.muted = false;
+                    video.volume = 0.5;
+                    soundIcon.className = 'fas fa-volume-down';
+                    soundToggle.className = 'sound-toggle volume-medium';
+                    soundToggle.title = 'Volume Médio (50%) - Clique para aumentar';
+                    volumeLevel = 1;
+                    console.log('Volume ajustado para 50%');
+                    break;
+                case 1: // Volume baixo → Volume alto (100%)
+                    video.muted = false;
+                    video.volume = 1.0;
+                    soundIcon.className = 'fas fa-volume-up';
+                    soundToggle.className = 'sound-toggle volume-high';
+                    soundToggle.title = 'Volume Alto (100%) - Clique para silenciar';
+                    volumeLevel = 2;
+                    console.log('Volume ajustado para 100%');
+                    break;
+                case 2: // Volume alto → Mudo
+                    video.muted = true;
+                    video.volume = 0;
+                    soundIcon.className = 'fas fa-volume-mute';
+                    soundToggle.className = 'sound-toggle volume-mute';
+                    soundToggle.title = 'Sem Som - Clique para ativar';
+                    volumeLevel = 0;
+                    console.log('Volume silenciado');
+                    break;
+            }
+        };
+        
+        // Executa a atualização com um pequeno atraso para melhorar a performance
+        setTimeout(() => {
+            updateVolume();
+            // Libera a flag após um curto período
+            setTimeout(() => {
+                isVolumeChanging = false;
+            }, 200);
+        }, 10);
     });
 
     // Botão de pular
     skipButton.addEventListener('click', () => {
         removeVideoOverlay();
     });
+    
+    // Detecção e otimização para dispositivos móveis
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // Adiciona eventos touch para melhor desempenho em dispositivos móveis
+        soundToggle.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Previne comportamentos padrão
+            // Simula o clique sem executar imediatamente
+            setTimeout(() => {
+                if (!e.defaultPrevented) {
+                    const clickEvent = new Event('click');
+                    soundToggle.dispatchEvent(clickEvent);
+                }
+            }, 100);
+        }, { passive: false });
+        
+        skipButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            removeVideoOverlay();
+        }, { passive: false });
+        
+        // Reduz a qualidade do vídeo em dispositivos móveis para melhor desempenho
+        video.addEventListener('loadedmetadata', () => {
+            if (video.videoHeight > 720) {
+                console.log('Reduzindo qualidade de vídeo para melhorar desempenho em dispositivos móveis');
+                video.style.transform = 'scale(0.95)'; // Ligeira redução para melhorar o rendering
+            }
+        });
+    }
 
+    // Configura opções de renderização para melhorar performance
+    if ('playsInline' in video) video.playsInline = true;
+    if ('disablePictureInPicture' in video) video.disablePictureInPicture = true;
+    
+    // Reduz o impacto de renderização em dispositivos móveis
+    video.style.willChange = 'transform'; // Otimiza renderização
+    
     // Tenta reproduzir o vídeo
     const playPromise = video.play();
     
@@ -219,8 +278,15 @@ function initVideoIntro() {
                 setTimeout(() => {
                     if (video.muted) {
                         console.log('Forçando unmute...');
+                        // Tenta ajustar o volume de forma mais gradual para evitar travamentos
                         video.muted = false;
-                        video.volume = 0.5;
+                        video.volume = 0.1;
+                        setTimeout(() => {
+                            video.volume = 0.3;
+                            setTimeout(() => {
+                                video.volume = 0.5;
+                            }, 50);
+                        }, 50);
                     }
                 }, 100);
             })
