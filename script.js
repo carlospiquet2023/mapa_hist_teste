@@ -1839,3 +1839,37 @@ window.addEventListener('DOMContentLoaded', function() {
     console.log('Screen width:', screen.width);
     console.log('User agent:', navigator.userAgent);
 });
+
+//=============================================================================
+// 📸 FUNÇÃO MEMÓRIA - PÁGINA DE VÍDEOS E FOTOS
+//=============================================================================
+
+/**
+ * ABRE PÁGINA DE MEMÓRIAS
+ * Função que abre uma nova janela/aba com vídeos e fotos históricas
+ */
+function abrirMemoria() {
+    // Por enquanto, vamos abrir uma URL de exemplo
+    // Você pode substituir por sua página específica de memórias
+    const urlMemoria = 'https://example.com/memoria-historica-rio'; // Substitua pela URL real
+    
+    try {
+        // Abre em nova aba
+        window.open(urlMemoria, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+        console.error('Erro ao abrir página de memórias:', error);
+        
+        // Fallback: redirecionar na mesma aba
+        window.location.href = urlMemoria;
+    }
+}
+
+// Função alternativa para criar um modal com galeria
+function abrirMemoriaModal() {
+    // Esta função pode ser usada para criar um modal interno
+    // com vídeos e fotos diretamente na aplicação
+    console.log('Abrindo galeria de memórias...');
+    
+    // TODO: Implementar modal com galeria de imagens/vídeos
+    alert('Funcionalidade em desenvolvimento!\nEm breve você poderá ver vídeos e fotos históricas do Centro do Rio.');
+}
