@@ -186,7 +186,7 @@ Overlay de vídeo que cobre toda a tela na inicialização
 /* Força as legendas a aparecerem dentro da área do vídeo */
 .video-intro-overlay video::-webkit-media-text-track-display {
     position: absolute !important;
-    bottom: 0 !important;
+    bottom: 20% !important; /* Posicionado mais abaixo para não sobrepor o rosto */
     left: 50% !important;
     transform: translateX(-50%) !important;
     max-width: 80% !important;
@@ -196,7 +196,7 @@ Overlay de vídeo que cobre toda a tela na inicialização
 /* Para Firefox */
 .video-intro-overlay video::-moz-media-text-track-display {
     position: absolute !important;
-    bottom: 0 !important;
+    bottom: 20% !important; /* Posicionado mais abaixo para não sobrepor o rosto */
     left: 50% !important;
     transform: translateX(-50%) !important;
     max-width: 80% !important;
@@ -225,7 +225,7 @@ Overlay de vídeo que cobre toda a tela na inicialização
 /* Legenda customizada como fallback */
 .custom-subtitles {
     position: absolute;
-    bottom: 10%;
+    bottom: 5%; /* Posicionado mais próximo à parte inferior */
     left: 50%;
     transform: translateX(-50%);
     background-color: rgba(0, 0, 0, 0.8);
@@ -236,7 +236,7 @@ Overlay de vídeo que cobre toda a tela na inicialização
     font-size: 1.2rem;
     text-align: center;
     max-width: 80%;
-    z-index: 20; /* Aumentado para garantir que fique acima do vídeo */
+    z-index: 50; /* Valor alto para garantir que fique acima de tudo */
     display: none;
     line-height: 1.4;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
@@ -263,8 +263,8 @@ Overlay de vídeo que cobre toda a tela na inicialização
     .custom-subtitles {
         font-size: 1rem;
         padding: 10px 16px;
-        bottom: 100px;
-        max-width: 90%;
+        bottom: 10%; /* Posicionamento mais abaixo em dispositivos móveis */
+        max-width: 95%;
     }
 }
 

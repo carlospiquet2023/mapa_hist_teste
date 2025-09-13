@@ -89,28 +89,36 @@ function initVideoIntro() {
                         border-radius: 4px !important;
                         position: relative !important;
                         bottom: 0 !important;
+                        z-index: 100 !important;
                     }
                 `;
                 document.head.appendChild(style);
             }
         }, 100);
         
-        // Ativa legendas automaticamente
+        // ESTRATÉGIA DUPLA: Ativa TANTO legendas nativas QUANTO customizadas para garantir que uma delas funcione
         let trackFound = false;
         for (let i = 0; i < textTracks.length; i++) {
             if (textTracks[i].kind === 'subtitles') {
                 textTracks[i].mode = 'showing';
-                console.log('Legenda ativada automaticamente:', textTracks[i].label);
+                console.log('Legenda nativa ativada:', textTracks[i].label);
                 trackFound = true;
                 break;
             }
         }
         
-        // Se não encontrar legendas nativas, usa o sistema customizado
-        if (!trackFound) {
-            console.log('Usando sistema de legendas customizado automaticamente');
-            enableCustomSubtitles();
-        }
+        // Sempre ativa o sistema customizado como backup
+        console.log('Ativando sistema de legendas customizado como backup');
+        enableCustomSubtitles();
+        
+        // Reforça ativação de legendas após 1 segundo
+        setTimeout(() => {
+            for (let i = 0; i < textTracks.length; i++) {
+                if (textTracks[i].kind === 'subtitles') {
+                    textTracks[i].mode = 'showing';
+                }
+            }
+        }, 1000);
     });
 
     // Sistema de legendas customizadas como fallback
@@ -267,28 +275,77 @@ function initVideoIntro() {
     // Reduz o impacto de renderização em dispositivos móveis
     video.style.willChange = 'transform'; // Otimiza renderização
     
+    // Força o vídeo a ter som desde o início
+    video.muted = false;
+    video.volume = 0.5;
+    
+    // Adiciona atributo de autoplay com som
+    video.setAttribute('autoplay', '');
+    video.removeAttribute('muted');
+    
+    // Desativa o controle automático dos navegadores
+    video.setAttribute('data-wc-autoplay-ok', 'true');
+    
     // Tenta reproduzir o vídeo
     const playPromise = video.play();
     
     if (playPromise !== undefined) {
         playPromise
             .then(() => {
-                console.log('Vídeo iniciado com sucesso - Volume: 50%');
-                // Força o som após 100ms para garantir que funcione
-                setTimeout(() => {
-                    if (video.muted) {
-                        console.log('Forçando unmute...');
-                        // Tenta ajustar o volume de forma mais gradual para evitar travamentos
+                console.log('Vídeo iniciado com sucesso - Tentando garantir som');
+                
+                // ESTRATÉGIA DE SOM FORÇADO - várias tentativas
+                const forceSoundStrategies = [
+                    // Estratégia 1: Simples unmute
+                    () => {
+                        console.log('Estratégia 1: Unmute direto');
+                        video.muted = false;
+                        video.volume = 0.5;
+                    },
+                    
+                    // Estratégia 2: Progressiva
+                    () => {
+                        console.log('Estratégia 2: Volume gradual');
                         video.muted = false;
                         video.volume = 0.1;
+                        setTimeout(() => { video.volume = 0.3; }, 50);
+                        setTimeout(() => { video.volume = 0.5; }, 100);
+                    },
+                    
+                    // Estratégia 3: Recriação do stream de áudio
+                    () => {
+                        console.log('Estratégia 3: Reativação do áudio');
+                        video.muted = false;
+                        const currentTime = video.currentTime;
+                        video.volume = 0.5;
+                        // Um pequeno truque para "reiniciar" o stream de áudio
+                        video.pause();
                         setTimeout(() => {
-                            video.volume = 0.3;
-                            setTimeout(() => {
-                                video.volume = 0.5;
-                            }, 50);
-                        }, 50);
+                            video.currentTime = currentTime;
+                            video.play();
+                        }, 10);
                     }
-                }, 100);
+                ];
+                
+                // Executa todas as estratégias com atrasos
+                forceSoundStrategies.forEach((strategy, index) => {
+                    setTimeout(() => {
+                        if (video.muted || video.volume === 0) {
+                            strategy();
+                        }
+                    }, index * 300); // Intervalos de 300ms entre estratégias
+                });
+                
+                // Força o som a cada 500ms por 2 segundos para garantir
+                for (let i = 1; i <= 4; i++) {
+                    setTimeout(() => {
+                        if (video.muted || video.volume === 0) {
+                            console.log('Tentativa adicional de ativar som:', i);
+                            video.muted = false;
+                            video.volume = 0.5;
+                        }
+                    }, i * 500);
+                }
             })
             .catch(error => {
                 console.log('Erro ao reproduzir vídeo com som, tentando abordagem alternativa:', error);

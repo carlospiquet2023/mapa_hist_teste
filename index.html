@@ -45,11 +45,13 @@
             autoplay 
             playsinline
             preload="auto"
+            volume="0.5"
+            data-wc-autoplay-ok="true"
             aria-label="Vídeo de introdução do Mapa Histórico do Rio de Janeiro"
             title="Intro - Centro Histórico do Rio de Janeiro">
             <source src="https://i.imgur.com/bmV79gW.mp4" type="video/mp4">
-            <!-- Legendas opcionais (podem ser ativadas via JavaScript) -->
-            <track kind="subtitles" src="subtitles/pt-br.vtt" srclang="pt-br" label="Português (Brasil)">
+            <!-- Legendas opcionais (ativadas automaticamente) -->
+            <track kind="subtitles" src="subtitles/pt-br.vtt" srclang="pt-br" label="Português (Brasil)" default>
             <track kind="descriptions" src="subtitles/descriptions-pt-br.vtt" srclang="pt-br" label="Descrição Audiovisual">
             Seu navegador não suporta o elemento de vídeo.
         </video>
