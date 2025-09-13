@@ -164,8 +164,8 @@ body {
     
     /* Layout e viewport */
     overflow: hidden; /* Previne scroll da página */
-    height: 100vh;
-    height: var(--app-height); /* Altura dinâmica para mobile */
+    height: 100svh; /* Small Viewport Height para evitar barra do navegador */
+    height: var(--app-height); /* Fallback baseado em JS */
     
     /* Suporte PWA - Safe areas para dispositivos com notch */
     padding-top: var(--safe-area-inset-top);
@@ -509,6 +509,22 @@ body {
     z-index: 1;
 }
 
+/* === Leaflet popup theming: texto claro sobre fundo escuro */
+.leaflet-popup-content-wrapper {
+    background: rgba(15, 15, 35, 0.95);
+    color: #f5f5f5;
+    border: 1px solid rgba(255,215,0,0.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+.leaflet-popup-content h3 { color: #FFD700; }
+.leaflet-popup-tip {
+    background: rgba(15, 15, 35, 0.95);
+    border: 1px solid rgba(255,215,0,0.25);
+}
+.leaflet-container a.leaflet-popup-close-button {
+    color: #fff;
+}
+
 /* === SIDEBAR COMPONENTS === */
 .section {
     margin-bottom: var(--space-8);
@@ -825,8 +841,8 @@ body {
             "header"
             "main"
             "sidebar" !important;
-        height: 100vh;
-        height: 100dvh; /* Dynamic viewport height for mobile */
+        height: 100svh; /* usa svh para evitar saltos nas barras */
+        height: 100dvh; /* fallback navegadores modernos */
         overflow: hidden;
     }
     
@@ -889,7 +905,8 @@ body {
     .main-content {
         grid-area: main !important;
         margin-top: var(--header-height) !important;
-        height: calc(100vh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        /* usa svh para contabilizar UI do navegador no mobile real */
+        height: calc(100svh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
         height: calc(100dvh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
         overflow: hidden !important;
         position: relative !important;
@@ -966,12 +983,7 @@ body {
         margin-bottom: var(--space-5);
     }
     
-    /* App-like map container */
-    #map {
-        border-radius: 0;
-        height: 100% !important;
-        width: 100%;
-    }
+    /* App-like map container - já definido acima (#map) */
 }
 
 /* === FORCE MOBILE LAYOUT FOR TOUCH DEVICES === */
@@ -1056,7 +1068,7 @@ body {
     /* Maximize map space - REDUZIDO AINDA MAIS: Mapa compacto para priorizar controles */
     .main-content {
         margin-top: 50px;
-        height: calc(100vh - 50px - 240px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        height: calc(100svh - 50px - 240px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
         height: calc(100dvh - 50px - 240px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
     }
     
@@ -1111,12 +1123,19 @@ body {
     }
 }
 
-/* === DARK MODE SUPPORT === */
+/* === DARK MODE SUPPORT (conserto de contraste) === */
+/*
+   No dispositivo real, o sistema estava aplicando esquema escuro e, com os
+   valores abaixo invertidos, o texto ficava preto sobre fundo escuro.
+   Mantemos os tons claros para o texto e escuro para o fundo, garantindo
+   alto contraste independentemente do tema do SO.
+*/
 @media (prefers-color-scheme: dark) {
     :root {
-        --neutral-50: #0a0a0a;
-        --neutral-100: #171717;
-        --neutral-900: #fafafa;
+        /* Texto claro e fundo escuro */
+        --neutral-50: #fafafa;  /* permanece claro para textos */
+        --neutral-100: #e5e5e5; /* cinza claro para subtítulos */
+        --neutral-900: #0a0a0a; /* fundo escuro consistente */
     }
 }
 
@@ -1259,7 +1278,7 @@ input:focus {
     
     /* Adjust map height for landscape */
     .main-content {
-        height: calc(100vh - var(--header-height) - 140px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        height: calc(100svh - var(--header-height) - 140px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
     }
     
     /* Compact section titles */

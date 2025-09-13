@@ -48,16 +48,29 @@ document.addEventListener('DOMContentLoaded', function() {
      * Ajusta altura da viewport para lidar com barras de navegação móveis
      */
     function setVH() {
-        const vh = window.innerHeight * 0.01;
+        // Usa visual viewport quando disponível para refletir altura útil
+        const h = (window.visualViewport?.height || window.innerHeight);
+        const vh = h * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
-        document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+        document.documentElement.style.setProperty('--app-height', `${h}px`);
     }
     
     // Aplicar configurações de viewport
     setVH();
-    window.addEventListener('resize', setVH);
+    window.addEventListener('resize', () => {
+        setVH();
+        // Se o mapa já existir, força recálculo do Leaflet
+        if (window.map && typeof window.map.invalidateSize === 'function') {
+            setTimeout(() => window.map.invalidateSize(), 0);
+        }
+    });
     window.addEventListener('orientationchange', () => {
-        setTimeout(setVH, 100); // Delay para aguardar mudança de orientação
+        setTimeout(() => {
+            setVH();
+            if (window.map && typeof window.map.invalidateSize === 'function') {
+                window.map.invalidateSize();
+            }
+        }, 200); // pequeno atraso para estabilizar o layout
     });
     
     /**
@@ -501,10 +514,16 @@ function initMap() {
     // Criar marcadores
     criarMarcadores();
 
-    // Esconder loading
+    // Esconder loading e garantir recálculo de tamanho do mapa
     setTimeout(() => {
         document.getElementById('loading').classList.add('hidden');
-    }, 1000);
+        // Garante que o Leaflet calcule o tamanho correto após animações/layout
+        setTimeout(() => {
+            if (map && typeof map.invalidateSize === 'function') {
+                map.invalidateSize();
+            }
+        }, 150);
+    }, 800);
 }
 
 // ===== CRIAR MARCADORES =====
@@ -540,9 +559,9 @@ function criarMarcadores() {
         // Popup com informações completas
         let popupContent = `
             <div style="font-family: 'Inter', sans-serif; max-width: 320px;">
-                <h3 style="color: #333; margin-bottom: 5px; font-size: 1.1rem; font-weight: 600;">${ponto.nome}</h3>
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">📅 ${ponto.periodo}</p>
-                <p style="color: #444; font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px;">${ponto.descricao}</p>`;
+                <h3 style="color: #fafafa; margin-bottom: 5px; font-size: 1.1rem; font-weight: 600;">${ponto.nome}</h3>
+                <p style="color: #e5e5e5; font-size: 0.9rem; margin-bottom: 10px;">📅 ${ponto.periodo}</p>
+                <p style="color: #f0f0f0; font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px;">${ponto.descricao}</p>`;
         
         // Adicionar imagem específica para Centro Cultural PGE-RJ
         if (ponto.id === 24) {
@@ -1292,10 +1311,8 @@ function aplicarFiltros() {
             if (!map.hasLayer(marcador)) {
                 marcador.addTo(map);
             }
-        } else {
-            if (map.hasLayer(marcador)) {
-                map.removeLayer(marcador);
-            }
+        } else if (map.hasLayer(marcador)) {
+            map.removeLayer(marcador);
         }
     });
 }
