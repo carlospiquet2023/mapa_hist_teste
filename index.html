@@ -2,8 +2,16 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Centro Histórico do Rio de Janeiro | Mapa Educacional</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#FFD700">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mapa História RJ">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -37,18 +45,42 @@
                 </div>
             </div>
             <div class="header-controls">
-                <button class="btn" onclick="resetMap()">
-                    <i class="fas fa-home"></i>
-                    Início
-                </button>
-                <button class="btn" onclick="toggleImperialFamily()">
-                    <i class="fas fa-crown"></i>
-                    Família Imperial
-                </button>
-                <button class="btn" onclick="mostrarHistoriaRJ()">
-                    <i class="fas fa-city"></i>
-                    História do Rio de Janeiro
-                </button>
+                <!-- Desktop Menu -->
+                <div class="desktop-menu">
+                    <button class="btn" onclick="resetMap()">
+                        <i class="fas fa-home"></i>
+                        Início
+                    </button>
+                    <button class="btn" onclick="toggleImperialFamily()">
+                        <i class="fas fa-crown"></i>
+                        Família Imperial
+                    </button>
+                    <button class="btn" onclick="mostrarHistoriaRJ()">
+                        <i class="fas fa-city"></i>
+                        História do Rio de Janeiro
+                    </button>
+                </div>
+                
+                <!-- Mobile Hamburger Menu -->
+                <div class="mobile-menu">
+                    <button class="hamburger-btn" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="mobile-menu-dropdown" id="mobileMenuDropdown">
+                        <button class="mobile-menu-item" onclick="resetMap(); closeMobileMenu()">
+                            <i class="fas fa-home"></i>
+                            Início
+                        </button>
+                        <button class="mobile-menu-item" onclick="toggleImperialFamily(); closeMobileMenu()">
+                            <i class="fas fa-crown"></i>
+                            Família Imperial
+                        </button>
+                        <button class="mobile-menu-item" onclick="mostrarHistoriaRJ(); closeMobileMenu()">
+                            <i class="fas fa-city"></i>
+                            História do Rio de Janeiro
+                        </button>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -83,7 +115,7 @@
                 </div>
             </div>
 
-            <div class="section">
+            <div class="section legend-section">
                 <h3 class="section-title">
                     <i class="fas fa-palette"></i>
                     Legenda
@@ -131,13 +163,15 @@
         <div class="main-content">
             <div id="map"></div>
             
-            <!-- Credenciais cobrindo a barra do Leaflet -->
-            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); color: white; padding: 6px 12px; font-size: 0.7rem; backdrop-filter: blur(8px); border-top: 1px solid rgba(255,215,0,0.3); z-index: 1000; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    📚 <strong style="color: #FFD700;">Carlos A O Piquet</strong> - Prof. História • Faculdade Simonsen
-                </div>
-                <div style="color: #AAA; font-size: 0.65rem;">
-                    📜 Certificações: História do Brasil & Mundial • 💻 Estudante: Redes de Computadores + MBA IA • Faculdade Estácio.
+            <!-- Credenciais limpas - Apenas Desktop -->
+            <div class="desktop-footer">
+                <div class="footer-content">
+                    <span class="footer-author">
+                        📚 <strong>Carlos A O Piquet</strong> - Prof. História • Faculdade Simonsen
+                    </span>
+                    <span class="footer-credentials">
+                        📜 Certificações: História do Brasil & Mundial • 💻 Estudante: Redes de Computadores + MBA IA • Faculdade Estácio
+                    </span>
                 </div>
             </div>
         </div>

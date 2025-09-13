@@ -1,10 +1,64 @@
+// ===== PWA & MOBILE OPTIMIZATIONS =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Detectar dispositivo mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    
+    // Configurar altura da viewport para mobile
+    function setVH() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+    }
+    
+    // Configurar no carregamento e ao redimensionar
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => {
+        setTimeout(setVH, 100);
+    });
+    
+    // Otimizações para PWA
+    if (isStandalone) {
+        document.body.classList.add('pwa-mode');
+        // Prevenir zoom em inputs (iOS)
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                const viewport = document.querySelector('meta[name="viewport"]');
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            });
+            input.addEventListener('blur', () => {
+                const viewport = document.querySelector('meta[name="viewport"]');
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover');
+            });
+        });
+    }
+    
+    // Otimizações de touch para mobile
+    if (isMobile) {
+        document.body.classList.add('mobile-device');
+        
+        // Prevenir scroll bounce no iOS
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.modal-content, .sidebar, #map')) {
+                return;
+            }
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Melhorar performance do scroll
+        document.addEventListener('touchstart', function() {}, { passive: true });
+    }
+});
+
 // ===== DADOS HISTÓRICOS =====
 const pontosHistoricos = [
     {
         id: 1,
         nome: "Museu Nacional de Belas Artes",
         categoria: "museum",
-        coords: [-22.9081, -43.1758],
+        coords: [-22.908728, -43.175951],
         periodo: "1937",
         descricao: "Principal museu de artes visuais do país, abriga a maior coleção de arte brasileira do século XIX e início do XX.",
         curiosidades: [
@@ -15,22 +69,22 @@ const pontosHistoricos = [
     },
     {
         id: 2,
-        nome: "Bunker da Lapa",
+        nome: "Subsolo da Praça dos Expedicionários",
         categoria: "bunker",
-        coords: [-22.9133, -43.1806],
-        periodo: "1943",
-        descricao: "Abrigo antiaéreo construído durante a Segunda Guerra Mundial para proteger a população civil dos bombardeios alemães.",
+        coords: [-22.90664, -43.17225],
+        periodo: "1942 e 1943",
+        descricao: "O subsolo da Praça dos Expedicionários, localizada no Centro do Rio de Janeiro, abriga um dos antigos abrigos antiaéreos construídos durante a Segunda Guerra Mundial. Esses espaços subterrâneos foram projetados para proteger a população civil em caso de bombardeios, em uma época em que o Brasil, aliado aos Estados Unidos, entrou no conflito após ataques de submarinos alemães na costa brasileira.",
         curiosidades: [
-            "🚨 Construído após o ataque alemão aos navios brasileiros em 1942",
-            "🏗️ Paredes de concreto armado com 2 metros de espessura",
-            "👥 Podia abrigar até 300 pessoas durante os alertas aéreos"
+            "🚨 Função preventiva – Apesar de terem sido construídos, os abrigos nunca chegaram a ser usados para ataques reais, já que o Rio de Janeiro não sofreu bombardeios durante a guerra.",
+            "🏗️ Estrutura resistente – O abrigo da Praça dos Expedicionários foi projetado em concreto armado, com entradas e saídas estratégicas, ventilação e capacidade para abrigar centenas de pessoas em caso de emergência.",
+            "👥 Memória pouco conhecida – Muitos cariocas passam pela praça sem imaginar que, sob seus pés, existe um espaço ligado diretamente à história da Segunda Guerra e à preparação do Brasil para um possível ataque aéreo."
         ]
     },
     {
         id: 3,
         nome: "Igreja da Candelária",
         categoria: "church",
-        coords: [-22.8995, -43.1776],
+        coords: [-22.900849, -43.177794],
         periodo: "1609",
         descricao: "Uma das igrejas mais importantes do Rio, construída em honra de Nossa Senhora da Candelária, padroeira dos navegadores.",
         curiosidades: [
@@ -43,7 +97,7 @@ const pontosHistoricos = [
         id: 4,
         nome: "Theatro Municipal",
         categoria: "culture",
-        coords: [-22.9068, -43.1796],
+        coords: [-22.908992, -43.176677],
         periodo: "1909",
         descricao: "Principal casa de espetáculos do Rio, inspirado na Ópera de Paris, é um símbolo da Belle Époque carioca.",
         curiosidades: [
@@ -56,7 +110,7 @@ const pontosHistoricos = [
         id: 5,
         nome: "Arcos da Lapa",
         categoria: "monument",
-        coords: [-22.9133, -43.1806],
+        coords: [-22.913034, -43.179956],
         periodo: "1750",
         descricao: "Aqueduto colonial que se tornou símbolo do Rio de Janeiro, hoje serve como viaduto para o bondinho de Santa Teresa.",
         curiosidades: [
@@ -69,7 +123,7 @@ const pontosHistoricos = [
         id: 6,
         nome: "Paço Imperial",
         categoria: "palace",
-        coords: [-22.9035, -43.1758],
+        coords: [-22.903589, -43.174169],
         periodo: "1743",
         descricao: "Antigo palácio dos governadores coloniais e depois residência da família real portuguesa no Brasil.",
         curiosidades: [
@@ -82,7 +136,7 @@ const pontosHistoricos = [
         id: 7,
         nome: "Mosteiro de São Bento",
         categoria: "church",
-        coords: [-22.8969, -43.1758],
+        coords: [-22.897070, -43.177943],
         periodo: "1590",
         descricao: "Um dos mais antigos mosteiros do Brasil, fundado pelos monges beneditinos, guardião de tesouros artísticos coloniais.",
         curiosidades: [
@@ -95,7 +149,7 @@ const pontosHistoricos = [
         id: 8,
         nome: "Casa França-Brasil",
         categoria: "culture",
-        coords: [-22.9016, -43.1741],
+        coords: [-22.900557, -43.175937],
         periodo: "1820",
         descricao: "Antigo mercado colonial transformado em centro cultural, exemplo da arquitetura neoclássica no Brasil.",
         curiosidades: [
@@ -108,7 +162,7 @@ const pontosHistoricos = [
         id: 9,
         nome: "Forte de Copacabana",
         categoria: "monument",
-        coords: [-22.9881, -43.1906],
+        coords: [-22.986439, -43.187200],
         periodo: "1914",
         descricao: "Fortificação militar construída para defender a entrada da Baía de Guanabara, palco da revolta dos 18 do Forte.",
         curiosidades: [
@@ -121,7 +175,7 @@ const pontosHistoricos = [
         id: 10,
         nome: "Real Gabinete Português de Leitura",
         categoria: "culture",
-        coords: [-22.9068, -43.1779],
+        coords: [-22.905354, -43.182213],
         periodo: "1887",
         descricao: "Biblioteca com a maior coleção de literatura portuguesa fora de Portugal, em edifício de arquitetura neomanuelina.",
         curiosidades: [
@@ -134,7 +188,7 @@ const pontosHistoricos = [
         id: 11,
         nome: "Centro Cultural Banco do Brasil",
         categoria: "culture",
-        coords: [-22.8997, -43.1778],
+        coords: [-22.901052, -43.176287],
         periodo: "1906",
         descricao: "Antigo edifício do Banco do Brasil transformado em um dos principais centros culturais do país.",
         curiosidades: [
@@ -147,7 +201,7 @@ const pontosHistoricos = [
         id: 12,
         nome: "Confeitaria Colombo",
         categoria: "culture",
-        coords: [-22.90500, -43.17889],
+        coords: [-22.90087, -43.17652],
         periodo: "1894",
         descricao: "Histórica confeitaria que preserva a Belle Époque carioca, frequentada pela elite da época.",
         curiosidades: [
@@ -160,7 +214,7 @@ const pontosHistoricos = [
         id: 13,
         nome: "Biblioteca Nacional",
         categoria: "library",
-        coords: [-22.9090, -43.1768],
+        coords: [-22.909703, -43.175377],
         periodo: "1810",
         descricao: "Maior biblioteca da América Latina, criada por D. João VI. Possui um dos maiores acervos bibliográficos do mundo.",
         curiosidades: [
@@ -173,7 +227,7 @@ const pontosHistoricos = [
         id: 14,
         nome: "Arquivo Nacional",
         categoria: "library",
-        coords: [-22.9120, -43.1790],
+        coords: [-22.906500, -43.190767],
         periodo: "1838",
         descricao: "Importante instituição que preserva a memória documental do Brasil, com documentos desde o período colonial.",
         curiosidades: [
@@ -186,7 +240,7 @@ const pontosHistoricos = [
         id: 15,
         nome: "Palácio Tiradentes",
         categoria: "palace",
-        coords: [-22.9028, -43.1752],
+        coords: [-22.903901, -43.173876],
         periodo: "1926",
         descricao: "Antiga sede da Câmara dos Deputados e da Assembleia Legislativa do Estado do Rio de Janeiro, hoje abriga o poder legislativo estadual.",
         curiosidades: [
@@ -199,7 +253,7 @@ const pontosHistoricos = [
         id: 16,
         nome: "Palácio Duque de Caxias",
         categoria: "palace",
-        coords: [-22.9063, -43.1756],
+        coords: [-22.902824, -43.189016],
         periodo: "1941",
         descricao: "Antigo Ministério da Guerra, hoje Comando Militar do Leste. Importante edifício da arquitetura oficial brasileira.",
         curiosidades: [
@@ -212,7 +266,7 @@ const pontosHistoricos = [
         id: 17,
         nome: "Igreja de São Francisco da Penitência",
         categoria: "church",
-        coords: [-22.9051, -43.1804],
+        coords: [-22.906899, -43.179261],
         periodo: "1773",
         descricao: "Igreja famosa por seu interior completamente revestido em ouro, considerada uma das mais belas do Brasil colonial.",
         curiosidades: [
@@ -225,7 +279,7 @@ const pontosHistoricos = [
         id: 18,
         nome: "Igreja do Carmo da Antiga Sé",
         categoria: "church",
-        coords: [-22.9026, -43.1749],
+        coords: [-22.90329, -43.17543],
         periodo: "1761",
         descricao: "Antiga catedral do Rio de Janeiro onde D. Pedro I foi coroado imperador do Brasil em 1822.",
         curiosidades: [
@@ -238,7 +292,7 @@ const pontosHistoricos = [
         id: 24,
         nome: "Centro Cultural PGE-RJ (Antigo Convento do Carmo)",
         categoria: "culture",
-        coords: [-22.9038093, -43.1755069],
+        coords: [-22.90366, -43.17567],
         periodo: "Século XVII",
         descricao: "O Centro Cultural PGE-RJ está situado no histórico e restaurado antigo Convento do Carmo, um edifício do século XVII que foi residência de D. Maria I e é uma das mais antigas construções do Rio de Janeiro.",
         curiosidades: [
@@ -255,7 +309,7 @@ const pontosHistoricos = [
         id: 19,
         nome: "Museu de Arte do Rio (MAR)",
         categoria: "museum",
-        coords: [-22.8952, -43.1804],
+        coords: [-22.89658, -43.18196],
         periodo: "2013",
         descricao: "Museu dedicado à arte, cultura e história do Rio de Janeiro, localizado na revitalizada Praça Mauá.",
         curiosidades: [
@@ -268,7 +322,7 @@ const pontosHistoricos = [
         id: 20,
         nome: "Museu do Amanhã",
         categoria: "museum",
-        coords: [-22.8957, -43.1798],
+        coords: [-22.89385, -43.17941],
         periodo: "2015",
         descricao: "Museu de ciências aplicadas que explora as possibilidades de construção do futuro a partir das escolhas de hoje.",
         curiosidades: [
@@ -281,7 +335,7 @@ const pontosHistoricos = [
         id: 21,
         nome: "Museu Histórico Nacional",
         categoria: "museum",
-        coords: [-22.9050, -43.1722],
+        coords: [-22.90553, -43.16967],
         periodo: "1922",
         descricao: "Um dos museus mais completos sobre a história do Brasil, instalado no antigo Arsenal de Guerra e Forte de Santiago.",
         curiosidades: [
@@ -294,7 +348,7 @@ const pontosHistoricos = [
         id: 22,
         nome: "Praça XV",
         categoria: "square",
-        coords: [-22.9030, -43.1740],
+        coords: [-22.90270, -43.17331],
         periodo: "1743",
         descricao: "Marco histórico da cidade, palco de importantes eventos da história brasileira, próxima ao Paço Imperial.",
         curiosidades: [
@@ -307,7 +361,7 @@ const pontosHistoricos = [
         id: 23,
         nome: "Ilha Fiscal",
         categoria: "square",
-        coords: [-22.8955, -43.1668],
+        coords: [-22.89615, -43.16694],
         periodo: "1889",
         descricao: "Pequena ilha na Baía de Guanabara, famosa pelo último grande baile do Império brasileiro em 1889.",
         curiosidades: [
@@ -1618,3 +1672,54 @@ function mostrarDetalhesPersonagem(personagem) {
     
     infoSection.innerHTML = detalhes;
 }
+
+// ===== MOBILE MENU FUNCTIONS =====
+function toggleMobileMenu() {
+    const dropdown = document.getElementById('mobileMenuDropdown');
+    const hamburgerBtn = document.querySelector('.hamburger-btn');
+    
+    if (dropdown) {
+        dropdown.classList.toggle('active');
+        
+        // Animar ícone do hamburger
+        const icon = hamburgerBtn.querySelector('i');
+        if (dropdown.classList.contains('active')) {
+            icon.className = 'fas fa-times';
+            hamburgerBtn.setAttribute('aria-expanded', 'true');
+        } else {
+            icon.className = 'fas fa-bars';
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+        }
+    }
+}
+
+function closeMobileMenu() {
+    const dropdown = document.getElementById('mobileMenuDropdown');
+    const hamburgerBtn = document.querySelector('.hamburger-btn');
+    
+    if (dropdown) {
+        dropdown.classList.remove('active');
+        
+        // Resetar ícone do hamburger
+        const icon = hamburgerBtn.querySelector('i');
+        icon.className = 'fas fa-bars';
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+    }
+}
+
+// Fechar menu mobile ao clicar fora
+document.addEventListener('click', function(event) {
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const dropdown = document.getElementById('mobileMenuDropdown');
+    
+    if (mobileMenu && dropdown && !mobileMenu.contains(event.target)) {
+        closeMobileMenu();
+    }
+});
+
+// Fechar menu mobile ao redimensionar a tela
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+        closeMobileMenu();
+    }
+});
