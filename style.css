@@ -885,12 +885,12 @@ body {
         z-index: 9999 !important;
     }
     
-    /* Map takes main space */
+    /* Map takes main space - AJUSTADO: Menor altura para dar mais espaço aos controles */
     .main-content {
         grid-area: main !important;
         margin-top: var(--header-height) !important;
-        height: calc(100vh - var(--header-height) - 200px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        height: calc(100dvh - var(--header-height) - 200px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100vh - var(--header-height) - 260px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100dvh - var(--header-height) - 260px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
         overflow: hidden !important;
         position: relative !important;
     }
@@ -902,21 +902,21 @@ body {
         border-radius: 0 !important;
     }
     
-    /* Bottom panel for controls */
+    /* Bottom panel for controls - AMPLIADO: Mais espaço para controles */
     .sidebar {
         grid-area: sidebar !important;
         position: fixed !important;
         bottom: var(--safe-area-inset-bottom) !important;
         left: 0 !important;
         right: 0 !important;
-        max-height: 200px !important;
-        min-height: 180px !important;
+        max-height: 260px !important;
+        min-height: 240px !important;
         overflow-y: auto !important;
         border-top: 2px solid rgba(255,215,0,0.3) !important;
         border-right: none !important;
         background: var(--surface-dark) !important;
         backdrop-filter: blur(15px) !important;
-        padding: var(--space-3) var(--mobile-padding) !important;
+        padding: var(--space-4) var(--mobile-padding) !important;
         z-index: var(--z-sidebar) !important;
     }
     
@@ -925,29 +925,38 @@ body {
         display: none;
     }
     
-    /* Touch-friendly controls in bottom panel */
+    /* Touch-friendly controls in bottom panel - MELHORADO: Com mais espaço */
     .filter-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-2);
-        margin-bottom: var(--space-3);
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
     }
     
     .filter-btn {
         padding: var(--space-3) var(--space-2);
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         border-radius: var(--radius-lg);
-        min-height: 44px;
+        min-height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
+        font-weight: 500;
     }
     
-    /* Search section styling */
+    /* Search section styling - MELHORADO: Mais espaçado */
     .section h3 {
-        font-size: 0.9rem;
-        margin-bottom: var(--space-2);
+        font-size: 1rem;
+        margin-bottom: var(--space-3);
         color: var(--accent-400);
+        font-weight: 600;
+    }
+    
+    /* Search input melhorado */
+    .search-input {
+        min-height: 48px;
+        font-size: 0.9rem;
+        padding: var(--space-3) var(--space-4) var(--space-3) var(--space-12);
     }
     
     /* App-like map container */
@@ -1037,17 +1046,18 @@ body {
         font-weight: 600;
     }
     
-    /* Maximize map space */
+    /* Maximize map space - AJUSTADO: Proporção melhor entre mapa e controles */
     .main-content {
         margin-top: 50px;
-        height: calc(100vh - 50px - 180px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        height: calc(100vh - 50px - 200px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        height: calc(100dvh - 50px - 200px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
     }
     
-    /* Compact bottom panel */
+    /* Compact bottom panel - OTIMIZADO: Altura ideal para controles */
     .sidebar {
-        max-height: 180px;
-        min-height: 160px;
-        padding: var(--space-2) var(--mobile-padding);
+        max-height: 200px;
+        min-height: 180px;
+        padding: var(--space-3) var(--mobile-padding);
     }
     
     /* Two-column filters for better touch */
