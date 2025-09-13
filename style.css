@@ -518,6 +518,9 @@ body {
 }
 .leaflet-popup-content h3 { color: #FFD700 !important; }
 .leaflet-popup-content p { color: #ffffff !important; }
+.leaflet-popup-content span { color: #ffffff !important; }
+.leaflet-popup-content div { color: #ffffff !important; }
+.leaflet-popup-content * { color: inherit !important; }
 .leaflet-popup-content button { 
     background: #FFD700 !important; 
     color: #000000 !important; 
@@ -907,14 +910,14 @@ body {
         z-index: 9999 !important;
     }
     
-    /* Map takes main space - REDUZIDO AINDA MAIS: Mapa bem menor para dar prioridade aos controles */
+    /* Map takes main space - ALTURA EQUILIBRADA: Mapa com tamanho adequado */
     .main-content {
         grid-area: main !important;
         margin-top: var(--header-height) !important;
         /* usa svh para contabilizar UI do navegador no mobile real */
-        height: calc(100svh - var(--header-height) - 400px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        height: calc(100dvh - var(--header-height) - 400px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        max-height: 230px !important; /* limite absoluto para garantir que o mapa não domine a tela */
+        height: calc(100svh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100dvh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        max-height: 350px !important; /* tamanho adequado para visualização do mapa */
         overflow: hidden !important;
         position: relative !important;
     }
@@ -926,15 +929,15 @@ body {
         border-radius: 0 !important;
     }
     
-    /* Bottom panel for controls - MUITO AMPLIADO: Controles agora têm prioridade */
+    /* Bottom panel for controls - TAMANHO EQUILIBRADO: Controles com espaço suficiente */
     .sidebar {
         grid-area: sidebar !important;
         position: fixed !important;
         bottom: var(--safe-area-inset-bottom) !important;
         left: 0 !important;
         right: 0 !important;
-        max-height: 400px !important; /* aumentado para maior área de controles */
-        min-height: 380px !important;
+        max-height: 320px !important; /* reduzido para equilibrar com o mapa */
+        min-height: 300px !important;
         overflow-y: auto !important;
         border-top: 2px solid rgba(255,215,0,0.3) !important;
         border-right: none !important;
@@ -1072,18 +1075,18 @@ body {
         font-weight: 600;
     }
     
-    /* Maximize map space - REDUZIDO AINDA MAIS: Mapa compacto para priorizar controles */
+    /* Maximize map space - EQUILIBRADO: Mapa com tamanho adequado */
     .main-content {
         margin-top: 50px;
-        height: calc(100svh - 50px - 300px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
-        height: calc(100dvh - 50px - 300px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
-        max-height: 180px !important; /* limite absoluto para garantir que o mapa não domine a tela */
+        height: calc(100svh - 50px - 280px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        height: calc(100dvh - 50px - 280px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        max-height: 250px !important; /* tamanho adequado para telas pequenas */
     }
     
-    /* Compact bottom panel - AMPLIADO: Mais espaço mesmo em telas pequenas */
+    /* Compact bottom panel - EQUILIBRADO: Espaço suficiente para controles */
     .sidebar {
-        max-height: 300px;
-        min-height: 280px;
+        max-height: 280px;
+        min-height: 260px;
         padding: var(--space-3) var(--mobile-padding);
     }
     
@@ -1287,7 +1290,7 @@ input:focus {
     /* Adjust map height for landscape */
     .main-content {
         height: calc(100svh - var(--header-height) - 140px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
-        max-height: 220px !important; /* limite absoluto mesmo em landscape */
+        max-height: 300px !important; /* aumentado para aproveitar o modo landscape */
     }
     
     /* Compact section titles */
