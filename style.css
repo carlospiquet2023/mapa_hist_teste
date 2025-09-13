@@ -910,14 +910,14 @@ body {
         z-index: 9999 !important;
     }
     
-    /* Map takes main space - ALTURA EQUILIBRADA: Mapa com tamanho adequado */
+    /* Map takes main space - ALTURA MÁXIMA: Mapa ocupa todo o contêiner roxo */
     .main-content {
         grid-area: main !important;
         margin-top: var(--header-height) !important;
         /* usa svh para contabilizar UI do navegador no mobile real */
-        height: calc(100svh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        height: calc(100dvh - var(--header-height) - 320px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        max-height: 350px !important; /* tamanho adequado para visualização do mapa */
+        height: calc(100svh - var(--header-height) - 280px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100dvh - var(--header-height) - 280px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        max-height: none !important; /* remove o limite máximo para o mapa ocupar todo o espaço disponível */
         overflow: hidden !important;
         position: relative !important;
     }
@@ -929,21 +929,21 @@ body {
         border-radius: 0 !important;
     }
     
-    /* Bottom panel for controls - TAMANHO EQUILIBRADO: Controles com espaço suficiente */
+    /* Bottom panel for controls - TAMANHO OTIMIZADO: Mais compacto e sem espaço vazio */
     .sidebar {
         grid-area: sidebar !important;
         position: fixed !important;
         bottom: var(--safe-area-inset-bottom) !important;
         left: 0 !important;
         right: 0 !important;
-        max-height: 320px !important; /* reduzido para equilibrar com o mapa */
-        min-height: 300px !important;
+        max-height: 280px !important; /* reduzido para dar mais espaço ao mapa */
+        min-height: 260px !important;
         overflow-y: auto !important;
         border-top: 2px solid rgba(255,215,0,0.3) !important;
         border-right: none !important;
         background: var(--surface-dark) !important;
         backdrop-filter: blur(15px) !important;
-        padding: var(--space-4) var(--mobile-padding) !important;
+        padding: var(--space-2) var(--mobile-padding) !important; /* padding vertical reduzido */
         z-index: var(--z-sidebar) !important;
     }
     
@@ -952,11 +952,11 @@ body {
         display: none;
     }
     
-    /* Touch-friendly controls in bottom panel - OTIMIZADO: Com muito mais espaço */
+    /* Touch-friendly controls in bottom panel - COMPACTO: Menos espaço vertical */
     .filter-grid {
         grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-3);
-        margin-bottom: var(--space-4);
+        gap: var(--space-2);
+        margin-bottom: var(--space-2);
     }
     
     .filter-btn {
@@ -972,10 +972,10 @@ body {
         line-height: 1.2;
     }
     
-    /* Search section styling - MUITO MELHORADO: Mais espaço e visibilidade */
+    /* Search section styling - COMPACTO: Menor espaçamento vertical */
     .section h3 {
         font-size: 1.1rem;
-        margin-bottom: var(--space-4);
+        margin-bottom: var(--space-2);
         color: var(--accent-400);
         font-weight: 600;
     }
@@ -988,9 +988,9 @@ body {
         margin-bottom: var(--space-4);
     }
     
-    /* Seções com melhor espaçamento */
+    /* Seções com espaçamento reduzido para interface mais compacta */
     .section {
-        margin-bottom: var(--space-5);
+        margin-bottom: var(--space-2);
     }
     
     /* App-like map container - já definido acima (#map) */
@@ -1075,19 +1075,19 @@ body {
         font-weight: 600;
     }
     
-    /* Maximize map space - EQUILIBRADO: Mapa com tamanho adequado */
+    /* Maximize map space - MAXIMIZADO: Mapa ocupa todo o espaço disponível */
     .main-content {
         margin-top: 50px;
-        height: calc(100svh - 50px - 280px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
-        height: calc(100dvh - 50px - 280px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
-        max-height: 250px !important; /* tamanho adequado para telas pequenas */
+        height: calc(100svh - 50px - 260px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        height: calc(100dvh - 50px - 260px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        max-height: none !important; /* remove limite para usar todo o espaço */
     }
     
-    /* Compact bottom panel - EQUILIBRADO: Espaço suficiente para controles */
+    /* Compact bottom panel - COMPACTO: Menor espaço vertical */
     .sidebar {
-        max-height: 280px;
-        min-height: 260px;
-        padding: var(--space-3) var(--mobile-padding);
+        max-height: 260px;
+        min-height: 240px;
+        padding: var(--space-2) var(--mobile-padding);
     }
     
     /* Two-column filters for better touch */
@@ -1276,9 +1276,9 @@ input:focus {
 @media (max-width: 768px) and (orientation: landscape) {
     /* Keep bottom panel compact in landscape */
     .sidebar {
-        max-height: 140px;
-        min-height: 120px;
-        padding: var(--space-2) var(--mobile-padding);
+        max-height: 110px;
+        min-height: 100px;
+        padding: var(--space-1) var(--mobile-padding);
     }
     
     /* More columns for wider screen */
@@ -1289,8 +1289,8 @@ input:focus {
     
     /* Adjust map height for landscape */
     .main-content {
-        height: calc(100svh - var(--header-height) - 140px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
-        max-height: 300px !important; /* aumentado para aproveitar o modo landscape */
+        height: calc(100svh - var(--header-height) - 110px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+        max-height: none !important; /* remove limite para usar todo o espaço */
     }
     
     /* Compact section titles */
