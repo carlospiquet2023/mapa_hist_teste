@@ -1,0 +1,148 @@
+/* 
+==========================================================================
+🖼️ GALERIA COM ROLAGEM AUTOMÁTICA - MAPA HISTÓRICO
+==========================================================================
+
+📝 DESCRIÇÃO:
+   Estilos para a galeria de imagens com rolagem automática ao passar o mouse
+   para os locais históricos do Rio de Janeiro
+
+🏗️ COMPONENTES:
+   - Container da galeria
+   - Scroll horizontal com animação automática
+   - Indicadores de navegação
+   - Transições suaves entre imagens
+
+👨‍💻 AUTOR: Carlos A O Piquet
+📅 ÚLTIMA ATUALIZAÇÃO: 2025
+
+==========================================================================
+*/
+
+/* Container principal da galeria */
+.imagens-galeria-container {
+    width: 100%;
+    position: relative;
+    margin: 16px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Container de rolagem horizontal */
+.imagens-galeria-scroll {
+    display: flex;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    height: 220px;
+    position: relative;
+}
+
+/* Esconde a barra de rolagem */
+.imagens-galeria-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* Cada item da imagem */
+.imagem-item {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    position: relative;
+    height: 220px;
+    transition: transform 0.5s ease;
+}
+
+/* Estilo da imagem */
+.imagem-galeria {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* Estilos específicos para a galeria em popups */
+.popup-galeria .imagens-galeria-container {
+    margin: 8px 0;
+    max-width: 300px;
+}
+
+.popup-galeria .imagens-galeria-scroll,
+.popup-galeria .imagem-item {
+    height: 150px;
+}
+
+.leaflet-popup-content .imagens-galeria-container {
+    width: 100%;
+    margin: 8px 0 12px;
+}
+
+.leaflet-popup-content .imagens-galeria-scroll {
+    height: 150px;
+}
+
+/* Controles da galeria */
+.galeria-controles {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 5;
+}
+
+/* Indicadores de navegação */
+.galeria-indicador {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.galeria-indicador[data-index="0"] {
+    background-color: #ffffff;
+}
+
+/* Animação de rolagem automática ao passar o mouse */
+@keyframes slideRight {
+    0% { transform: translateX(0); }
+    33% { transform: translateX(-100%); }
+    66% { transform: translateX(-200%); }
+    100% { transform: translateX(0); }
+}
+
+/* Ativação da animação no hover */
+.imagens-galeria-container:hover .imagens-galeria-scroll {
+    animation: slideRight 6s linear infinite;
+}
+
+/* Animação específica para popups */
+.leaflet-popup-content .imagens-galeria-scroll {
+    animation-duration: 8s;
+    animation-play-state: paused;
+}
+
+.leaflet-popup-content .imagens-galeria-container:hover .imagens-galeria-scroll {
+    animation-play-state: running;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .imagens-galeria-scroll {
+        height: 180px;
+    }
+    
+    .imagem-item {
+        height: 180px;
+    }
+    
+    .galeria-controles {
+        bottom: 5px;
+    }
+}

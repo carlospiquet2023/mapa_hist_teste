@@ -32,8 +32,8 @@
 //=============================================================================
 
 /**
- * CONTROLADOR DA INTRO DE VÍDEO
- * Gerencia o vídeo de introdução que aparece ao carregar o site
+ * CONTROLADOR DA INTRO DE VÍDEO - VERSÃO SIMPLIFICADA
+ * Gerencia o vídeo de introdução sem travamentos
  */
 function initVideoIntro() {
     const overlay = document.getElementById('videoIntroOverlay');
@@ -46,107 +46,174 @@ function initVideoIntro() {
         console.log('Elementos de vídeo não encontrados');
         return;
     }
-
-    // Configuração inicial do vídeo - FORÇAR SOM de forma mais robusta
-    video.autoplay = true;
+    
+    // Detecta se é dispositivo móvel
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Configuração básica do vídeo
     video.playsInline = true;
-    video.muted = false; // Inicia desmutado
-    video.volume = 0.5; // Volume na metade (50%)
+    video.volume = 0.8;
     
-    // Remove qualquer atributo de muted do DOM
-    video.removeAttribute('muted');
+    // Em dispositivos móveis, inicia sempre mudo devido às políticas dos navegadores
+    if (isMobile) {
+        video.muted = true;
+        console.log('Dispositivo móvel detectado - iniciando vídeo mudo');
+    } else {
+        video.muted = false;
+    }
     
-    // Força configurações no DOM
-    video.setAttribute('autoplay', '');
-    video.setAttribute('playsinline', '');
-    
-    // Atualizar ícone para refletir que tem som
-    soundIcon.className = 'fas fa-volume-up';
-    soundToggle.title = 'Desligar Som';
-    
-    console.log('Vídeo configurado com som - Muted:', video.muted, 'Volume:', video.volume);
-
-    // Controle de legendas
-    let subtitlesEnabled = true; // Começamos com legendas ativadas
-    const textTracks = video.textTracks;
-    
-    // Debug: verificar se as tracks foram carregadas
-    video.addEventListener('loadedmetadata', () => {
-        console.log('Número de text tracks encontradas:', textTracks.length);
-        for (let i = 0; i < textTracks.length; i++) {
-            console.log(`Track ${i}:`, textTracks[i].kind, textTracks[i].language, textTracks[i].label);
-        }
-        
-        // Força o estilo das legendas após carregar
+    // Função para remover overlay
+    const removeOverlay = () => {
+        overlay.classList.add('fade-out');
         setTimeout(() => {
-            const videoElement = document.getElementById('introVideo');
-            if (videoElement) {
-                // Adiciona estilo inline para garantir que as legendas apareçam
-                const style = document.createElement('style');
-                style.textContent = `
-                    #introVideo::cue {
-                        background-color: rgba(0, 0, 0, 0.8) !important;
-                        color: white !important;
-                        font-size: 1.2rem !important;
-                        padding: 8px 16px !important;
-                        border-radius: 4px !important;
-                        position: relative !important;
-                        bottom: 0 !important;
-                        z-index: 100 !important;
-                    }
-                `;
-                document.head.appendChild(style);
+            if (overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
             }
-        }, 100);
-        
-        // DESABILITA TOTALMENTE as legendas nativas para evitar duplicação
-        for (let i = 0; i < textTracks.length; i++) {
-            textTracks[i].mode = 'disabled'; // Força desabilitação
-        }
-        
-        // Força esconder legendas nativas via CSS também
-        setTimeout(() => {
-            const videoElement = document.getElementById('introVideo');
-            if (videoElement) {
-                // Estilo para ESCONDER legendas nativas completamente
-                const style = document.createElement('style');
-                style.textContent = `
-                    #introVideo::cue {
-                        display: none !important;
-                        visibility: hidden !important;
-                        opacity: 0 !important;
-                    }
-                    #introVideo::-webkit-media-text-track-display {
-                        display: none !important;
-                    }
-                    #introVideo::-moz-media-text-track-display {
-                        display: none !important;
-                    }
-                `;
-                document.head.appendChild(style);
+        }, 1000);
+    };
+    
+    // Botão de pular
+    if (skipButton) {
+        skipButton.addEventListener('click', removeOverlay);
+    }
+    
+    // Controle de som otimizado para mobile
+    if (soundToggle && soundIcon) {
+        // Configuração inicial do botão baseada no estado do vídeo
+        const updateSoundButton = () => {
+            if (video.muted) {
+                soundIcon.className = 'fas fa-volume-mute';
+                soundToggle.title = 'Ativar Som';
+                if (isMobile) {
+                    // Em mobile, adiciona dica visual
+                    soundToggle.style.animation = 'pulse 2s infinite';
+                }
+            } else {
+                soundIcon.className = 'fas fa-volume-up';
+                soundToggle.title = 'Desligar Som';
+                soundToggle.style.animation = '';
             }
-        }, 100);
+        };
         
-        // USA APENAS o sistema customizado
-        console.log('Usando APENAS sistema de legendas customizado');
-        enableCustomSubtitles();
-    });
+        // Configuração inicial
+        updateSoundButton();
+        
+        soundToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Previne múltiplos cliques rapidamente
+            if (soundToggle.disabled) return;
+            soundToggle.disabled = true;
+            
+            setTimeout(() => {
+                soundToggle.disabled = false;
+            }, 300);
+            
+            if (video.muted) {
+                // Ativar som
+                video.muted = false;
+                video.volume = 0.8;
+                
+                // Em mobile, precisa de interação do usuário para funcionar
+                if (isMobile) {
+                    // Força o play para "quebrar" a política de autoplay
+                    video.play().then(() => {
+                        console.log('Som ativado com sucesso no mobile');
+                    }).catch(err => {
+                        console.log('Não foi possível ativar som:', err);
+                        video.muted = true; // Volta para mudo se não conseguir
+                    });
+                }
+            } else {
+                // Mutar som
+                video.muted = true;
+            }
+            
+            updateSoundButton();
+        });
+    }
+    
+    // Tentar reproduzir vídeo - estratégia diferente para mobile e desktop
+    const startVideo = () => {
+        video.play().then(() => {
+            console.log('Vídeo iniciado com sucesso');
+            if (isMobile) {
+                console.log('Mobile: vídeo iniciado mudo, aguardando interação do usuário');
+            } else {
+                // Desktop: garantir que o volume está correto
+                if (!video.muted) {
+                    video.volume = 0.8;
+                }
+            }
+        }).catch(error => {
+            console.log('Erro ao reproduzir vídeo:', error);
+            
+            // Fallback: força modo mudo
+            video.muted = true;
+            if (soundToggle && soundIcon) {
+                soundIcon.className = 'fas fa-volume-mute';
+                soundToggle.title = 'Ativar Som';
+                if (isMobile) {
+                    soundToggle.style.animation = 'pulse 2s infinite';
+                }
+            }
+            
+            video.play().catch(finalError => {
+                console.log('Erro total ao reproduzir vídeo:', finalError);
+                removeOverlay();
+            });
+        });
+    };
+    
+    // Inicia o vídeo
+    startVideo();
+    
+    // Otimização especial para dispositivos móveis
+    if (isMobile) {
+        // Detecta primeira interação do usuário para "quebrar" políticas de autoplay
+        const enableSoundOnFirstInteraction = () => {
+            // Só executa se o vídeo estiver mudo
+            if (video.muted && video.paused === false) {
+                console.log('Primeira interação detectada - tentando ativar som automaticamente');
+                video.muted = false;
+                video.volume = 0.8;
+                
+                // Atualiza o botão
+                if (soundToggle && soundIcon) {
+                    soundIcon.className = 'fas fa-volume-up';
+                    soundToggle.title = 'Desligar Som';
+                    soundToggle.style.animation = '';
+                }
+            }
+            
+            // Remove os listeners após primeira interação
+            document.removeEventListener('touchstart', enableSoundOnFirstInteraction);
+            document.removeEventListener('click', enableSoundOnFirstInteraction);
+        };
+        
+        // Adiciona listeners para primeira interação
+        document.addEventListener('touchstart', enableSoundOnFirstInteraction, { once: true });
+        document.addEventListener('click', enableSoundOnFirstInteraction, { once: true });
+    }
+    
+    // Quando terminar, remove overlay
+    video.addEventListener('ended', removeOverlay);
+    video.addEventListener('error', removeOverlay);
 
-    // Sistema de legendas customizadas como fallback
+    // Configuração simples de legendas
+    let subtitlesEnabled = true;
     const customSubtitles = document.getElementById('customSubtitles');
-    let customSubtitleInterval;
     
-    const subtitleData = [
-        { start: 0, end: 2.5, text: "Sejam todos bem-vindos ao Mapa Histórico do Rio." },
-        { start: 2.5, end: 5, text: "Aqui, vamos explorar o passado da cidade" },
-        { start: 5, end: 6.5, text: "de forma prática e visual," },
-        { start: 6.5, end: 8, text: "trazendo a história à vida." }
-    ];
-    
-    function enableCustomSubtitles() {
-        if (customSubtitleInterval) clearInterval(customSubtitleInterval);
+    if (customSubtitles) {
+        const subtitleData = [
+            { start: 0, end: 2.5, text: "Sejam todos bem-vindos ao Mapa Histórico do Rio." },
+            { start: 2.5, end: 5, text: "Aqui, vamos explorar o passado da cidade" },
+            { start: 5, end: 6.5, text: "de forma prática e visual," },
+            { start: 6.5, end: 8, text: "trazendo a história à vida." }
+        ];
         
-        customSubtitleInterval = setInterval(() => {
+        const showSubtitles = () => {
             const currentTime = video.currentTime;
             let currentSubtitle = null;
             
@@ -163,231 +230,10 @@ function initVideoIntro() {
             } else {
                 customSubtitles.classList.remove('show');
             }
-        }, 100);
+        };
         
-        // Limpa o interval quando o vídeo termina
-        video.addEventListener('ended', () => {
-            if (customSubtitleInterval) {
-                clearInterval(customSubtitleInterval);
-                customSubtitles.classList.remove('show');
-            }
-        });
-        
-        subtitlesToggle.classList.add('active');
-        subtitlesIcon.className = 'fas fa-closed-captioning';
-        subtitlesToggle.title = 'Desativar Legendas';
-        subtitlesEnabled = true;
-        console.log('Legendas customizadas ativadas');
+        video.addEventListener('timeupdate', showSubtitles);
     }
-    
-    function disableCustomSubtitles() {
-        if (customSubtitleInterval) {
-            clearInterval(customSubtitleInterval);
-            customSubtitleInterval = null;
-        }
-        customSubtitles.classList.remove('show');
-    }
-
-    // Controle de som SIMPLIFICADO - apenas liga/desliga para evitar travamentos
-    let isSoundOn = true; // Começa com som ligado
-    
-    soundToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Debounce para evitar cliques múltiplos
-        if (soundToggle.disabled) return;
-        soundToggle.disabled = true;
-        
-        setTimeout(() => {
-            if (isSoundOn) {
-                // Desliga som
-                video.muted = true;
-                soundIcon.className = 'fas fa-volume-mute';
-                soundToggle.title = 'Ativar Som';
-                isSoundOn = false;
-                console.log('Som desligado');
-            } else {
-                // Liga som
-                video.muted = false;
-                video.volume = 0.5;
-                soundIcon.className = 'fas fa-volume-up';
-                soundToggle.title = 'Desligar Som';
-                isSoundOn = true;
-                console.log('Som ligado');
-            }
-            
-            // Re-habilita o botão
-            setTimeout(() => {
-                soundToggle.disabled = false;
-            }, 300);
-        }, 50);
-    });
-
-    // Botão de pular
-    skipButton.addEventListener('click', () => {
-        removeVideoOverlay();
-    });
-    
-    // Detecção e otimização para dispositivos móveis SIMPLIFICADA
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-        console.log('Dispositivo móvel detectado - aplicando otimizações');
-        
-        // Eventos touch SIMPLES para evitar travamentos
-        soundToggle.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Simula clique após um pequeno delay
-            setTimeout(() => {
-                soundToggle.click();
-            }, 50);
-        }, { passive: false });
-        
-        skipButton.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            removeVideoOverlay();
-        }, { passive: false });
-        
-        // Otimizações de performance para mobile
-        video.addEventListener('loadeddata', () => {
-            console.log('Vídeo carregado em dispositivo móvel');
-            // Força o som novamente após carregamento
-            video.muted = false;
-            video.volume = 0.5;
-        });
-    }
-
-    // Configura opções de renderização para melhorar performance
-    if ('playsInline' in video) video.playsInline = true;
-    if ('disablePictureInPicture' in video) video.disablePictureInPicture = true;
-    
-    // Reduz o impacto de renderização em dispositivos móveis
-    video.style.willChange = 'transform'; // Otimiza renderização
-    
-    // Força o vídeo a ter som desde o início
-    video.muted = false;
-    video.volume = 0.5;
-    
-    // Adiciona atributo de autoplay com som
-    video.setAttribute('autoplay', '');
-    video.removeAttribute('muted');
-    
-    // Desativa o controle automático dos navegadores
-    video.setAttribute('data-wc-autoplay-ok', 'true');
-    
-    // Tenta reproduzir o vídeo
-    const playPromise = video.play();
-    
-    if (playPromise !== undefined) {
-        playPromise
-            .then(() => {
-                console.log('Vídeo iniciado com sucesso');
-                
-                // Sistema SIMPLES e ROBUSTO para garantir som
-                const ensureSound = () => {
-                    if (video.muted || video.volume === 0) {
-                        video.muted = false;
-                        video.volume = 0.5;
-                        console.log('Som forçadamente ativado');
-                    }
-                };
-                
-                // Tenta ativar som imediatamente
-                ensureSound();
-                
-                // Verifica e força som a cada 200ms por 3 segundos
-                const soundInterval = setInterval(() => {
-                    ensureSound();
-                }, 200);
-                
-                setTimeout(() => {
-                    clearInterval(soundInterval);
-                    console.log('Finalizadas tentativas de ativação de som');
-                }, 3000);
-            })
-            .catch(error => {
-                console.log('Erro ao reproduzir vídeo com som, tentando abordagem alternativa:', error);
-                
-                // Primeira tentativa: tentar reproduzir com som baixo
-                video.volume = 0.3;
-                video.muted = false;
-                video.play().then(() => {
-                    console.log('Vídeo funcionou com volume baixo');
-                    // Aumenta gradualmente o volume
-                    setTimeout(() => {
-                        video.volume = 0.5;
-                    }, 500);
-                }).catch(e => {
-                    console.log('Fallback para modo silencioso:', e);
-                    // Último recurso: modo silencioso com opção para ativar
-                    video.muted = true;
-                    video.volume = 0;
-                    soundIcon.className = 'fas fa-volume-mute';
-                    soundToggle.className = 'sound-toggle volume-mute';
-                    soundToggle.title = 'Clique para ativar som';
-                    volumeLevel = 0;
-                    
-                    // Adiciona dica visual para ativar som
-                    soundToggle.style.animation = 'pulse 2s infinite';
-                    
-                    video.play().catch(finalError => {
-                        console.log('Erro total ao reproduzir vídeo:', finalError);
-                        removeVideoOverlay();
-                    });
-                });
-            });
-    }
-
-    // Listener para quando o vídeo terminar
-    video.addEventListener('ended', () => {
-        setTimeout(() => {
-            removeVideoOverlay();
-        }, 500); // Pequeno delay antes de iniciar a animação
-    });
-
-    // Listener para erros no vídeo
-    video.addEventListener('error', (e) => {
-        console.log('Erro no vídeo:', e);
-        removeVideoOverlay();
-    });
-
-    // Função para remover o overlay com animação
-    function removeVideoOverlay() {
-        overlay.classList.add('fade-out');
-        
-        // Remove o elemento do DOM após a animação
-        setTimeout(() => {
-            if (overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
-            }
-        }, 1500); // Tempo da animação CSS
-    }
-
-    // Tentativa adicional: ativar som em qualquer clique na tela
-    function tryEnableSound() {
-        if (video.muted && video.readyState >= 2) {
-            video.muted = false;
-            video.volume = 0.5;
-            soundIcon.className = 'fas fa-volume-down';
-            soundToggle.className = 'sound-toggle volume-medium';
-            soundToggle.title = 'Volume Médio (50%) - Clique para ajustar';
-            soundToggle.style.animation = '';
-            volumeLevel = 1;
-            console.log('Som ativado através de interação do usuário');
-            
-            // Remove o listener após ativação
-            document.removeEventListener('click', tryEnableSound);
-            document.removeEventListener('touchstart', tryEnableSound);
-        }
-    }
-    
-    // Adiciona listeners para tentar ativar som na primeira interação
-    document.addEventListener('click', tryEnableSound);
-    document.addEventListener('touchstart', tryEnableSound);
 }
 
 //=============================================================================
@@ -407,7 +253,6 @@ document.addEventListener('DOMContentLoaded', function() {
      * DETECÇÃO DE DISPOSITIVO
      * Identifica se está rodando em mobile ou como PWA standalone
      */
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     
     /**
@@ -498,6 +343,11 @@ const pontosHistoricos = [
         coords: [-22.908728, -43.175951],
         periodo: "1937",
         descricao: "Principal museu de artes visuais do país, abriga a maior coleção de arte brasileira do século XIX e início do XX.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🎨 Possui mais de 20.000 obras, incluindo a famosa 'Primeira Missa no Brasil' de Victor Meirelles",
             "🏛️ Prédio projetado pelo arquiteto francês Grandjean de Montigny",
@@ -511,6 +361,11 @@ const pontosHistoricos = [
         coords: [-22.90664, -43.17225],
         periodo: "1942 e 1943",
         descricao: "O subsolo da Praça dos Expedicionários, localizada no Centro do Rio de Janeiro, abriga um dos antigos abrigos antiaéreos construídos durante a Segunda Guerra Mundial. Esses espaços subterrâneos foram projetados para proteger a população civil em caso de bombardeios, em uma época em que o Brasil, aliado aos Estados Unidos, entrou no conflito após ataques de submarinos alemães na costa brasileira.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🚨 Função preventiva – Apesar de terem sido construídos, os abrigos nunca chegaram a ser usados para ataques reais, já que o Rio de Janeiro não sofreu bombardeios durante a guerra.",
             "🏗️ Estrutura resistente – O abrigo da Praça dos Expedicionários foi projetado em concreto armado, com entradas e saídas estratégicas, ventilação e capacidade para abrigar centenas de pessoas em caso de emergência.",
@@ -524,6 +379,11 @@ const pontosHistoricos = [
         coords: [-22.900849, -43.177794],
         periodo: "1609",
         descricao: "Uma das igrejas mais importantes do Rio, construída em honra de Nossa Senhora da Candelária, padroeira dos navegadores.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "⛪ Construção levou mais de 250 anos para ser concluída",
             "🎨 Interior decorado com mármores de Carrara e pinturas de João Zeferino da Costa",
@@ -537,6 +397,11 @@ const pontosHistoricos = [
         coords: [-22.908992, -43.176677],
         periodo: "1909",
         descricao: "Principal casa de espetáculos do Rio, inspirado na Ópera de Paris, é um símbolo da Belle Époque carioca.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🎭 Inaugurado em 1909, inspirado na Ópera de Paris",
             "🎨 Decoração interna com pinturas de Eliseu Visconti",
@@ -684,6 +549,32 @@ const pontosHistoricos = [
             "🏛️ Construído no local onde Tiradentes foi enforcado em 1792",
             "⚖️ Sede da Câmara dos Deputados de 1926 a 1960",
             "🎨 Belíssimo hall com vitrais e escadaria em mármore"
+        ],
+        linhaTempo: [
+            {
+                ano: "1792",
+                titulo: "Execução de Tiradentes",
+                descricao: "Local onde Joaquim José da Silva Xavier foi enforcado",
+                imagem: "https://via.placeholder.com/300x200/8B0000/FFFFFF?text=Execução+Tiradentes+1792"
+            },
+            {
+                ano: "1926",
+                titulo: "Construção do Palácio",
+                descricao: "Inauguração como sede da Câmara dos Deputados",
+                imagem: "https://via.placeholder.com/300x200/4169E1/FFFFFF?text=Inauguração+Palácio+1926"
+            },
+            {
+                ano: "1960",
+                titulo: "Mudança da Capital",
+                descricao: "Brasília torna-se capital, palácio muda função",
+                imagem: "https://via.placeholder.com/300x200/FFD700/000000?text=Mudança+Capital+1960"
+            },
+            {
+                ano: "2024",
+                titulo: "Atualidade",
+                descricao: "Sede da Assembleia Legislativa do Estado do Rio",
+                imagem: "https://via.placeholder.com/300x200/32CD32/FFFFFF?text=ALERJ+Atual+2024"
+            }
         ]
     },
     {
@@ -740,6 +631,32 @@ const pontosHistoricos = [
             "🍽️ Conta com bistrô e tours guiados pelo edifício histórico",
             "🎭 Promove arte brasileira e democratiza o acesso à cultura",
             "🏛️ Restaurado pela PGE-RJ para valorizar o patrimônio histórico"
+        ],
+        linhaTempo: [
+            {
+                ano: "1761",
+                titulo: "Construção Original",
+                descricao: "Convento do Carmo é fundado pelos frades carmelitas",
+                imagem: "https://via.placeholder.com/300x200/8B4513/FFFFFF?text=Convento+Original+1761"
+            },
+            {
+                ano: "1808",
+                titulo: "Residência Real",
+                descricao: "Serviu como residência da rainha D. Maria I",
+                imagem: "https://via.placeholder.com/300x200/4169E1/FFFFFF?text=Residência+Real+1808"
+            },
+            {
+                ano: "1950",
+                titulo: "Século XX",
+                descricao: "Período de declínio e necessidade de restauração",
+                imagem: "https://via.placeholder.com/300x200/696969/FFFFFF?text=Período+Declínio+1950"
+            },
+            {
+                ano: "2010",
+                titulo: "Centro Cultural",
+                descricao: "Restaurado e transformado em centro cultural pela PGE-RJ",
+                imagem: "https://via.placeholder.com/300x200/32CD32/FFFFFF?text=Centro+Cultural+2010"
+            }
         ]
     },
     {
@@ -925,30 +842,44 @@ function criarMarcadores() {
 
         // Popup com informações completas - contraste garantido usando !important no CSS
         let popupContent = `
-            <div style="font-family: 'Inter', sans-serif; max-width: 320px;">
-                <h3 style="margin-bottom: 5px; font-size: 1.1rem; font-weight: 600;">${ponto.nome}</h3>
-                <p style="font-size: 0.9rem; margin-bottom: 10px;">📅 ${ponto.periodo}</p>
-                <p style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px;">${ponto.descricao}</p>`;
+            <div class="popup-container">
+                <h3 class="popup-title">${ponto.nome}</h3>
+                <p class="popup-subtitle">📅 ${ponto.periodo}</p>`;
         
-        // Adicionar imagem específica para Centro Cultural PGE-RJ
-        if (ponto.id === 24) {
+        // Adicionar galeria de imagens se existir
+        if (ponto.galeria && ponto.galeria.length > 0) {
             popupContent += `
-                <div style="text-align: center; margin: 10px 0;">
-                    <img src="https://i.imgur.com/jlkagUO.jpeg" 
-                         alt="Centro Cultural PGE-RJ" 
-                         style="width: 100%; max-width: 280px; height: 180px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                <div class="popup-galeria">
+                    ${gerarGaleriaImagens(ponto.galeria)}
                 </div>`;
         }
         
         popupContent += `
-                <button onclick="mostrarDetalhes(${ponto.id})" 
-                        style="width: 100%; padding: 10px 16px; margin-top: 8px; font-size: 0.9rem;">
+                <p class="popup-description">${ponto.descricao}</p>`;
+        
+        // Adicionar imagem específica para Centro Cultural PGE-RJ
+        if (ponto.id === 24) {
+            popupContent += `
+                <div class="popup-image-container">
+                    <img src="https://i.imgur.com/jlkagUO.jpeg" 
+                         alt="Centro Cultural PGE-RJ" 
+                         class="popup-image">
+                </div>`;
+        }
+        
+        popupContent += `
+                <button onclick="mostrarDetalhes(${ponto.id})" class="popup-button">
                     📖 Ver Detalhes Completos
                 </button>
             </div>
         `;
         
         marcador.bindPopup(popupContent);
+        
+        // Evento para inicializar a galeria quando o popup for aberto
+        marcador.on('popupopen', function() {
+            inicializarGaleriaImagens();
+        });
 
         // Evento de clique
         marcador.on('click', () => {
@@ -959,6 +890,156 @@ function criarMarcadores() {
         marcador.pontoData = ponto;
         marcadores.push(marcador);
     });
+}
+
+// ===== GERAR GALERIA DE IMAGENS =====
+function gerarGaleriaImagens(galeria) {
+    if (!galeria || galeria.length === 0) return '';
+    
+    return `
+        <div class="imagens-galeria-container">
+            <div class="imagens-galeria-scroll" id="galeria-scroll">
+                ${galeria.map((imagem, index) => `
+                    <div class="imagem-item" style="--index: ${index}">
+                        <img src="${imagem}" alt="Imagem histórica ${index + 1}" class="imagem-galeria">
+                    </div>
+                `).join('')}
+            </div>
+            <div class="galeria-controles">
+                ${galeria.map((_, index) => `
+                    <span class="galeria-indicador" data-index="${index}"></span>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+// ===== GERAR GALERIA DA LINHA DO TEMPO =====
+function gerarGaleriaLinhaTempo(linhaTempo) {
+    if (!linhaTempo || linhaTempo.length === 0) return '';
+    
+    return `
+        <div class="timeline-gallery">
+            <h4 class="timeline-title">
+                <i class="fas fa-history"></i>
+                Linha do Tempo
+            </h4>
+            <div class="timeline-container">
+                ${linhaTempo.map((periodo, index) => `
+                    <div class="timeline-item" data-index="${index}">
+                        <div class="timeline-image">
+                            <img src="${periodo.imagem}" 
+                                 alt="${periodo.titulo}" 
+                                 onclick="abrirImagemGaleria(${index}, ${JSON.stringify(linhaTempo).replace(/"/g, '&quot;')})"
+                                 style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s ease;">
+                        </div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">${periodo.ano}</span>
+                            <h5 class="timeline-period-title">${periodo.titulo}</h5>
+                            <p class="timeline-description">${periodo.descricao}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+// ===== ABRIR IMAGEM DA GALERIA =====
+function abrirImagemGaleria(index, linhaTempo) {
+    const modal = document.createElement('div');
+    modal.className = 'image-modal';
+    modal.innerHTML = `
+        <div class="modal-backdrop" onclick="fecharImagemGaleria()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="fecharImagemGaleria()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-gallery">
+                <div class="gallery-navigation">
+                    <button class="nav-btn prev" onclick="navegarGaleria(-1)" ${index === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="nav-btn next" onclick="navegarGaleria(1)" ${index === linhaTempo.length - 1 ? 'disabled' : ''}>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="gallery-image">
+                    <img src="${linhaTempo[index].imagem}" alt="${linhaTempo[index].titulo}">
+                </div>
+                <div class="gallery-info">
+                    <h3>${linhaTempo[index].ano} - ${linhaTempo[index].titulo}</h3>
+                    <p>${linhaTempo[index].descricao}</p>
+                </div>
+                <div class="gallery-thumbnails">
+                    ${linhaTempo.map((periodo, i) => `
+                        <img src="${periodo.imagem}" 
+                             alt="${periodo.titulo}"
+                             class="thumbnail ${i === index ? 'active' : ''}"
+                             onclick="navegarParaImagem(${i})">
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.galeriaAtual = linhaTempo;
+    modal.indiceAtual = index;
+    
+    // Animate in
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+// ===== NAVEGAÇÃO DA GALERIA =====
+function navegarGaleria(direcao) {
+    const modal = document.querySelector('.image-modal');
+    if (!modal) return;
+    
+    const novoIndice = modal.indiceAtual + direcao;
+    if (novoIndice >= 0 && novoIndice < modal.galeriaAtual.length) {
+        navegarParaImagem(novoIndice);
+    }
+}
+
+function navegarParaImagem(indice) {
+    const modal = document.querySelector('.image-modal');
+    if (!modal) return;
+    
+    modal.indiceAtual = indice;
+    const periodo = modal.galeriaAtual[indice];
+    
+    // Atualizar imagem
+    const img = modal.querySelector('.gallery-image img');
+    img.src = periodo.imagem;
+    img.alt = periodo.titulo;
+    
+    // Atualizar informações
+    const info = modal.querySelector('.gallery-info');
+    info.innerHTML = `
+        <h3>${periodo.ano} - ${periodo.titulo}</h3>
+        <p>${periodo.descricao}</p>
+    `;
+    
+    // Atualizar thumbnails
+    modal.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === indice);
+    });
+    
+    // Atualizar botões de navegação
+    const prevBtn = modal.querySelector('.nav-btn.prev');
+    const nextBtn = modal.querySelector('.nav-btn.next');
+    prevBtn.disabled = indice === 0;
+    nextBtn.disabled = indice === modal.galeriaAtual.length - 1;
+}
+
+// ===== FECHAR GALERIA =====
+function fecharImagemGaleria() {
+    const modal = document.querySelector('.image-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => modal.remove(), 300);
+    }
 }
 
 // ===== MOSTRAR DETALHES =====
@@ -973,57 +1054,39 @@ function mostrarDetalhes(id) {
     const infoSection = document.getElementById('infoSection');
     infoSection.style.display = 'block';
     
-    // Conteúdo específico para Centro Cultural PGE-RJ
-    if (id === 24) {
-        infoSection.innerHTML = `
-            <div class="info-panel">
-                <h3 class="info-title">${ponto.nome}</h3>
-                <p class="info-subtitle">📅 ${ponto.periodo}</p>
-                <p class="info-description">${ponto.descricao}</p>
-                
-                <!-- Imagem do Centro Cultural PGE-RJ -->
-                <div style="text-align: center; margin: 20px 0;">
-                    <img src="https://i.imgur.com/jlkagUO.jpeg" 
-                         alt="Centro Cultural PGE-RJ - Antigo Convento do Carmo" 
-                         style="width: 100%; max-width: 350px; height: 250px; border-radius: 12px; box-shadow: 0 8px 25px rgba(26,188,156,0.4); object-fit: cover;">
-                </div>
-                
-                <div class="curiosities-grid">
-                    ${ponto.curiosidades.map(curiosidade => `
-                        <div class="curiosity-item">
-                            <p class="curiosity-text">${curiosidade}</p>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <button class="back-btn" onclick="voltarInicio()">
-                    <i class="fas fa-arrow-left"></i>
-                    Voltar
-                </button>
+    // Verificar se o ponto tem linha do tempo e galeria
+    const temLinhaTempo = ponto.linhaTempo && ponto.linhaTempo.length > 0;
+    const temGaleria = ponto.galeria && ponto.galeria.length > 0;
+    
+    infoSection.innerHTML = `
+        <div class="info-panel">
+            <h3 class="info-title">${ponto.nome}</h3>
+            <p class="info-subtitle">📅 ${ponto.periodo}</p>
+            
+            ${temGaleria ? gerarGaleriaImagens(ponto.galeria) : ''}
+            
+            <p class="info-description">${ponto.descricao}</p>
+            
+            ${temLinhaTempo ? gerarGaleriaLinhaTempo(ponto.linhaTempo) : ''}
+            
+            <div class="curiosities-grid">
+                ${ponto.curiosidades.map(curiosidade => `
+                    <div class="curiosity-item">
+                        <p class="curiosity-text">${curiosidade}</p>
+                    </div>
+                `).join('')}
             </div>
-        `;
-    } else {
-        // Conteúdo padrão para outros pontos
-        infoSection.innerHTML = `
-            <div class="info-panel">
-                <h3 class="info-title">${ponto.nome}</h3>
-                <p class="info-subtitle">${ponto.categoria.charAt(0).toUpperCase() + ponto.categoria.slice(1)}</p>
-                <p class="info-description">${ponto.descricao}</p>
-                
-                <div class="curiosities-grid">
-                    ${ponto.curiosidades.map(curiosidade => `
-                        <div class="curiosity-item">
-                            <p class="curiosity-text">${curiosidade}</p>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <button class="back-btn" onclick="voltarInicio()">
-                    <i class="fas fa-arrow-left"></i>
-                    Voltar
-                </button>
-            </div>
-        `;
+            
+            <button class="back-btn" onclick="voltarInicio()">
+                <i class="fas fa-arrow-left"></i>
+                Voltar
+            </button>
+        </div>
+    `;
+    
+    // Inicializar a galeria de imagens se existir
+    if (temGaleria) {
+        inicializarGaleriaImagens();
     }
 }
 
@@ -2176,19 +2239,59 @@ window.addEventListener('resize', function() {
     }
 });
 
-// === DEBUG: VERIFICAR ELEMENTOS MOBILE ===
+// Função para inicializar a galeria de imagens com rolagem automática
+function inicializarGaleriaImagens() {
+    // Seleciona todos os containers de galeria no documento
+    const galerias = document.querySelectorAll('.imagens-galeria-container');
+    
+    // Para cada galeria encontrada
+    galerias.forEach(galeria => {
+        // Seleciona os indicadores da galeria
+        const indicadores = galeria.querySelectorAll('.galeria-indicador');
+        
+        // Adiciona evento de clique para cada indicador
+        indicadores.forEach((indicador, index) => {
+            // Remover eventos anteriores para evitar duplicação
+            indicador.removeEventListener('click', indicadorClickHandler);
+            
+            // Adicionar o evento de clique
+            indicador.addEventListener('click', indicadorClickHandler);
+            
+            // Marcar o primeiro indicador como ativo
+            if (index === 0) {
+                indicador.classList.add('ativo');
+            }
+        });
+        
+        // Garantir que a animação de hover funcione
+        // Removemos a manipulação manual de animação pois já está sendo gerenciada pelo CSS
+        // com a pseudo-classe :hover
+    });
+}
+
+// Função de manipulação de clique no indicador
+function indicadorClickHandler() {
+    const index = this.getAttribute('data-index');
+    const galeria = this.closest('.imagens-galeria-container');
+    
+    // Atualiza classe ativa
+    galeria.querySelectorAll('.galeria-indicador').forEach(ind => ind.classList.remove('ativo'));
+    this.classList.add('ativo');
+    
+    // Rola para a imagem correspondente
+    const scroll = galeria.querySelector('.imagens-galeria-scroll');
+    if (scroll) {
+        scroll.scrollTo({
+            left: scroll.clientWidth * index,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Inicializar componentes quando o DOM for carregado
 window.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, checking mobile elements...');
-    
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const desktopMenu = document.querySelector('.desktop-menu');
-    const hamburgerBtn = document.querySelector('.hamburger-btn');
-    const dropdown = document.getElementById('mobileMenuDropdown');
-    
-    console.log('Mobile menu element:', mobileMenu);
-    console.log('Desktop menu element:', desktopMenu);
-    console.log('Hamburger button:', hamburgerBtn);
-    console.log('Dropdown:', dropdown);
+    // Inicializar as galerias já existentes na página
+    inicializarGaleriaImagens();
     
     // Verificar CSS computed styles
     if (mobileMenu) {
@@ -2230,12 +2333,4 @@ function abrirMemoria() {
     }
 }
 
-// Função alternativa para criar um modal com galeria
-function abrirMemoriaModal() {
-    // Esta função pode ser usada para criar um modal interno
-    // com vídeos e fotos diretamente na aplicação
-    console.log('Abrindo galeria de memórias...');
-    
-    // TODO: Implementar modal com galeria de imagens/vídeos
-    alert('Funcionalidade em desenvolvimento!\nEm breve você poderá ver vídeos e fotos históricas do Centro do Rio.');
-}
+// Função removida: abrirMemoriaModal - não utilizada

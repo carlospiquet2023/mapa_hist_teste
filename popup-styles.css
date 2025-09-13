@@ -1,0 +1,53 @@
+/* Estilos para os popups do mapa */
+.popup-container {
+    font-family: 'Inter', sans-serif;
+    max-width: 320px;
+}
+
+.popup-title {
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.popup-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.popup-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.popup-image-container {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.popup-image {
+    width: 100%;
+    max-width: 280px;
+    height: 180px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.popup-button {
+    width: 100%;
+    padding: 10px 16px;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    background-color: var(--primary-600);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.popup-button:hover {
+    background-color: var(--primary-700);
+}
