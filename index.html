@@ -37,6 +37,37 @@
 </head>
 
 <body>
+    <!-- ===== INTRO DE VÍDEO ===== -->
+    <!-- Overlay fullscreen com vídeo de introdução -->
+    <div class="video-intro-overlay" id="videoIntroOverlay">
+        <video 
+            id="introVideo" 
+            autoplay 
+            playsinline
+            preload="auto"
+            aria-label="Vídeo de introdução do Mapa Histórico do Rio de Janeiro"
+            title="Intro - Centro Histórico do Rio de Janeiro">
+            <source src="https://i.imgur.com/bmV79gW.mp4" type="video/mp4">
+            <!-- Legendas opcionais (podem ser ativadas via JavaScript) -->
+            <track kind="subtitles" src="subtitles/pt-br.vtt" srclang="pt-br" label="Português (Brasil)">
+            <track kind="descriptions" src="subtitles/descriptions-pt-br.vtt" srclang="pt-br" label="Descrição Audiovisual">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+        
+        <!-- Legenda customizada como fallback -->
+        <div class="custom-subtitles" id="customSubtitles"></div>
+        
+        <!-- Controles do vídeo -->
+        <div class="video-controls">
+            <button class="sound-toggle" id="soundToggle" title="Volume Médio (50%)">
+                <i class="fas fa-volume-down" id="soundIcon"></i>
+            </button>
+            <button class="skip-video" id="skipVideo" title="Pular Intro">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- ===== TELA DE CARREGAMENTO ===== -->
     <!-- Overlay fullscreen com animação enquanto o mapa carrega -->
     <div class="loading" id="loading">

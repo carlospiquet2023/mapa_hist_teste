@@ -8,6 +8,7 @@
    do Centro do Rio de Janeiro com recursos educacionais avançados
 
 🎯 FUNCIONALIDADES PRINCIPAIS:
+   - Intro de vídeo fullscreen responsiva
    - Mapa interativo com Leaflet.js
    - Filtragem por categorias históricas
    - Sistema de busca avançado
@@ -27,6 +28,284 @@
 */
 
 //=============================================================================
+// 🎬 INTRO DE VÍDEO
+//=============================================================================
+
+/**
+ * CONTROLADOR DA INTRO DE VÍDEO
+ * Gerencia o vídeo de introdução que aparece ao carregar o site
+ */
+function initVideoIntro() {
+    const overlay = document.getElementById('videoIntroOverlay');
+    const video = document.getElementById('introVideo');
+    const soundToggle = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+    const skipButton = document.getElementById('skipVideo');
+    
+    if (!overlay || !video) {
+        console.log('Elementos de vídeo não encontrados');
+        return;
+    }
+
+    // Configuração inicial do vídeo - FORÇAR SOM
+    video.autoplay = true;
+    video.playsInline = true;
+    video.muted = false; // EXPLICITAMENTE não silenciar
+    video.volume = 0.5; // Volume na metade (50%)
+    
+    // Força unmute no elemento DOM também
+    video.removeAttribute('muted');
+
+    // Atualizar ícone para refletir que tem som
+    soundIcon.className = 'fas fa-volume-down'; // Ícone de volume médio
+    soundToggle.className = 'sound-toggle volume-medium'; // Classe CSS para indicador
+    soundToggle.title = 'Volume Médio (50%) - Clique para ajustar';
+
+    console.log('Vídeo configurado - Muted:', video.muted, 'Volume:', video.volume);
+
+    // Controle de legendas
+    let subtitlesEnabled = true; // Começamos com legendas ativadas
+    const textTracks = video.textTracks;
+    
+    // Debug: verificar se as tracks foram carregadas
+    video.addEventListener('loadedmetadata', () => {
+        console.log('Número de text tracks encontradas:', textTracks.length);
+        for (let i = 0; i < textTracks.length; i++) {
+            console.log(`Track ${i}:`, textTracks[i].kind, textTracks[i].language, textTracks[i].label);
+        }
+        
+        // Força o estilo das legendas após carregar
+        setTimeout(() => {
+            const videoElement = document.getElementById('introVideo');
+            if (videoElement) {
+                // Adiciona estilo inline para garantir que as legendas apareçam
+                const style = document.createElement('style');
+                style.textContent = `
+                    #introVideo::cue {
+                        background-color: rgba(0, 0, 0, 0.8) !important;
+                        color: white !important;
+                        font-size: 1.2rem !important;
+                        padding: 8px 16px !important;
+                        border-radius: 4px !important;
+                        position: relative !important;
+                        bottom: 0 !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }, 100);
+        
+        // Ativa legendas automaticamente
+        let trackFound = false;
+        for (let i = 0; i < textTracks.length; i++) {
+            if (textTracks[i].kind === 'subtitles') {
+                textTracks[i].mode = 'showing';
+                console.log('Legenda ativada automaticamente:', textTracks[i].label);
+                trackFound = true;
+                break;
+            }
+        }
+        
+        // Se não encontrar legendas nativas, usa o sistema customizado
+        if (!trackFound) {
+            console.log('Usando sistema de legendas customizado automaticamente');
+            enableCustomSubtitles();
+        }
+    });
+
+    // Sistema de legendas customizadas como fallback
+    const customSubtitles = document.getElementById('customSubtitles');
+    let customSubtitleInterval;
+    
+    const subtitleData = [
+        { start: 0, end: 2.5, text: "Sejam todos bem-vindos ao Mapa Histórico do Rio." },
+        { start: 2.5, end: 5, text: "Aqui, vamos explorar o passado da cidade" },
+        { start: 5, end: 6.5, text: "de forma prática e visual," },
+        { start: 6.5, end: 8, text: "trazendo a história à vida." }
+    ];
+    
+    function enableCustomSubtitles() {
+        if (customSubtitleInterval) clearInterval(customSubtitleInterval);
+        
+        customSubtitleInterval = setInterval(() => {
+            const currentTime = video.currentTime;
+            let currentSubtitle = null;
+            
+            for (let subtitle of subtitleData) {
+                if (currentTime >= subtitle.start && currentTime <= subtitle.end) {
+                    currentSubtitle = subtitle;
+                    break;
+                }
+            }
+            
+            if (currentSubtitle && subtitlesEnabled) {
+                customSubtitles.textContent = currentSubtitle.text;
+                customSubtitles.classList.add('show');
+            } else {
+                customSubtitles.classList.remove('show');
+            }
+        }, 100);
+        
+        // Limpa o interval quando o vídeo termina
+        video.addEventListener('ended', () => {
+            if (customSubtitleInterval) {
+                clearInterval(customSubtitleInterval);
+                customSubtitles.classList.remove('show');
+            }
+        });
+        
+        subtitlesToggle.classList.add('active');
+        subtitlesIcon.className = 'fas fa-closed-captioning';
+        subtitlesToggle.title = 'Desativar Legendas';
+        subtitlesEnabled = true;
+        console.log('Legendas customizadas ativadas');
+    }
+    
+    function disableCustomSubtitles() {
+        if (customSubtitleInterval) {
+            clearInterval(customSubtitleInterval);
+            customSubtitleInterval = null;
+        }
+        customSubtitles.classList.remove('show');
+    }
+
+    // Controle de som - cicla entre diferentes volumes
+    let volumeLevel = 1; // 0 = mudo, 1 = baixo (50%), 2 = alto (100%)
+    
+    soundToggle.addEventListener('click', () => {
+        switch(volumeLevel) {
+            case 0: // Mudo → Volume baixo (50%)
+                video.muted = false;
+                video.volume = 0.5;
+                soundIcon.className = 'fas fa-volume-down';
+                soundToggle.className = 'sound-toggle volume-medium';
+                soundToggle.title = 'Volume Médio (50%) - Clique para aumentar';
+                volumeLevel = 1;
+                console.log('Volume ajustado para 50%');
+                break;
+            case 1: // Volume baixo → Volume alto (100%)
+                video.volume = 1.0;
+                soundIcon.className = 'fas fa-volume-up';
+                soundToggle.className = 'sound-toggle volume-high';
+                soundToggle.title = 'Volume Alto (100%) - Clique para silenciar';
+                volumeLevel = 2;
+                console.log('Volume ajustado para 100%');
+                break;
+            case 2: // Volume alto → Mudo
+                video.muted = true;
+                video.volume = 0;
+                soundIcon.className = 'fas fa-volume-mute';
+                soundToggle.className = 'sound-toggle volume-mute';
+                soundToggle.title = 'Sem Som - Clique para ativar';
+                volumeLevel = 0;
+                console.log('Volume silenciado');
+                break;
+        }
+    });
+
+    // Botão de pular
+    skipButton.addEventListener('click', () => {
+        removeVideoOverlay();
+    });
+
+    // Tenta reproduzir o vídeo
+    const playPromise = video.play();
+    
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                console.log('Vídeo iniciado com sucesso - Volume: 50%');
+                // Força o som após 100ms para garantir que funcione
+                setTimeout(() => {
+                    if (video.muted) {
+                        console.log('Forçando unmute...');
+                        video.muted = false;
+                        video.volume = 0.5;
+                    }
+                }, 100);
+            })
+            .catch(error => {
+                console.log('Erro ao reproduzir vídeo com som, tentando abordagem alternativa:', error);
+                
+                // Primeira tentativa: tentar reproduzir com som baixo
+                video.volume = 0.3;
+                video.muted = false;
+                video.play().then(() => {
+                    console.log('Vídeo funcionou com volume baixo');
+                    // Aumenta gradualmente o volume
+                    setTimeout(() => {
+                        video.volume = 0.5;
+                    }, 500);
+                }).catch(e => {
+                    console.log('Fallback para modo silencioso:', e);
+                    // Último recurso: modo silencioso com opção para ativar
+                    video.muted = true;
+                    video.volume = 0;
+                    soundIcon.className = 'fas fa-volume-mute';
+                    soundToggle.className = 'sound-toggle volume-mute';
+                    soundToggle.title = 'Clique para ativar som';
+                    volumeLevel = 0;
+                    
+                    // Adiciona dica visual para ativar som
+                    soundToggle.style.animation = 'pulse 2s infinite';
+                    
+                    video.play().catch(finalError => {
+                        console.log('Erro total ao reproduzir vídeo:', finalError);
+                        removeVideoOverlay();
+                    });
+                });
+            });
+    }
+
+    // Listener para quando o vídeo terminar
+    video.addEventListener('ended', () => {
+        setTimeout(() => {
+            removeVideoOverlay();
+        }, 500); // Pequeno delay antes de iniciar a animação
+    });
+
+    // Listener para erros no vídeo
+    video.addEventListener('error', (e) => {
+        console.log('Erro no vídeo:', e);
+        removeVideoOverlay();
+    });
+
+    // Função para remover o overlay com animação
+    function removeVideoOverlay() {
+        overlay.classList.add('fade-out');
+        
+        // Remove o elemento do DOM após a animação
+        setTimeout(() => {
+            if (overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        }, 1500); // Tempo da animação CSS
+    }
+
+    // Tentativa adicional: ativar som em qualquer clique na tela
+    function tryEnableSound() {
+        if (video.muted && video.readyState >= 2) {
+            video.muted = false;
+            video.volume = 0.5;
+            soundIcon.className = 'fas fa-volume-down';
+            soundToggle.className = 'sound-toggle volume-medium';
+            soundToggle.title = 'Volume Médio (50%) - Clique para ajustar';
+            soundToggle.style.animation = '';
+            volumeLevel = 1;
+            console.log('Som ativado através de interação do usuário');
+            
+            // Remove o listener após ativação
+            document.removeEventListener('click', tryEnableSound);
+            document.removeEventListener('touchstart', tryEnableSound);
+        }
+    }
+    
+    // Adiciona listeners para tentar ativar som na primeira interação
+    document.addEventListener('click', tryEnableSound);
+    document.addEventListener('touchstart', tryEnableSound);
+}
+
+//=============================================================================
 // 📱 PWA & OTIMIZAÇÕES MOBILE
 //=============================================================================
 
@@ -35,6 +314,9 @@
  * Configura otimizações específicas para dispositivos móveis e PWA
  */
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // Inicializar intro de vídeo
+    initVideoIntro();
     
     /**
      * DETECÇÃO DE DISPOSITIVO
