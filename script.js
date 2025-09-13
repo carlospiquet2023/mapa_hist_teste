@@ -988,8 +988,8 @@ function gerarGaleriaImagens(galeria) {
         <div class="imagens-galeria-container">
             <div class="imagens-galeria-scroll" id="galeria-scroll">
                 ${galeria.map((imagem, index) => `
-                    <div class="imagem-item" style="--index: ${index}">
-                        <img src="${imagem}" alt="Imagem histórica ${index + 1}" class="imagem-galeria">
+                    <div class="imagem-item" style="--index: ${index}; position: relative; left: 0;">
+                        <img src="${imagem}" alt="Imagem histórica ${index + 1}" class="imagem-galeria" loading="eager" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200/CCCCCC/333333?text=Imagem+${index+1}';">
                     </div>
                 `).join('')}
             </div>
@@ -2362,18 +2362,14 @@ function inicializarGaleriaImagens() {
             indicador.addEventListener('click', function() {
                 // Remove ativo de todos os indicadores desta galeria
                 indicadores.forEach(ind => ind.classList.remove('ativo'));
-                
                 // Adiciona ativo ao indicador clicado
                 this.classList.add('ativo');
                 
-                // Move a galeria para a imagem correspondente
+                // Move a galeria para a imagem correspondente via scroll
                 const index = parseInt(this.getAttribute('data-index'));
                 if (scroll) {
-                    // Pausa qualquer animação em andamento
-                    scroll.style.animationPlayState = 'paused';
-                    // Aplica a transformação direta
-                    scroll.style.transform = `translateX(-${index * 100}%)`;
-                    scroll.style.transition = 'transform 0.5s ease';
+                    const alvo = index * scroll.clientWidth;
+                    scroll.scrollTo({ left: alvo, behavior: 'smooth' });
                 }
             });
         });
@@ -2393,7 +2389,8 @@ function inicializarGaleriaImagens() {
                 galeria.addEventListener('mouseenter', function() {
                     autoScrollInterval = setInterval(() => {
                         currentIndex = (currentIndex + 1) % totalImages;
-                        scroll.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        const alvo = currentIndex * scroll.clientWidth;
+                        scroll.scrollTo({ left: alvo, behavior: 'smooth' });
                         
                         // Atualiza indicadores
                         indicadores.forEach(ind => ind.classList.remove('ativo'));
@@ -2405,7 +2402,7 @@ function inicializarGaleriaImagens() {
                     clearInterval(autoScrollInterval);
                     // Voltamos para a primeira imagem
                     currentIndex = 0;
-                    scroll.style.transform = 'translateX(0)';
+                    scroll.scrollTo({ left: 0, behavior: 'smooth' });
                     
                     // Atualiza indicadores
                     indicadores.forEach(ind => ind.classList.remove('ativo'));
@@ -2472,20 +2469,11 @@ function mudarImagemGaleria(elemento, index) {
     
     // Encontra o container de scroll
     const scroll = galeria.querySelector('.imagens-galeria-scroll');
+    if (!scroll) return;
     
-    // Pausa a animação para não interferir
-    scroll.style.animationPlayState = 'paused';
-    
-    // Move a galeria para a imagem correspondente
-    scroll.style.transform = `translateX(-${index * 100}%)`;
-    
-    // Depois de um tempo, retorna ao estado normal se o mouse ainda estiver sobre a galeria
-    setTimeout(() => {
-        if (galeria.matches(':hover')) {
-            scroll.style.animationPlayState = 'running';
-            scroll.style.transform = '';
-        }
-    }, 3000);
+    // Move via scroll real
+    const alvo = index * scroll.clientWidth;
+    scroll.scrollTo({ left: alvo, behavior: 'smooth' });
 }
 
 // Inicializar componentes quando o DOM for carregado

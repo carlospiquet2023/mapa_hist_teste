@@ -32,13 +32,15 @@
 /* Container de rolagem horizontal */
 .imagens-galeria-scroll {
     display: flex;
-    overflow-x: hidden;
+    overflow-x: auto; /* permite rolar para ver as próximas imagens */
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE/Edge */
     height: 220px;
     position: relative;
+    width: 100%;
+    -webkit-overflow-scrolling: touch; /* rolagem suave no iOS */
 }
 
 /* Esconde a barra de rolagem */
@@ -55,6 +57,8 @@
     transition: transform 0.5s ease;
     min-width: 100%; /* Garante que a largura mínima seja de 100% */
     display: block; /* Garante que o elemento seja exibido */
+    left: 0;
+    opacity: 1;
 }
 
 /* Estilo da imagem */
@@ -115,32 +119,36 @@
 
 /* Animação de rolagem automática ao passar o mouse */
 @keyframes slideRight {
-    0% { transform: translateX(0); }
-    33% { transform: translateX(-100%); }
-    66% { transform: translateX(-200%); }
+    0%, 25% { transform: translateX(0); }
+    33%, 58% { transform: translateX(-100%); }
+    66%, 91% { transform: translateX(-200%); }
     100% { transform: translateX(0); }
 }
 
-/* Ativação da animação no hover */
-.imagens-galeria-container:hover .imagens-galeria-scroll {
-    animation: slideRight 9s ease-in-out infinite;
-    animation-play-state: running;
-}
-
-/* Pausa a animação quando não está em hover */
+/* Configuração: sem animação por transform (evita conflito no popup) */
 .imagens-galeria-scroll {
-    animation-play-state: paused;
-    animation: slideRight 9s ease-in-out infinite;
+    animation: none;
+    transition: transform 0.5s ease;
 }
 
-/* Animação específica para popups */
+/* Sem animação no hover (vamos usar scroll via JS) */
+.imagens-galeria-container:hover .imagens-galeria-scroll {
+    animation: none;
+}
+
+/* Popups: garantir que não haja animação */
 .leaflet-popup-content .imagens-galeria-scroll {
-    animation-duration: 9s;
-    animation-play-state: paused;
+    animation: none;
 }
 
 .leaflet-popup-content .imagens-galeria-container:hover .imagens-galeria-scroll {
-    animation-play-state: running;
+    animation: none;
+}
+
+/* Garante que todas as imagens estejam visíveis na galeria */
+.imagens-galeria-scroll .imagem-item {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* Responsividade para dispositivos móveis */
@@ -155,5 +163,21 @@
     
     .galeria-controles {
         bottom: 5px;
+    }
+    
+    /* Ajustes específicos para mobile */
+    .imagens-galeria-container {
+        touch-action: pan-x;
+    }
+    
+    /* Sem animação automática no mobile */
+    .leaflet-popup-content .imagens-galeria-scroll {
+        animation: none !important;
+    }
+    
+    /* Garante que todas as imagens sejam visíveis */
+    .imagem-item {
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 }
