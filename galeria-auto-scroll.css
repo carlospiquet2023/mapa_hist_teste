@@ -53,6 +53,8 @@
     position: relative;
     height: 220px;
     transition: transform 0.5s ease;
+    min-width: 100%; /* Garante que a largura mínima seja de 100% */
+    display: block; /* Garante que o elemento seja exibido */
 }
 
 /* Estilo da imagem */
@@ -61,6 +63,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
+    display: block; /* Garante que a imagem seja exibida */
 }
 
 /* Estilos específicos para a galeria em popups */
@@ -105,6 +108,7 @@
     transition: background-color 0.3s ease;
 }
 
+.galeria-indicador.ativo,
 .galeria-indicador[data-index="0"] {
     background-color: #ffffff;
 }
@@ -119,12 +123,19 @@
 
 /* Ativação da animação no hover */
 .imagens-galeria-container:hover .imagens-galeria-scroll {
-    animation: slideRight 6s linear infinite;
+    animation: slideRight 9s ease-in-out infinite;
+    animation-play-state: running;
+}
+
+/* Pausa a animação quando não está em hover */
+.imagens-galeria-scroll {
+    animation-play-state: paused;
+    animation: slideRight 9s ease-in-out infinite;
 }
 
 /* Animação específica para popups */
 .leaflet-popup-content .imagens-galeria-scroll {
-    animation-duration: 8s;
+    animation-duration: 9s;
     animation-play-state: paused;
 }
 

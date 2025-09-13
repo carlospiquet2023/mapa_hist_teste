@@ -415,6 +415,11 @@ const pontosHistoricos = [
         coords: [-22.913034, -43.179956],
         periodo: "1750",
         descricao: "Aqueduto colonial que se tornou símbolo do Rio de Janeiro, hoje serve como viaduto para o bondinho de Santa Teresa.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🚰 Originalmente um aqueduto que trazia água para o centro",
             "🚋 Desde 1896 serve como viaduto para os bondes de Santa Teresa",
@@ -428,6 +433,11 @@ const pontosHistoricos = [
         coords: [-22.903589, -43.174169],
         periodo: "1743",
         descricao: "Antigo palácio dos governadores coloniais e depois residência da família real portuguesa no Brasil.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "👑 Residência de D. João VI quando chegou ao Brasil em 1808",
             "📜 Local onde foi assinada a Lei Áurea em 1888",
@@ -441,6 +451,11 @@ const pontosHistoricos = [
         coords: [-22.897070, -43.177943],
         periodo: "1590",
         descricao: "Um dos mais antigos mosteiros do Brasil, fundado pelos monges beneditinos, guardião de tesouros artísticos coloniais.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🎵 Mantém a tradição dos cantos gregorianos há mais de 400 anos",
             "🏗️ Interior é um dos mais ricos exemplos do barroco brasileiro",
@@ -454,6 +469,11 @@ const pontosHistoricos = [
         coords: [-22.900557, -43.175937],
         periodo: "1820",
         descricao: "Antigo mercado colonial transformado em centro cultural, exemplo da arquitetura neoclássica no Brasil.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🏛️ Projeto do arquiteto francês Grandjean de Montigny",
             "🛒 Era o antigo mercado da cidade no século XIX",
@@ -467,6 +487,11 @@ const pontosHistoricos = [
         coords: [-22.986439, -43.187200],
         periodo: "1914",
         descricao: "Fortificação militar construída para defender a entrada da Baía de Guanabara, palco da revolta dos 18 do Forte.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "⚔️ Palco da histórica 'Revolta dos 18 do Forte' em 1922",
             "🔫 Possui canhões Krupp de 1906 ainda preservados",
@@ -480,6 +505,11 @@ const pontosHistoricos = [
         coords: [-22.905354, -43.182213],
         periodo: "1887",
         descricao: "Biblioteca com a maior coleção de literatura portuguesa fora de Portugal, em edifício de arquitetura neomanuelina.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "📚 Maior acervo de literatura portuguesa fora de Portugal",
             "🏰 Arquitetura neomanuelina única no Rio de Janeiro",
@@ -493,6 +523,11 @@ const pontosHistoricos = [
         coords: [-22.901052, -43.176287],
         periodo: "1906",
         descricao: "Antigo edifício do Banco do Brasil transformado em um dos principais centros culturais do país.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🏛️ Arquitetura eclética do início do século XX",
             "🎨 Um dos centros culturais mais visitados do Brasil",
@@ -506,6 +541,11 @@ const pontosHistoricos = [
         coords: [-22.90087, -43.17652],
         periodo: "1894",
         descricao: "Histórica confeitaria que preserva a Belle Époque carioca, frequentada pela elite da época.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "☕ Frequentada por escritores como Machado de Assis",
             "🪞 Espelhos belgas e móveis importados da Europa",
@@ -519,6 +559,11 @@ const pontosHistoricos = [
         coords: [-22.909703, -43.175377],
         periodo: "1810",
         descricao: "Maior biblioteca da América Latina, criada por D. João VI. Possui um dos maiores acervos bibliográficos do mundo.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "📚 Mais de 15 milhões de itens no acervo",
             "👑 Origem no acervo real trazido pela família real portuguesa",
@@ -532,6 +577,11 @@ const pontosHistoricos = [
         coords: [-22.906500, -43.190767],
         periodo: "1838",
         descricao: "Importante instituição que preserva a memória documental do Brasil, com documentos desde o período colonial.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "📜 Maior arquivo público da América Latina",
             "⚖️ Guarda documentos fundamentais da história do Brasil",
@@ -575,6 +625,11 @@ const pontosHistoricos = [
                 descricao: "Sede da Assembleia Legislativa do Estado do Rio",
                 imagem: "https://via.placeholder.com/300x200/32CD32/FFFFFF?text=ALERJ+Atual+2024"
             }
+        ],
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
         ]
     },
     {
@@ -584,6 +639,11 @@ const pontosHistoricos = [
         coords: [-22.902824, -43.189016],
         periodo: "1941",
         descricao: "Antigo Ministério da Guerra, hoje Comando Militar do Leste. Importante edifício da arquitetura oficial brasileira.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "⚔️ Era a sede do Ministério da Guerra até 1999",
             "🏛️ Arquitetura art déco dos anos 1940",
@@ -597,6 +657,11 @@ const pontosHistoricos = [
         coords: [-22.906899, -43.179261],
         periodo: "1773",
         descricao: "Igreja famosa por seu interior completamente revestido em ouro, considerada uma das mais belas do Brasil colonial.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "✨ Interior completamente folheado a ouro",
             "🎨 Pinturas no teto de Caetano da Costa Coelho",
@@ -610,6 +675,11 @@ const pontosHistoricos = [
         coords: [-22.90329, -43.17543],
         periodo: "1761",
         descricao: "Antiga catedral do Rio de Janeiro onde D. Pedro I foi coroado imperador do Brasil em 1822.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "👑 Local da coroação de D. Pedro I como imperador em 1822",
             "💒 Casamento de D. Pedro I com D. Leopoldina em 1817",
@@ -657,6 +727,11 @@ const pontosHistoricos = [
                 descricao: "Restaurado e transformado em centro cultural pela PGE-RJ",
                 imagem: "https://via.placeholder.com/300x200/32CD32/FFFFFF?text=Centro+Cultural+2010"
             }
+        ],
+        galeria: [
+            "https://i.imgur.com/vguYQN3.jpeg",
+            "https://i.imgur.com/oiSL0zO.jpeg",
+            "https://i.imgur.com/HcgtYAb.jpeg"
         ]
     },
     {
@@ -666,6 +741,11 @@ const pontosHistoricos = [
         coords: [-22.89658, -43.18196],
         periodo: "2013",
         descricao: "Museu dedicado à arte, cultura e história do Rio de Janeiro, localizado na revitalizada Praça Mauá.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🎨 Integra dois edifícios: o Palacete Dom João VI e a Escola do Olhar",
             "🌊 Foca na arte e cultura carioca em diálogo com o mundo",
@@ -679,6 +759,11 @@ const pontosHistoricos = [
         coords: [-22.89385, -43.17941],
         periodo: "2015",
         descricao: "Museu de ciências aplicadas que explora as possibilidades de construção do futuro a partir das escolhas de hoje.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "🚀 Projeto arquitetônico futurista de Santiago Calatrava",
             "🌱 Foco em sustentabilidade e futuro da humanidade",
@@ -692,6 +777,11 @@ const pontosHistoricos = [
         coords: [-22.90553, -43.16967],
         periodo: "1922",
         descricao: "Um dos museus mais completos sobre a história do Brasil, instalado no antigo Arsenal de Guerra e Forte de Santiago.",
+        galeria: [
+            "https://i.imgur.com/vguYQN3.jpeg",
+            "https://i.imgur.com/oiSL0zO.jpeg",
+            "https://i.imgur.com/HcgtYAb.jpeg"
+        ],
         curiosidades: [
             "🏰 Localizado no antigo Arsenal de Guerra da Ponta do Calabouço",
             "⚔️ Maior acervo de história do Brasil",
@@ -705,6 +795,11 @@ const pontosHistoricos = [
         coords: [-22.90270, -43.17331],
         periodo: "1743",
         descricao: "Marco histórico da cidade, palco de importantes eventos da história brasileira, próxima ao Paço Imperial.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "👑 Local de desembarque da família real portuguesa em 1808",
             "🎪 Palco da Proclamação da República em 1889",
@@ -718,6 +813,11 @@ const pontosHistoricos = [
         coords: [-22.89615, -43.16694],
         periodo: "1889",
         descricao: "Pequena ilha na Baía de Guanabara, famosa pelo último grande baile do Império brasileiro em 1889.",
+        galeria: [
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg",
+            "https://i.imgur.com/aAQt0f3.jpeg"
+        ],
         curiosidades: [
             "💃 Palco do famoso 'Baile da Ilha Fiscal' em 9 de novembro de 1889",
             "👑 Último grande evento social do Império, dias antes da Proclamação da República",
@@ -855,19 +955,7 @@ function criarMarcadores() {
         }
         
         popupContent += `
-                <p class="popup-description">${ponto.descricao}</p>`;
-        
-        // Adicionar imagem específica para Centro Cultural PGE-RJ
-        if (ponto.id === 24) {
-            popupContent += `
-                <div class="popup-image-container">
-                    <img src="https://i.imgur.com/jlkagUO.jpeg" 
-                         alt="Centro Cultural PGE-RJ" 
-                         class="popup-image">
-                </div>`;
-        }
-        
-        popupContent += `
+                <p class="popup-description">${ponto.descricao}</p>
                 <button onclick="mostrarDetalhes(${ponto.id})" class="popup-button">
                     📖 Ver Detalhes Completos
                 </button>
@@ -907,7 +995,7 @@ function gerarGaleriaImagens(galeria) {
             </div>
             <div class="galeria-controles">
                 ${galeria.map((_, index) => `
-                    <span class="galeria-indicador" data-index="${index}"></span>
+                    <span class="galeria-indicador" data-index="${index}" onclick="mudarImagemGaleria(this, ${index})"></span>
                 `).join('')}
             </div>
         </div>
@@ -2248,24 +2336,108 @@ function inicializarGaleriaImagens() {
     galerias.forEach(galeria => {
         // Seleciona os indicadores da galeria
         const indicadores = galeria.querySelectorAll('.galeria-indicador');
+        const scroll = galeria.querySelector('.imagens-galeria-scroll');
+        const imagens = galeria.querySelectorAll('.imagem-item');
         
-        // Adiciona evento de clique para cada indicador
+        // Verificar se as imagens estão visíveis
+        if (imagens.length > 0) {
+            // Garante que todas as imagens têm display e posicionamento corretos
+            imagens.forEach((img, idx) => {
+                img.style.display = 'block';
+                img.style.flexBasis = '100%';
+            });
+        }
+        
+        // Marcar o primeiro indicador como ativo
         indicadores.forEach((indicador, index) => {
-            // Remover eventos anteriores para evitar duplicação
-            indicador.removeEventListener('click', indicadorClickHandler);
+            // Remover classe ativo de todos
+            indicador.classList.remove('ativo');
             
-            // Adicionar o evento de clique
-            indicador.addEventListener('click', indicadorClickHandler);
-            
-            // Marcar o primeiro indicador como ativo
+            // Marcar apenas o primeiro como ativo
             if (index === 0) {
                 indicador.classList.add('ativo');
             }
+            
+            // Adiciona evento de clique para cada indicador
+            indicador.addEventListener('click', function() {
+                // Remove ativo de todos os indicadores desta galeria
+                indicadores.forEach(ind => ind.classList.remove('ativo'));
+                
+                // Adiciona ativo ao indicador clicado
+                this.classList.add('ativo');
+                
+                // Move a galeria para a imagem correspondente
+                const index = parseInt(this.getAttribute('data-index'));
+                if (scroll) {
+                    // Pausa qualquer animação em andamento
+                    scroll.style.animationPlayState = 'paused';
+                    // Aplica a transformação direta
+                    scroll.style.transform = `translateX(-${index * 100}%)`;
+                    scroll.style.transition = 'transform 0.5s ease';
+                }
+            });
         });
         
-        // Garantir que a animação de hover funcione
-        // Removemos a manipulação manual de animação pois já está sendo gerenciada pelo CSS
-        // com a pseudo-classe :hover
+        // Implementar controle automático baseado na animação CSS
+        let currentIndex = 0;
+        const totalImages = indicadores.length;
+        
+        // Atualizar indicadores conforme a animação CSS
+        if (totalImages > 1) {
+            // Verificamos inicialmente se a animação está funcionando
+            if (window.getComputedStyle(scroll).animationName === 'none') {
+                console.log('Animação não está aplicada corretamente. Ativando fallback manual.');
+                // Ativamos um fallback manual
+                let autoScrollInterval;
+                
+                galeria.addEventListener('mouseenter', function() {
+                    autoScrollInterval = setInterval(() => {
+                        currentIndex = (currentIndex + 1) % totalImages;
+                        scroll.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        
+                        // Atualiza indicadores
+                        indicadores.forEach(ind => ind.classList.remove('ativo'));
+                        indicadores[currentIndex].classList.add('ativo');
+                    }, 3000);
+                });
+                
+                galeria.addEventListener('mouseleave', function() {
+                    clearInterval(autoScrollInterval);
+                    // Voltamos para a primeira imagem
+                    currentIndex = 0;
+                    scroll.style.transform = 'translateX(0)';
+                    
+                    // Atualiza indicadores
+                    indicadores.forEach(ind => ind.classList.remove('ativo'));
+                    indicadores[0].classList.add('ativo');
+                });
+            } else {
+                // A animação CSS está funcionando, vamos apenas atualizar os indicadores
+                galeria.addEventListener('mouseenter', function() {
+                    // Iniciar controle dos indicadores quando o mouse entra
+                    let animationInterval = setInterval(() => {
+                        if (!galeria.matches(':hover')) {
+                            clearInterval(animationInterval);
+                            return;
+                        }
+                        
+                        // Atualizar indicador ativo
+                        indicadores.forEach(ind => ind.classList.remove('ativo'));
+                        currentIndex = (currentIndex + 1) % totalImages;
+                        indicadores[currentIndex].classList.add('ativo');
+                    }, 3000); // Muda a cada 3 segundos
+                });
+                
+                galeria.addEventListener('mouseleave', function() {
+                    // Reset para primeira imagem quando sai o mouse
+                    setTimeout(() => {
+                        currentIndex = 0;
+                        indicadores.forEach(ind => ind.classList.remove('ativo'));
+                        indicadores[0].classList.add('ativo');
+                    }, 100);
+                });
+            }
+        }
     });
 }
 
@@ -2286,6 +2458,34 @@ function indicadorClickHandler() {
             behavior: 'smooth'
         });
     }
+}
+
+// Função para mudar manualmente a imagem da galeria
+function mudarImagemGaleria(elemento, index) {
+    // Encontra o container da galeria
+    const galeria = elemento.closest('.imagens-galeria-container');
+    
+    // Atualiza a classe ativo nos indicadores
+    const indicadores = galeria.querySelectorAll('.galeria-indicador');
+    indicadores.forEach(ind => ind.classList.remove('ativo'));
+    elemento.classList.add('ativo');
+    
+    // Encontra o container de scroll
+    const scroll = galeria.querySelector('.imagens-galeria-scroll');
+    
+    // Pausa a animação para não interferir
+    scroll.style.animationPlayState = 'paused';
+    
+    // Move a galeria para a imagem correspondente
+    scroll.style.transform = `translateX(-${index * 100}%)`;
+    
+    // Depois de um tempo, retorna ao estado normal se o mouse ainda estiver sobre a galeria
+    setTimeout(() => {
+        if (galeria.matches(':hover')) {
+            scroll.style.animationPlayState = 'running';
+            scroll.style.transform = '';
+        }
+    }, 3000);
 }
 
 // Inicializar componentes quando o DOM for carregado
