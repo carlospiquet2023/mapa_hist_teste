@@ -1,51 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- ===== META TAGS BÁSICAS ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Centro Histórico do Rio de Janeiro | Mapa Educacional</title>
     
-    <!-- PWA Meta Tags -->
+    <!-- ===== PWA (PROGRESSIVE WEB APP) META TAGS ===== -->
+    <!-- Define a cor da barra de status em dispositivos móveis -->
     <meta name="theme-color" content="#FFD700">
+    <!-- Habilita o modo app para iOS Safari -->
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Define o estilo da barra de status no iOS -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Título do app quando adicionado à tela inicial -->
     <meta name="apple-mobile-web-app-title" content="Mapa História RJ">
+    <!-- Habilita funcionalidades de app móvel -->
     <meta name="mobile-web-app-capable" content="yes">
+    <!-- Desabilita detecção automática de números de telefone -->
     <meta name="format-detection" content="telephone=no">
     
-    <!-- Leaflet CSS -->
+    <!-- ===== BIBLIOTECAS EXTERNAS ===== -->
+    <!-- Leaflet.js: Biblioteca para mapas interativos -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Tipografia profissional -->
+    <!-- Inter: Fonte para corpo do texto (moderna e legível) -->
+    <!-- Playfair Display: Fonte para títulos (elegante e histórica) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome: Ícones vetoriais -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Custom CSS -->
+    <!-- ===== ESTILOS PERSONALIZADOS ===== -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- Loading Screen -->
+    <!-- ===== TELA DE CARREGAMENTO ===== -->
+    <!-- Overlay fullscreen com animação enquanto o mapa carrega -->
     <div class="loading" id="loading">
         <div class="spinner"></div>
         <div class="loading-text">Carregando Mapa Histórico...</div>
     </div>
 
-    <!-- App Container -->
+    <!-- ===== CONTAINER PRINCIPAL DA APLICAÇÃO ===== -->
+    <!-- Layout Grid responsivo que organiza header, sidebar e conteúdo principal -->
     <div class="app-container">
-        <!-- Header -->
+        
+        <!-- ===== CABEÇALHO FIXO ===== -->
+        <!-- Header com logo e controles de navegação -->
         <header class="header">
+            <!-- === LOGOTIPO E IDENTIDADE === -->
             <div class="logo">
+                <!-- Ícone do mapa com gradiente dourado -->
                 <div class="logo-icon">
                     <i class="fas fa-map-marked-alt"></i>
                 </div>
+                <!-- Textos da marca -->
                 <div class="logo-content">
                     <h1>Mapa Histórico do Rio</h1>
                     <p>Centro da Cidade Imperial</p>
                 </div>
             </div>
+            
+            <!-- === CONTROLES DE NAVEGAÇÃO === -->
             <div class="header-controls">
-                <!-- Desktop Menu -->
+                
+                <!-- MENU DESKTOP: Visível apenas em telas grandes -->
                 <div class="desktop-menu">
                     <button class="btn" onclick="resetMap()">
                         <i class="fas fa-home"></i>
@@ -61,11 +83,13 @@
                     </button>
                 </div>
                 
-                <!-- Mobile Hamburger Menu -->
+                <!-- MENU MOBILE: Menu hamburger para dispositivos móveis -->
                 <div class="mobile-menu">
+                    <!-- Botão hamburger com animação -->
                     <button class="hamburger-btn" onclick="toggleMobileMenu()">
                         <i class="fas fa-bars"></i>
                     </button>
+                    <!-- Dropdown do menu mobile -->
                     <div class="mobile-menu-dropdown" id="mobileMenuDropdown">
                         <button class="mobile-menu-item" onclick="resetMap(); closeMobileMenu()">
                             <i class="fas fa-home"></i>
@@ -84,24 +108,30 @@
             </div>
         </header>
 
-        <!-- Sidebar -->
+        <!-- ===== BARRA LATERAL DE CONTROLES ===== -->
+        <!-- Sidebar com busca, filtros e legenda -->
         <div class="sidebar">
+            
+            <!-- === SEÇÃO DE BUSCA === -->
             <div class="section">
                 <h3 class="section-title">
                     <i class="fas fa-search"></i>
                     Buscar Locais
                 </h3>
+                <!-- Container com ícone e input de busca -->
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" class="search-input" placeholder="Digite o nome de um local..." id="searchInput">
                 </div>
             </div>
 
+            <!-- === SEÇÃO DE FILTROS POR CATEGORIA === -->
             <div class="section">
                 <h3 class="section-title">
                     <i class="fas fa-filter"></i>
                     Categorias
                 </h3>
+                <!-- Grid responsivo de botões de filtro -->
                 <div class="filter-grid">
                     <button class="filter-btn active" onclick="filterCategory('all')">Todos</button>
                     <button class="filter-btn" onclick="filterCategory('museum')">Museus</button>
@@ -115,11 +145,14 @@
                 </div>
             </div>
 
+            <!-- === SEÇÃO DE LEGENDA === -->
+            <!-- Explicação visual das cores usadas no mapa -->
             <div class="section legend-section">
                 <h3 class="section-title">
                     <i class="fas fa-palette"></i>
                     Legenda
                 </h3>
+                <!-- Grid de itens da legenda com cores correspondentes -->
                 <div class="legend-grid">
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #e74c3c;"></div>
@@ -156,19 +189,26 @@
                 </div>
             </div>
 
+            <!-- === SEÇÃO DE INFORMAÇÕES DINÂMICAS === -->
+            <!-- Container que será preenchido dinamicamente com detalhes dos locais -->
             <div id="infoSection" style="display: none;"></div>
         </div>
 
-        <!-- Main Content -->
+        <!-- ===== ÁREA PRINCIPAL DO MAPA ===== -->
+        <!-- Container que abriga o mapa interativo do Leaflet -->
         <div class="main-content">
+            <!-- Div onde o mapa será renderizado pelo JavaScript -->
             <div id="map"></div>
             
-            <!-- Credenciais limpas - Apenas Desktop -->
+            <!-- === RODAPÉ COM CREDENCIAIS === -->
+            <!-- Visível apenas no desktop, contém informações do autor -->
             <div class="desktop-footer">
                 <div class="footer-content">
+                    <!-- Informações do autor/professor -->
                     <span class="footer-author">
                         📚 <strong>Carlos A O Piquet</strong> - Prof. História • Faculdade Simonsen
                     </span>
+                    <!-- Certificações e estudos -->
                     <span class="footer-credentials">
                         📜 Certificações: História do Brasil & Mundial • 💻 Estudante: Redes de Computadores + MBA IA • Faculdade Estácio
                     </span>
@@ -177,10 +217,12 @@
         </div>
     </div>
 
-    <!-- Remover footer anterior -->
-
-    <!-- Scripts -->
+    <!-- ===== SCRIPTS EXTERNOS ===== -->
+    <!-- Leaflet.js: Biblioteca JavaScript para mapas interativos -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- ===== SCRIPT PERSONALIZADO ===== -->
+    <!-- Contém toda a lógica da aplicação -->
     <script src="script.js"></script>
 </body>
 </html>

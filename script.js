@@ -1,27 +1,73 @@
-// ===== PWA & MOBILE OPTIMIZATIONS =====
+/*
+==========================================================================
+🗺️ MAPA HISTÓRICO DO RIO DE JANEIRO - LÓGICA DA APLICAÇÃO
+==========================================================================
+
+📝 DESCRIÇÃO:
+   Sistema completo de mapa interativo para exploração histórica
+   do Centro do Rio de Janeiro com recursos educacionais avançados
+
+🎯 FUNCIONALIDADES PRINCIPAIS:
+   - Mapa interativo com Leaflet.js
+   - Filtragem por categorias históricas
+   - Sistema de busca avançado
+   - Interface responsiva PWA
+   - Conteúdo educacional rico
+
+📱 COMPATIBILIDADE:
+   - Progressive Web App (PWA)
+   - Mobile-first responsive design
+   - Touch gestures otimizados
+   - Standalone app support
+
+👨‍💻 AUTOR: Carlos A O Piquet
+📅 ÚLTIMA ATUALIZAÇÃO: 2025
+
+==========================================================================
+*/
+
+//=============================================================================
+// 📱 PWA & OTIMIZAÇÕES MOBILE
+//=============================================================================
+
+/**
+ * INICIALIZAÇÃO DA APLICAÇÃO
+ * Configura otimizações específicas para dispositivos móveis e PWA
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    // Detectar dispositivo mobile
+    
+    /**
+     * DETECÇÃO DE DISPOSITIVO
+     * Identifica se está rodando em mobile ou como PWA standalone
+     */
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     
-    // Configurar altura da viewport para mobile
+    /**
+     * CONFIGURAÇÃO DE VIEWPORT DINÂMICO
+     * Ajusta altura da viewport para lidar com barras de navegação móveis
+     */
     function setVH() {
         const vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
         document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
     }
     
-    // Configurar no carregamento e ao redimensionar
+    // Aplicar configurações de viewport
     setVH();
     window.addEventListener('resize', setVH);
     window.addEventListener('orientationchange', () => {
-        setTimeout(setVH, 100);
+        setTimeout(setVH, 100); // Delay para aguardar mudança de orientação
     });
     
-    // Otimizações para PWA
+    /**
+     * OTIMIZAÇÕES PARA PWA
+     * Configurações específicas quando rodando como aplicativo standalone
+     */
     if (isStandalone) {
         document.body.classList.add('pwa-mode');
-        // Prevenir zoom em inputs (iOS)
+        
+        // Prevenir zoom em inputs no iOS
         const inputs = document.querySelectorAll('input, select, textarea');
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
@@ -35,24 +81,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Otimizações de touch para mobile
+    /**
+     * OTIMIZAÇÕES ESPECÍFICAS PARA MOBILE
+     * Melhora performance e experiência em dispositivos touch
+     */
     if (isMobile) {
         document.body.classList.add('mobile-device');
         
         // Prevenir scroll bounce no iOS
         document.addEventListener('touchmove', function(e) {
+            // Permitir scroll apenas em elementos específicos
             if (e.target.closest('.modal-content, .sidebar, #map')) {
                 return;
             }
             e.preventDefault();
         }, { passive: false });
         
-        // Melhorar performance do scroll
+        // Otimizar performance de touch
         document.addEventListener('touchstart', function() {}, { passive: true });
     }
 });
 
-// ===== DADOS HISTÓRICOS =====
+//=============================================================================
+// 🏛️ BASE DE DADOS HISTÓRICOS
+//=============================================================================
+
+/**
+ * PONTOS HISTÓRICOS DO CENTRO DO RIO
+ * Array com todos os locais históricos, suas coordenadas e informações
+ */
 const pontosHistoricos = [
     {
         id: 1,
@@ -1675,8 +1732,12 @@ function mostrarDetalhesPersonagem(personagem) {
 
 // ===== MOBILE MENU FUNCTIONS =====
 function toggleMobileMenu() {
+    console.log('toggleMobileMenu called'); // Debug
     const dropdown = document.getElementById('mobileMenuDropdown');
     const hamburgerBtn = document.querySelector('.hamburger-btn');
+    
+    console.log('Dropdown found:', dropdown); // Debug
+    console.log('Hamburger button found:', hamburgerBtn); // Debug
     
     if (dropdown) {
         dropdown.classList.toggle('active');
@@ -1686,10 +1747,14 @@ function toggleMobileMenu() {
         if (dropdown.classList.contains('active')) {
             icon.className = 'fas fa-times';
             hamburgerBtn.setAttribute('aria-expanded', 'true');
+            console.log('Menu opened'); // Debug
         } else {
             icon.className = 'fas fa-bars';
             hamburgerBtn.setAttribute('aria-expanded', 'false');
+            console.log('Menu closed'); // Debug
         }
+    } else {
+        console.error('Mobile menu dropdown not found!'); // Debug
     }
 }
 
@@ -1702,8 +1767,12 @@ function closeMobileMenu() {
         
         // Resetar ícone do hamburger
         const icon = hamburgerBtn.querySelector('i');
-        icon.className = 'fas fa-bars';
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        if (icon) {
+            icon.className = 'fas fa-bars';
+        }
+        if (hamburgerBtn) {
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+        }
     }
 }
 
@@ -1722,4 +1791,35 @@ window.addEventListener('resize', function() {
     if (window.innerWidth > 768) {
         closeMobileMenu();
     }
+});
+
+// === DEBUG: VERIFICAR ELEMENTOS MOBILE ===
+window.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, checking mobile elements...');
+    
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const desktopMenu = document.querySelector('.desktop-menu');
+    const hamburgerBtn = document.querySelector('.hamburger-btn');
+    const dropdown = document.getElementById('mobileMenuDropdown');
+    
+    console.log('Mobile menu element:', mobileMenu);
+    console.log('Desktop menu element:', desktopMenu);
+    console.log('Hamburger button:', hamburgerBtn);
+    console.log('Dropdown:', dropdown);
+    
+    // Verificar CSS computed styles
+    if (mobileMenu) {
+        const mobileStyle = window.getComputedStyle(mobileMenu);
+        console.log('Mobile menu display:', mobileStyle.display);
+    }
+    
+    if (desktopMenu) {
+        const desktopStyle = window.getComputedStyle(desktopMenu);
+        console.log('Desktop menu display:', desktopStyle.display);
+    }
+    
+    // Verificar viewport
+    console.log('Window width:', window.innerWidth);
+    console.log('Screen width:', screen.width);
+    console.log('User agent:', navigator.userAgent);
 });
