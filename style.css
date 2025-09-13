@@ -206,19 +206,19 @@ body {
 /* === HEADER DESIGN === */
 .header {
     position: fixed;
-    top: 0;
+    top: 8px; /* Espaçamento adicionado para evitar esmagamento contra a barra do navegador */
     left: 0;
     right: 0;
     z-index: var(--z-fixed);
     background: var(--surface-darker);
     backdrop-filter: blur(24px) saturate(180%);
     border-bottom: 1px solid var(--glass-border);
-    padding: var(--space-2) var(--space-6); /* Padding vertical reduzido */
+    padding: var(--space-3) var(--space-6); /* Padding vertical aumentado para dar mais espaço */
     display: flex;
     align-items: center;
     justify-content: space-between;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    height: var(--header-height); /* Altura fixa reduzida */
+    height: auto; /* Removida altura fixa para permitir respiração do conteúdo */
 }
 
 .header::before {
@@ -482,7 +482,7 @@ body {
     border-right: 1px solid var(--glass-border);
     padding: var(--space-6);
     overflow-y: auto;
-    margin-top: 80px;
+    margin-top: calc(var(--header-height) + 24px); /* Aumentado o espaçamento para evitar sobreposição com o cabeçalho */
     position: relative;
 }
 
@@ -1334,7 +1334,7 @@ input:focus {
 
 .footer-author {
     color: var(--neutral-100);
-    font-size: 0.75rem;
+    font-size: 0.6rem; /* Fonte ainda mais reduzida */
     font-weight: 500;
 }
 
@@ -1361,9 +1361,9 @@ input:focus {
         right: 0 !important; 
         background: rgb(0, 0, 0) !important; /* fundo totalmente opaco */
         border-top: 1px solid rgba(255, 215, 0, 0.7) !important;
-        padding: 8px 0 !important;
+        padding: 6px 0 !important; /* padding reduzido */
         text-align: center !important;
-        font-size: 0.75rem !important;
+        font-size: 0.55rem !important; /* fonte ainda mais reduzida */
         color: var(--neutral-200) !important;
         z-index: 1001 !important; /* z-index acima do mapa e suas atribuições */
     }
