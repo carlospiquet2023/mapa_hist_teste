@@ -47,21 +47,24 @@ function initVideoIntro() {
         return;
     }
 
-    // Configuração inicial do vídeo - FORÇAR SOM
+    // Configuração inicial do vídeo - FORÇAR SOM de forma mais robusta
     video.autoplay = true;
     video.playsInline = true;
-    video.muted = false; // EXPLICITAMENTE não silenciar
+    video.muted = false; // Inicia desmutado
     video.volume = 0.5; // Volume na metade (50%)
     
-    // Força unmute no elemento DOM também
+    // Remove qualquer atributo de muted do DOM
     video.removeAttribute('muted');
-
+    
+    // Força configurações no DOM
+    video.setAttribute('autoplay', '');
+    video.setAttribute('playsinline', '');
+    
     // Atualizar ícone para refletir que tem som
-    soundIcon.className = 'fas fa-volume-down'; // Ícone de volume médio
-    soundToggle.className = 'sound-toggle volume-medium'; // Classe CSS para indicador
-    soundToggle.title = 'Volume Médio (50%) - Clique para ajustar';
-
-    console.log('Vídeo configurado - Muted:', video.muted, 'Volume:', video.volume);
+    soundIcon.className = 'fas fa-volume-up';
+    soundToggle.title = 'Desligar Som';
+    
+    console.log('Vídeo configurado com som - Muted:', video.muted, 'Volume:', video.volume);
 
     // Controle de legendas
     let subtitlesEnabled = true; // Começamos com legendas ativadas
@@ -96,29 +99,37 @@ function initVideoIntro() {
             }
         }, 100);
         
-        // ESTRATÉGIA DUPLA: Ativa TANTO legendas nativas QUANTO customizadas para garantir que uma delas funcione
-        let trackFound = false;
+        // DESABILITA TOTALMENTE as legendas nativas para evitar duplicação
         for (let i = 0; i < textTracks.length; i++) {
-            if (textTracks[i].kind === 'subtitles') {
-                textTracks[i].mode = 'showing';
-                console.log('Legenda nativa ativada:', textTracks[i].label);
-                trackFound = true;
-                break;
-            }
+            textTracks[i].mode = 'disabled'; // Força desabilitação
         }
         
-        // Sempre ativa o sistema customizado como backup
-        console.log('Ativando sistema de legendas customizado como backup');
-        enableCustomSubtitles();
-        
-        // Reforça ativação de legendas após 1 segundo
+        // Força esconder legendas nativas via CSS também
         setTimeout(() => {
-            for (let i = 0; i < textTracks.length; i++) {
-                if (textTracks[i].kind === 'subtitles') {
-                    textTracks[i].mode = 'showing';
-                }
+            const videoElement = document.getElementById('introVideo');
+            if (videoElement) {
+                // Estilo para ESCONDER legendas nativas completamente
+                const style = document.createElement('style');
+                style.textContent = `
+                    #introVideo::cue {
+                        display: none !important;
+                        visibility: hidden !important;
+                        opacity: 0 !important;
+                    }
+                    #introVideo::-webkit-media-text-track-display {
+                        display: none !important;
+                    }
+                    #introVideo::-moz-media-text-track-display {
+                        display: none !important;
+                    }
+                `;
+                document.head.appendChild(style);
             }
-        }, 1000);
+        }, 100);
+        
+        // USA APENAS o sistema customizado
+        console.log('Usando APENAS sistema de legendas customizado');
+        enableCustomSubtitles();
     });
 
     // Sistema de legendas customizadas como fallback
@@ -177,60 +188,40 @@ function initVideoIntro() {
         customSubtitles.classList.remove('show');
     }
 
-    // Controle de som - cicla entre diferentes volumes
-    let volumeLevel = 1; // 0 = mudo, 1 = baixo (50%), 2 = alto (100%)
-    let isVolumeChanging = false; // Flag para prevenir múltiplos cliques
+    // Controle de som SIMPLIFICADO - apenas liga/desliga para evitar travamentos
+    let isSoundOn = true; // Começa com som ligado
     
     soundToggle.addEventListener('click', (e) => {
-        // Previne cliques rápidos consecutivos
-        if (isVolumeChanging) return;
-        isVolumeChanging = true;
-        
-        // Evita propagação do evento que pode estar causando problemas
         e.preventDefault();
         e.stopPropagation();
         
-        // Função para atualizar o volume
-        const updateVolume = () => {
-            switch(volumeLevel) {
-                case 0: // Mudo → Volume baixo (50%)
-                    video.muted = false;
-                    video.volume = 0.5;
-                    soundIcon.className = 'fas fa-volume-down';
-                    soundToggle.className = 'sound-toggle volume-medium';
-                    soundToggle.title = 'Volume Médio (50%) - Clique para aumentar';
-                    volumeLevel = 1;
-                    console.log('Volume ajustado para 50%');
-                    break;
-                case 1: // Volume baixo → Volume alto (100%)
-                    video.muted = false;
-                    video.volume = 1.0;
-                    soundIcon.className = 'fas fa-volume-up';
-                    soundToggle.className = 'sound-toggle volume-high';
-                    soundToggle.title = 'Volume Alto (100%) - Clique para silenciar';
-                    volumeLevel = 2;
-                    console.log('Volume ajustado para 100%');
-                    break;
-                case 2: // Volume alto → Mudo
-                    video.muted = true;
-                    video.volume = 0;
-                    soundIcon.className = 'fas fa-volume-mute';
-                    soundToggle.className = 'sound-toggle volume-mute';
-                    soundToggle.title = 'Sem Som - Clique para ativar';
-                    volumeLevel = 0;
-                    console.log('Volume silenciado');
-                    break;
-            }
-        };
+        // Debounce para evitar cliques múltiplos
+        if (soundToggle.disabled) return;
+        soundToggle.disabled = true;
         
-        // Executa a atualização com um pequeno atraso para melhorar a performance
         setTimeout(() => {
-            updateVolume();
-            // Libera a flag após um curto período
+            if (isSoundOn) {
+                // Desliga som
+                video.muted = true;
+                soundIcon.className = 'fas fa-volume-mute';
+                soundToggle.title = 'Ativar Som';
+                isSoundOn = false;
+                console.log('Som desligado');
+            } else {
+                // Liga som
+                video.muted = false;
+                video.volume = 0.5;
+                soundIcon.className = 'fas fa-volume-up';
+                soundToggle.title = 'Desligar Som';
+                isSoundOn = true;
+                console.log('Som ligado');
+            }
+            
+            // Re-habilita o botão
             setTimeout(() => {
-                isVolumeChanging = false;
-            }, 200);
-        }, 10);
+                soundToggle.disabled = false;
+            }, 300);
+        }, 50);
     });
 
     // Botão de pular
@@ -238,33 +229,35 @@ function initVideoIntro() {
         removeVideoOverlay();
     });
     
-    // Detecção e otimização para dispositivos móveis
+    // Detecção e otimização para dispositivos móveis SIMPLIFICADA
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile) {
-        // Adiciona eventos touch para melhor desempenho em dispositivos móveis
-        soundToggle.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Previne comportamentos padrão
-            // Simula o clique sem executar imediatamente
+        console.log('Dispositivo móvel detectado - aplicando otimizações');
+        
+        // Eventos touch SIMPLES para evitar travamentos
+        soundToggle.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Simula clique após um pequeno delay
             setTimeout(() => {
-                if (!e.defaultPrevented) {
-                    const clickEvent = new Event('click');
-                    soundToggle.dispatchEvent(clickEvent);
-                }
-            }, 100);
+                soundToggle.click();
+            }, 50);
         }, { passive: false });
         
-        skipButton.addEventListener('touchstart', (e) => {
+        skipButton.addEventListener('touchend', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             removeVideoOverlay();
         }, { passive: false });
         
-        // Reduz a qualidade do vídeo em dispositivos móveis para melhor desempenho
-        video.addEventListener('loadedmetadata', () => {
-            if (video.videoHeight > 720) {
-                console.log('Reduzindo qualidade de vídeo para melhorar desempenho em dispositivos móveis');
-                video.style.transform = 'scale(0.95)'; // Ligeira redução para melhorar o rendering
-            }
+        // Otimizações de performance para mobile
+        video.addEventListener('loadeddata', () => {
+            console.log('Vídeo carregado em dispositivo móvel');
+            // Força o som novamente após carregamento
+            video.muted = false;
+            video.volume = 0.5;
         });
     }
 
@@ -292,60 +285,29 @@ function initVideoIntro() {
     if (playPromise !== undefined) {
         playPromise
             .then(() => {
-                console.log('Vídeo iniciado com sucesso - Tentando garantir som');
+                console.log('Vídeo iniciado com sucesso');
                 
-                // ESTRATÉGIA DE SOM FORÇADO - várias tentativas
-                const forceSoundStrategies = [
-                    // Estratégia 1: Simples unmute
-                    () => {
-                        console.log('Estratégia 1: Unmute direto');
+                // Sistema SIMPLES e ROBUSTO para garantir som
+                const ensureSound = () => {
+                    if (video.muted || video.volume === 0) {
                         video.muted = false;
                         video.volume = 0.5;
-                    },
-                    
-                    // Estratégia 2: Progressiva
-                    () => {
-                        console.log('Estratégia 2: Volume gradual');
-                        video.muted = false;
-                        video.volume = 0.1;
-                        setTimeout(() => { video.volume = 0.3; }, 50);
-                        setTimeout(() => { video.volume = 0.5; }, 100);
-                    },
-                    
-                    // Estratégia 3: Recriação do stream de áudio
-                    () => {
-                        console.log('Estratégia 3: Reativação do áudio');
-                        video.muted = false;
-                        const currentTime = video.currentTime;
-                        video.volume = 0.5;
-                        // Um pequeno truque para "reiniciar" o stream de áudio
-                        video.pause();
-                        setTimeout(() => {
-                            video.currentTime = currentTime;
-                            video.play();
-                        }, 10);
+                        console.log('Som forçadamente ativado');
                     }
-                ];
+                };
                 
-                // Executa todas as estratégias com atrasos
-                forceSoundStrategies.forEach((strategy, index) => {
-                    setTimeout(() => {
-                        if (video.muted || video.volume === 0) {
-                            strategy();
-                        }
-                    }, index * 300); // Intervalos de 300ms entre estratégias
-                });
+                // Tenta ativar som imediatamente
+                ensureSound();
                 
-                // Força o som a cada 500ms por 2 segundos para garantir
-                for (let i = 1; i <= 4; i++) {
-                    setTimeout(() => {
-                        if (video.muted || video.volume === 0) {
-                            console.log('Tentativa adicional de ativar som:', i);
-                            video.muted = false;
-                            video.volume = 0.5;
-                        }
-                    }, i * 500);
-                }
+                // Verifica e força som a cada 200ms por 3 segundos
+                const soundInterval = setInterval(() => {
+                    ensureSound();
+                }, 200);
+                
+                setTimeout(() => {
+                    clearInterval(soundInterval);
+                    console.log('Finalizadas tentativas de ativação de som');
+                }, 3000);
             })
             .catch(error => {
                 console.log('Erro ao reproduzir vídeo com som, tentando abordagem alternativa:', error);
