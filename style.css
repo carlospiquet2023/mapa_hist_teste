@@ -910,13 +910,13 @@ body {
         z-index: 9999 !important;
     }
     
-    /* Map takes main space - MAXIMIZANDO O MAPA: Mais espaço para visualização */
+    /* Map takes MENOS espaço - EQUILIBRANDO: Mais espaço para os botões */
     .main-content {
         grid-area: main !important;
-        margin-top: var(--header-height) !important;
-        /* usa svh para contabilizar UI do navegador no mobile real */
-        height: calc(100svh - var(--header-height) - 220px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
-        height: calc(100dvh - var(--header-height) - 220px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        margin-top: 0 !important;
+        /* usa svh para contabilizar UI do navegador no mobile real - reduzido altura do mapa */
+        height: calc(100svh - var(--header-height) - 300px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
+        height: calc(100dvh - var(--header-height) - 300px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)) !important;
         max-height: none !important; /* remove o limite máximo para o mapa ocupar todo o espaço disponível */
         overflow: hidden !important;
         position: relative !important;
@@ -928,23 +928,24 @@ body {
         width: 100% !important;
         height: 100% !important;
         border-radius: 0 !important;
+        position: relative !important; /* para posicionamento absoluto do rodapé */
     }
     
-    /* Bottom panel for controls - ALTURA REDUZIDA: Botões mais próximos do mapa */
+    /* Bottom panel for controls - AUMENTADA: Mais espaço para os botões e rodapé */
     .sidebar {
         grid-area: sidebar !important;
         position: fixed !important;
         bottom: var(--safe-area-inset-bottom) !important;
         left: 0 !important;
         right: 0 !important;
-        max-height: 220px !important; /* reduzido para subir os botões */
-        min-height: 200px !important;
+        max-height: 300px !important; /* altura AUMENTADA para mais espaço para os botões */
+        min-height: 280px !important; /* altura mínima também AUMENTADA */
         overflow-y: auto !important;
         border-top: 2px solid rgba(255,215,0,0.3) !important;
         border-right: none !important;
         background: var(--surface-dark) !important;
         backdrop-filter: blur(15px) !important;
-        padding: var(--space-1) var(--mobile-padding) !important; /* padding ainda mais reduzido */
+        padding: var(--space-1) var(--mobile-padding) var(--space-12) var(--mobile-padding) !important; /* padding inferior aumentado para o rodapé */
         z-index: var(--z-sidebar) !important;
     }
     
@@ -957,7 +958,7 @@ body {
     .filter-grid {
         grid-template-columns: repeat(4, 1fr);
         gap: var(--space-1);
-        margin-bottom: var(--space-1);
+        margin-bottom: 2px !important;
     }
     
     .filter-btn {
@@ -975,23 +976,23 @@ body {
     
     /* Search section styling - ULTRA COMPACTO: Mínimo espaçamento */
     .section h3 {
-        font-size: 1rem;
-        margin-bottom: var(--space-1);
+        font-size: 0.9rem;
+        margin-bottom: 2px;
         color: var(--accent-400);
         font-weight: 600;
     }
     
-    /* Search input muito melhorado */
+    /* Search input ultra compacto */
     .search-input {
-        min-height: 52px;
-        font-size: 1rem;
-        padding: var(--space-4) var(--space-4) var(--space-4) var(--space-12);
-        margin-bottom: var(--space-4);
+        min-height: 40px;
+        font-size: 0.9rem;
+        padding: var(--space-2) var(--space-3) var(--space-2) var(--space-10);
+        margin-bottom: var(--space-2);
     }
     
-    /* Seções com espaçamento mínimo para interface compacta */
+    /* Seções com espaçamento mínimo para interface ultra compacta */
     .section {
-        margin-bottom: var(--space-1);
+        margin-bottom: 2px;
     }
     
     /* App-like map container - já definido acima (#map) */
@@ -1315,11 +1316,11 @@ input:focus {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgb(0, 0, 0); /* Totalmente opaco para cobrir atribuições do mapa */
     backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 215, 0, 0.3);
+    border-top: 1px solid rgba(255, 215, 0, 0.5);
     padding: 8px 16px;
-    z-index: var(--z-footer); /* Menor que o header e sidebar para não sobrepor */
+    z-index: 1001; /* Maior que o mapa e suas atribuições */
 }
 
 .footer-content {
@@ -1345,9 +1346,29 @@ input:focus {
     font-size: 0.7rem;
 }
 
-/* Hide desktop footer on mobile */
+/* Mobile footer aparecendo NO MAPA */
 @media (max-width: 768px) {
     .desktop-footer {
-        display: none;
+        display: none; /* Esconde o rodapé desktop */
+    }
+    
+    /* Rodapé mobile colocado diretamente sobre o mapa - mais abaixo e totalmente opaco */
+    .mobile-footer {
+        position: absolute !important; 
+        bottom: 0 !important; /* posicionado no fundo absoluto para cobrir atribuições */
+        left: 0 !important; /* estendendo por toda a largura */
+        right: 0 !important; 
+        background: rgb(0, 0, 0) !important; /* fundo totalmente opaco */
+        border-top: 1px solid rgba(255, 215, 0, 0.7) !important;
+        padding: 8px 0 !important;
+        text-align: center !important;
+        font-size: 0.75rem !important;
+        color: var(--neutral-200) !important;
+        z-index: 1001 !important; /* z-index acima do mapa e suas atribuições */
+    }
+    
+    .mobile-footer strong {
+        color: var(--accent-400) !important;
+        font-weight: bold !important;
     }
 }
