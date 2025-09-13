@@ -1846,12 +1846,11 @@ window.addEventListener('DOMContentLoaded', function() {
 
 /**
  * ABRE PÁGINA DE MEMÓRIAS
- * Função que abre uma nova janela/aba com vídeos e fotos históricas
+ * Função que abre a galeria de fotos históricas do Rio de Janeiro
  */
 function abrirMemoria() {
-    // Por enquanto, vamos abrir uma URL de exemplo
-    // Você pode substituir por sua página específica de memórias
-    const urlMemoria = 'https://example.com/memoria-historica-rio'; // Substitua pela URL real
+    // Caminho para a galeria de memórias
+    const urlMemoria = './galeria-memoria.html';
     
     try {
         // Abre em nova aba
