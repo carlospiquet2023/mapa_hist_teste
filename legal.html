@@ -4,404 +4,314 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informações Legais - Mapa da História</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        .legal-page {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif;
             line-height: 1.6;
-            color: #333;
+            color: #000;
+            background: #fff;
+            padding: 2rem;
+            max-width: 21cm;
+            margin: 0 auto;
+            min-height: 100vh;
         }
 
-        .legal-header {
+        .document-header {
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 15px;
             margin-bottom: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-bottom: 2px solid #000;
+            padding-bottom: 1rem;
         }
 
-        .legal-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .legal-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .legal-nav {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .legal-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 5px solid;
-        }
-
-        .legal-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        .legal-card.terms { border-left-color: #4CAF50; }
-        .legal-card.privacy { border-left-color: #2196F3; }
-        .legal-card.copyright { border-left-color: #FF9800; }
-        .legal-card.license { border-left-color: #9C27B0; }
-
-        .legal-card h3 {
-            color: #2c3e50;
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .legal-card .icon {
-            font-size: 1.5rem;
-        }
-
-        .legal-card p {
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-
-        .legal-card .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: transform 0.2s ease;
-            font-weight: 600;
-        }
-
-        .legal-card .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .quick-summary {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 3rem 0;
-            border-left: 5px solid #007bff;
-        }
-
-        .quick-summary h2 {
-            color: #007bff;
-            margin-bottom: 1.5rem;
+        .document-title {
             font-size: 1.8rem;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .summary-item {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .summary-item h4 {
-            color: #333;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
         }
 
-        .summary-item p {
-            color: #666;
-            font-size: 0.95rem;
-            margin: 0;
-        }
-
-        .contact-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 3rem;
-            border-radius: 15px;
-            text-align: center;
-            margin-top: 3rem;
-        }
-
-        .contact-section h2 {
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .contact-item {
-            background: rgba(255,255,255,0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-        }
-
-        .contact-item h4 {
-            margin-bottom: 1rem;
+        .document-subtitle {
             font-size: 1.2rem;
-        }
-
-        .contact-item a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: opacity 0.3s ease;
-        }
-
-        .contact-item a:hover {
-            opacity: 0.8;
-        }
-
-        .warning-box {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-left: 5px solid #f39c12;
-        }
-
-        .warning-box h3 {
-            color: #856404;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .warning-box p {
-            color: #856404;
-            margin: 0;
-            font-weight: 500;
+            color: #333;
+            font-style: italic;
         }
 
         .back-btn {
-            position: fixed;
-            top: 2rem;
-            left: 2rem;
-            background: #007bff;
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: #000;
             color: white;
-            padding: 0.8rem 1.2rem;
-            border-radius: 50px;
+            padding: 0.5rem 1rem;
             text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
-            transition: all 0.3s ease;
-            z-index: 1000;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            border-radius: 3px;
         }
 
         .back-btn:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+            background: #333;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #000;
+            padding-bottom: 0.3rem;
+        }
+
+        .article {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .paragraph {
+            text-align: justify;
+            margin-bottom: 1rem;
+            text-indent: 2rem;
+        }
+
+        .list {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .list-item {
+            margin-bottom: 0.3rem;
+        }
+
+        .legal-text {
+            font-size: 1rem;
+            text-align: justify;
+        }
+
+        .signature-block {
+            margin-top: 3rem;
+            text-align: center;
+            border-top: 1px solid #000;
+            padding-top: 2rem;
+        }
+
+        .contact-info {
+            background: #f5f5f5;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            margin: 2rem 0;
+        }
+
+        .warning-box {
+            background: #fffacd;
+            border: 2px solid #daa520;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media print {
+            .back-btn {
+                display: none;
+            }
+            body {
+                padding: 1rem;
+            }
         }
 
         @media (max-width: 768px) {
-            .legal-page {
+            body {
                 padding: 1rem;
+                font-size: 0.9rem;
             }
             
-            .legal-header h1 {
-                font-size: 2rem;
-            }
-            
-            .legal-nav {
-                grid-template-columns: 1fr;
+            .document-title {
+                font-size: 1.4rem;
             }
             
             .back-btn {
                 position: relative;
                 top: auto;
                 left: auto;
-                margin-bottom: 2rem;
-                display: inline-block;
+                display: block;
+                margin-bottom: 1rem;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
     <a href="index.html" class="back-btn">← Voltar ao Site</a>
-    
-    <div class="legal-page">
-        <div class="legal-header">
-            <h1>⚖️ Informações Legais</h1>
-            <p>Protegendo seus direitos e os nossos. Transparência total sobre como operamos.</p>
-        </div>
 
-        <div class="warning-box">
-            <h3>⚠️ Aviso Importante</h3>
-            <p>Este site e todo seu conteúdo são protegidos por direitos autorais. O uso não autorizado pode resultar em ação judicial. Leia nossos termos antes de usar qualquer conteúdo.</p>
-        </div>
+    <div class="document-header">
+        <div class="document-title">Informações Legais</div>
+        <div class="document-subtitle">Mapa da História - Centro Histórico do Rio de Janeiro</div>
+    </div>
 
-        <div class="legal-nav">
-            <div class="legal-card terms">
-                <h3><span class="icon">📋</span> Termos de Uso</h3>
-                <p>Regras e condições para uso do site. Define o que você pode e não pode fazer ao navegar em nosso conteúdo educacional.</p>
-                <a href="#" class="btn" onclick="openDocument('TERMOS-DE-USO.md')">Ler Termos de Uso</a>
-            </div>
+    <div class="warning-box">
+        ⚠️ AVISO IMPORTANTE: Este site e todo seu conteúdo são protegidos por direitos autorais.<br>
+        O uso não autorizado pode resultar em ação judicial.
+    </div>
 
-            <div class="legal-card privacy">
-                <h3><span class="icon">🔒</span> Política de Privacidade</h3>
-                <p>Como coletamos, usamos e protegemos seus dados pessoais. Conformidade total com a LGPD brasileira.</p>
-                <a href="#" class="btn" onclick="openDocument('POLITICA-PRIVACIDADE.md')">Ver Política de Privacidade</a>
-            </div>
-
-            <div class="legal-card copyright">
-                <h3><span class="icon">©</span> Direitos Autorais</h3>
-                <p>Aviso completo sobre propriedade intelectual. Todos os direitos reservados e proteções legais do projeto.</p>
-                <a href="#" class="btn" onclick="openDocument('COPYRIGHT-NOTICE.md')">Ver Direitos Autorais</a>
-            </div>
-
-            <div class="legal-card license">
-                <h3><span class="icon">📄</span> Licença Proprietária</h3>
-                <p>Documento técnico-legal completo sobre licenciamento. Para desenvolvedores e uso comercial.</p>
-                <a href="#" class="btn" onclick="openDocument('LICENCA-PROPRIETARIA.md')">Ver Licença</a>
-            </div>
-        </div>
-
-        <div class="quick-summary">
-            <h2>📝 Resumo Rápido</h2>
-            <div class="summary-grid">
-                <div class="summary-item">
-                    <h4>✅ Permitido</h4>
-                    <p>Navegar, estudar, compartilhar links, citar em trabalhos acadêmicos com devidos créditos.</p>
-                </div>
-                <div class="summary-item">
-                    <h4>❌ Proibido</h4>
-                    <p>Copiar código, reproduzir design, uso comercial não autorizado, redistribuição.</p>
-                </div>
-                <div class="summary-item">
-                    <h4>🔒 Seus Dados</h4>
-                    <p>Coletamos apenas o mínimo necessário. Não vendemos dados. LGPD compliant.</p>
-                </div>
-                <div class="summary-item">
-                    <h4>⚖️ Violações</h4>
-                    <p>Monitoramento ativo. Ação judicial automática. Multas de até R$ 280.000.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="contact-section">
-            <h2>📞 Contato Legal</h2>
-            <p>Dúvidas sobre direitos autorais, licenciamento ou questões legais?</p>
-            
-            <div class="contact-grid">
-                <div class="contact-item">
-                    <h4>📧 E-mail Geral</h4>
-                    <a href="mailto:carlospiquet.projetos@gmail.com">carlospiquet.projetos@gmail.com</a>
-                </div>
-                <div class="contact-item">
-                    <h4>⚖️ Questões Jurídicas</h4>
-                    <a href="mailto:carlospiquet.projetos@gmail.com">carlospiquet.projetos@gmail.com</a>
-                </div>
-                <div class="contact-item">
-                    <h4>💼 Licenciamento</h4>
-                    <a href="mailto:carlospiquet.projetos@gmail.com">carlospiquet.projetos@gmail.com</a>
-                </div>
-                <div class="contact-item">
-                    <h4>🛡️ LGPD/Privacidade</h4>
-                    <a href="mailto:carlospiquet.projetos@gmail.com">carlospiquet.projetos@gmail.com</a>
-                </div>
-            </div>
+    <div class="section">
+        <div class="section-title">I. Identificação do Responsável</div>
+        
+        <div class="legal-text">
+            <p class="paragraph">
+                <strong>Nome/Razão Social:</strong> Carlos Antonio de Oliveira Piquet<br>
+                <strong>CNPJ:</strong> 27.658.099/0001-70<br>
+                <strong>E-mail:</strong> carlospiquet.projetos@gmail.com<br>
+                <strong>Atividade:</strong> Desenvolvimento de conteúdo educacional digital
+            </p>
         </div>
     </div>
 
+    <div class="section">
+        <div class="section-title">II. Direitos Autorais e Propriedade Intelectual</div>
+        
+        <div class="article">
+            <div class="article-title">Art. 1º - Da Propriedade</div>
+            <p class="paragraph">
+                Todo o conteúdo deste website, incluindo mas não se limitando a textos, imagens, códigos de programação, design gráfico, layout, logotipos, e demais elementos, constitui obra intelectual de propriedade exclusiva de Carlos Antonio de Oliveira Piquet, estando protegido pela Lei nº 9.610/98 (Lei de Direitos Autorais) e demais legislações aplicáveis.
+            </p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Art. 2º - Das Restrições</div>
+            <p class="paragraph">
+                É expressamente vedado, sem prévia e expressa autorização por escrito do titular:
+            </p>
+            <div class="list">
+                <div class="list-item">a) A reprodução total ou parcial do conteúdo;</div>
+                <div class="list-item">b) A distribuição, publicação ou disponibilização pública;</div>
+                <div class="list-item">c) A modificação, adaptação ou criação de obras derivadas;</div>
+                <div class="list-item">d) O uso comercial direto ou indireto;</div>
+                <div class="list-item">e) A engenharia reversa do código fonte;</div>
+                <div class="list-item">f) A remoção de avisos de copyright e créditos.</div>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Art. 3º - Das Penalidades</div>
+            <p class="paragraph">
+                A violação dos direitos autorais sujeitará o infrator às sanções civis e criminais previstas nos artigos 102 a 110 da Lei nº 9.610/98, incluindo indenização por danos materiais e morais, busca e apreensão, e multa de até R$ 280.000,00 (duzentos e oitenta mil reais).
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">III. Termos de Uso</div>
+        
+        <div class="article">
+            <div class="article-title">Art. 4º - Do Acesso</div>
+            <p class="paragraph">
+                O acesso a este website implica na aceitação plena e sem reservas de todos os termos aqui estabelecidos. Caso não concorde com qualquer disposição, o usuário deve cessar imediatamente o uso do site.
+            </p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Art. 5º - Do Uso Permitido</div>
+            <p class="paragraph">
+                É permitido exclusivamente o uso pessoal e educacional não comercial, limitado à navegação e visualização do conteúdo, bem como o compartilhamento de links para o site oficial.
+            </p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Art. 6º - Das Obrigações do Usuário</div>
+            <p class="paragraph">
+                O usuário compromete-se a utilizar o site de forma lícita, respeitando os direitos de propriedade intelectual, não interferindo no funcionamento técnico, e não praticando qualquer ato que possa comprometer a segurança ou integridade do sistema.
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">IV. Política de Privacidade (LGPD)</div>
+        
+        <div class="article">
+            <div class="article-title">Art. 7º - Do Tratamento de Dados Pessoais</div>
+            <p class="paragraph">
+                O tratamento de dados pessoais neste website observa rigorosamente as disposições da Lei nº 13.709/18 (Lei Geral de Proteção de Dados). Coletamos apenas dados técnicos mínimos necessários para o funcionamento do site, sendo o titular dos dados o responsável identificado no artigo 1º deste documento.
+            </p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Art. 8º - Dos Direitos do Titular dos Dados</div>
+            <p class="paragraph">
+                São assegurados aos usuários todos os direitos previstos no art. 18 da LGPD, incluindo confirmação da existência de tratamento, acesso aos dados, correção, eliminação, portabilidade, e revogação do consentimento, exercidos mediante solicitação ao e-mail constante no artigo 1º.
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">V. Disposições Gerais</div>
+        
+        <div class="article">
+            <div class="article-title">Art. 9º - Da Legislação Aplicável</div>
+            <p class="paragraph">
+                Este documento rege-se integralmente pela legislação brasileira, elegendo-se o foro da comarca do domicílio do responsável para dirimir quaisquer controvérsias.
+            </p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Art. 10º - Das Alterações</div>
+            <p class="paragraph">
+                O responsável reserva-se o direito de alterar estes termos a qualquer tempo, mediante publicação no website, entrando as alterações em vigor na data de sua publicação.
+            </p>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <strong>CONTATO PARA QUESTÕES LEGAIS:</strong><br>
+        E-mail: carlospiquet.projetos@gmail.com<br>
+        Horário de atendimento: Segunda a sexta-feira, das 9h às 18h<br>
+        Prazo de resposta: até 15 dias úteis
+    </div>
+
+    <div class="signature-block">
+        <p><strong>© 2024 Carlos Antonio de Oliveira Piquet</strong></p>
+        <p><strong>CNPJ: 27.658.099/0001-70</strong></p>
+        <p><strong>TODOS OS DIREITOS RESERVADOS</strong></p>
+        <br>
+        <p><em>Documento emitido em: 14 de setembro de 2024</em></p>
+        <p><em>Última atualização: 14 de setembro de 2024</em></p>
+    </div>
+
     <script>
-        function openDocument(filename) {
-            // Em um ambiente real, você abriria o documento em uma nova aba ou modal
-            // Por agora, vamos simular com um alert
-            alert(`Abrindo documento: ${filename}\n\nEm um ambiente de produção, este documento seria exibido em uma nova janela ou baixado.`);
-            
-            // Código alternativo para download (descomente se quiser permitir download):
-            // const link = document.createElement('a');
-            // link.href = filename;
-            // link.download = filename;
-            // link.click();
-        }
+        // Proteção de cópia
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
 
-        // Smooth scroll para links internos
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'a' || e.key === 'c' || e.key === 'v' || e.key === 'p')) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Animação de entrada para os cards
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.legal-card, .summary-item').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            observer.observe(card);
-        });
-
-        // CSS para animação
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInUp {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
             }
-        `;
-        document.head.appendChild(style);
+        });
 
         // Copyright notice no console
-        console.log(`
-        %c🛡️ MAPA DA HISTÓRIA - TODOS OS DIREITOS RESERVADOS
-        %c© ${new Date().getFullYear()} Carlos Antonio de Oliveira Piquet. Uso não autorizado é proibido.
-        %cEste site é protegido por direitos autorais. 
-        Violações serão processadas judicialmente.
-        `, 
-        'color: #FF6B6B; font-size: 16px; font-weight: bold;',
-        'color: #4ECDC4; font-size: 14px;',
-        'color: #45B7D1; font-size: 12px;'
-        );
+        console.log('%c⚖️ DOCUMENTO LEGAL PROTEGIDO', 'color: red; font-size: 16px; font-weight: bold;');
+        console.log('%c© 2024 Carlos Antonio de Oliveira Piquet - CNPJ: 27.658.099/0001-70', 'color: blue; font-size: 12px;');
+        console.log('%cEste documento é protegido por direitos autorais. Reprodução não autorizada é crime.', 'color: orange; font-size: 10px;');
     </script>
 </body>
 </html>
