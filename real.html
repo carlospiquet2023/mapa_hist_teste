@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!--
+    =====================================================================================
+    🏛️ HISTÓRIA COMPLETA DO RIO DE JANEIRO - MATERIAL EDUCATIVO PARA ADOLESCENTES 🏛️
+    =====================================================================================
+    Desenvolvido por: Carlos Antonio de Oliveira Piquet
+    CNPJ: 27.658.099/0001-70
+    Professor de História - Faculdade Simonsen
+    E-mail: carlospiquet.projetos@gmail.com
+    
+    📚 OBJETIVO EDUCACIONAL:
+    Esta página apresenta de forma interativa e envolvente a rica história do Rio de Janeiro,
+    desde suas origens indígenas até os dias atuais, especialmente adaptada para estudantes
+    do ensino médio, com foco em despertar o interesse pela história local e nacional.
+    
+    🎯 METODOLOGIA PEDAGÓGICA:
+    - Timeline visual e interativa
+    - Biografias de personagens históricos relevantes
+    - Eventos marcantes contextalizados
+    - Linguagem acessível para adolescentes
+    - Design moderno e responsivo
+    =====================================================================================
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>História Completa do Rio de Janeiro | Material Educativo</title>
+    <meta name="description" content="História completa do Rio de Janeiro desde 1500 até hoje. Material educativo para estudantes com timeline interativa, personagens históricos e eventos marcantes.">
+    <meta name="keywords" content="História Rio de Janeiro, educação, timeline, período colonial, império, república, material didático">
+    <meta name="author" content="Carlos Antonio de Oliveira Piquet">
+    
+    <!-- Google Fonts para melhor tipografia -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== RESET E BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* ===== SEÇÃO HERO APRIMORADA ===== */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)),
+                radial-gradient(circle at 30% 70%, rgba(255,215,0,0.3) 0%, transparent 50%),
+                linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"><animate attributeName="r" values="2;5;2" dur="3s" repeatCount="indefinite"/></circle></svg>') repeat,
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><polygon points="100,10 40,198 190,78 10,78 160,198" fill="rgba(255,215,0,0.05)"/></svg>') no-repeat center;
+            animation: backgroundMove 20s linear infinite;
+        }
+
+        @keyframes backgroundMove {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-10px) translateY(-10px); }
+            50% { transform: translateX(10px) translateY(-5px); }
+            75% { transform: translateX(-5px) translateY(10px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            background: linear-gradient(45deg, #FFD700, #FFF, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: heroTitle 2s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            margin-bottom: 0.5rem;
+            opacity: 0.95;
+            animation: fadeInUp 1.5s ease 0.3s both;
+        }
+
+        .hero-description {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            animation: fadeInUp 1.5s ease 0.6s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.5s ease 0.9s both;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 15px 30px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        /* ===== NAVEGAÇÃO ===== */
+        .nav-header {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeInLeft 1s ease 1.2s both;
+        }
+
+        .back-btn {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .back-btn:hover {
+            background: rgba(0,0,0,0.9);
+            transform: translateX(-5px);
+        }
+
+        /* ===== TIMELINE APRIMORADA ===== */
+        .timeline-container {
+            background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .timeline {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                #FF6B6B 0%, 
+                #4ECDC4 25%, 
+                #45B7D1 50%, 
+                #96CEB4 75%, 
+                #FFEAA7 100%);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            border-radius: 2px;
+        }
+
+        /* ===== PERÍODOS HISTÓRICOS ===== */
+        .period {
+            margin: 8rem 0;
+            background: white;
+            border-radius: 25px;
+            padding: 4rem;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.1),
+                0 8px 25px rgba(0,0,0,0.05);
+            position: relative;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .period.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .period:nth-child(odd) {
+            margin-right: calc(50% + 40px);
+        }
+
+        .period:nth-child(even) {
+            margin-left: calc(50% + 40px);
+        }
+
+        .period-marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            top: 60px;
+            border: 6px solid white;
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .period:nth-child(1) .period-marker {
+            right: -50px;
+            background: #FF6B6B;
+        }
+
+        .period:nth-child(2) .period-marker {
+            left: -50px;
+            background: #4ECDC4;
+        }
+
+        .period:nth-child(3) .period-marker {
+            right: -50px;
+            background: #45B7D1;
+        }
+
+        .period:nth-child(4) .period-marker {
+            left: -50px;
+            background: #96CEB4;
+        }
+
+        .period:nth-child(5) .period-marker {
+            right: -50px;
+            background: #FFEAA7;
+            color: #2c3e50;
+        }
+
+        .period:nth-child(6) .period-marker {
+            left: -50px;
+            background: #FD79A8;
+        }
+
+        .period-header {
+            border-bottom: 3px solid #e9ecef;
+            padding-bottom: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .period-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3vw, 3rem);
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .period-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+
+        .period-years {
+            font-size: 1.4rem;
+            color: #7f8c8d;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .period-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            text-align: justify;
+            color: #34495e;
+        }
+
+        .key-events {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .key-events h4 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .events-list {
+            list-style: none;
+        }
+
+        .events-list li {
+            background: white;
+            margin-bottom: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .events-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .event-year {
+            font-weight: 700;
+            color: #e74c3c;
+            font-size: 1.1rem;
+        }
+
+        .event-description {
+            margin-top: 0.5rem;
+            color: #2c3e50;
+        }
+
+        /* ===== PERSONAGENS HISTÓRICOS ===== */
+        .characters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .character {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.6s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .character::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.8s ease;
+            opacity: 0;
+        }
+
+        .character:hover::before {
+            animation: shine 0.8s ease;
+        }
+
+        .character.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .character:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .character-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .character-role {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            font-style: italic;
+            color: #FFD700;
+        }
+
+        .character-bio {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        /* ===== CURIOSIDADES ===== */
+        .curiosities {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6rem 0;
+            margin-top: 4rem;
+        }
+
+        .curiosities-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .curiosities h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .curiosities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .curiosity-card {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .curiosity-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .curiosity-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .curiosity-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 768px) {
+            .timeline::before { 
+                left: 30px; 
+                width: 4px;
+            }
+            
+            .period { 
+                margin-left: 80px !important; 
+                margin-right: 0 !important; 
+                padding: 2rem;
+            }
+            
+            .period-marker { 
+                left: -35px !important; 
+                right: auto !important;
+                width: 25px;
+                height: 25px;
+            }
+            
+            .characters { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .curiosities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+
+        /* ===== ANIMAÇÕES ===== */
+        @keyframes heroTitle {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(45deg) translateX(-200%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: rotate(45deg) translateX(200%); opacity: 0; }
+        }
+
+        /* ===== ACESSIBILIDADE ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ===== SCROLL SUAVE ===== */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVEGAÇÃO ===== -->
+    <nav class="nav-header">
+        <button class="back-btn" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i> Voltar ao Mapa
+        </button>
+    </nav>
+
+    <!-- ===== SEÇÃO HERO ===== -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>História do Rio de Janeiro</h1>
+            <p class="hero-subtitle">Uma Jornada Épica Através dos Séculos</p>
+            <p class="hero-description">
+                Da fundação pelos portugueses aos tempos modernos - 
+                descubra como a Cidade Maravilhosa se tornou o coração cultural do Brasil
+            </p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="scrollToTimeline()">
+                    <i class="fas fa-scroll"></i>
+                    Explorar Timeline
+                </button>
+                <a href="index.html" class="btn-secondary">
+                    <i class="fas fa-map-marked-alt"></i>
+                    Ver no Mapa
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TIMELINE HISTÓRICA ===== -->
+    <section class="timeline-container">
+        <div class="timeline" id="timeline">
+            <h2 class="section-title">
+                <i class="fas fa-hourglass-half"></i>
+                Linha do Tempo Histórica
+            </h2>
+            
+            <!-- PERÍODO PRÉ-COLONIAL -->
+            <div class="period">
+                <div class="period-marker">🏹</div>
+                <div class="period-header">
+                    <h3 class="period-title">
+                        <span class="period-icon">🏞️</span>
+                        Período Pré-Colonial
+                    </h3>
+                    <div class="period-years">Antes de 1500 - 1565</div>
+                </div>
+                
+                <div class="period-description">
+                    Muito antes da chegada dos europeus, a região da Baía de Guanabara era habitada pelos povos indígenas Tupinambás e Tamoios. Esses grupos viviam em harmonia com a natureza exuberante, desenvolvendo uma cultura rica baseada na pesca, caça e agricultura de subsistência. A Baía de Guanabara, chamada pelos indígenas de "seio do mar", era um paraíso natural com florestas densas e fauna abundante.
+                </div>
+
+                <div class="key-events">
+                    <h4><i class="fas fa-leaf"></i> Principais Características</h4>
+                    <ul class="events-list">
+                        <li>
+                            <div class="event-year">Há milhares de anos</div>
+                            <div class="event-description">Ocupação indígena da região com os povos Tupinambás e Tamoios</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1502</div>
+                            <div class="event-description">Primeira expedição europeia avista a Baía de Guanabara em 1º de janeiro</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1555-1567</div>
+                            <div class="event-description">França Antártica: tentativa francesa de colonização com apoio indígena</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="characters">
+                    <div class="character">
+                        <div class="character-avatar">🏹</div>
+                        <div class="character-name">Cunhambebe</div>
+                        <div class="character-role">Grande Chefe Tamoio</div>
+                        <div class="character-bio">Líder indígena que comandou a resistência contra a colonização portuguesa e aliou-se aos franceses na França Antártica. Conhecido por sua bravura e estratégia militar.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">⚓</div>
+                        <div class="character-name">Nicolas Durand de Villegagnon</div>
+                        <div class="character-role">Fundador da França Antártica</div>
+                        <div class="character-bio">Militar francês que estabeleceu uma colônia na Baía de Guanabara em 1555, sonhando criar um refúgio protestante no Novo Mundo.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERÍODO COLONIAL -->
+            <div class="period">
+                <div class="period-marker">⛪</div>
+                <div class="period-header">
+                    <h3 class="period-title">
+                        <span class="period-icon">🏛️</span>
+                        Período Colonial
+                    </h3>
+                    <div class="period-years">1565 - 1822</div>
+                </div>
+                
+                <div class="period-description">
+                    O Rio de Janeiro nasceu da necessidade portuguesa de expulsar os franceses e garantir o domínio sobre esta região estratégica. Fundada como São Sebastião do Rio de Janeiro em 1565, a cidade cresceu lentamente até se tornar um dos principais portos do império português. Com a descoberta do ouro em Minas Gerais, o Rio transformou-se no principal porto de escoamento das riquezas coloniais e, em 1763, tornou-se capital do Vice-Reino do Brasil.
+                </div>
+
+                <div class="key-events">
+                    <h4><i class="fas fa-crown"></i> Eventos Marcantes</h4>
+                    <ul class="events-list">
+                        <li>
+                            <div class="event-year">1565</div>
+                            <div class="event-description">Fundação da cidade de São Sebastião do Rio de Janeiro por Estácio de Sá</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1567</div>
+                            <div class="event-description">Expulsão definitiva dos franceses da Baía de Guanabara</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1690-1720</div>
+                            <div class="event-description">Descoberta do ouro em Minas Gerais impulsiona crescimento do Rio</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1763</div>
+                            <div class="event-description">Rio de Janeiro torna-se capital do Vice-Reino do Brasil</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1808</div>
+                            <div class="event-description">Chegada da Família Real Portuguesa - transformação urbana</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="characters">
+                    <div class="character">
+                        <div class="character-avatar">⚔️</div>
+                        <div class="character-name">Estácio de Sá</div>
+                        <div class="character-role">Fundador e Primeiro Governador</div>
+                        <div class="character-bio">Sobrinho de Mem de Sá, liderou a expedição que fundou o Rio de Janeiro e morreu heroicamente lutando contra os franceses e tamoios em 1567.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">👑</div>
+                        <div class="character-name">Mem de Sá</div>
+                        <div class="character-role">Governador-Geral do Brasil</div>
+                        <div class="character-bio">Terceiro Governador-Geral do Brasil, consolidou a fundação do Rio e implementou as primeiras estruturas administrativas da cidade.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">🏰</div>
+                        <div class="character-name">Marquês do Lavradio</div>
+                        <div class="character-role">Vice-Rei do Brasil (1769-1779)</div>
+                        <div class="character-bio">Considerado um dos melhores administradores coloniais, promoveu reformas urbanas, criou o Passeio Público e modernizou a cidade.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERÍODO JOANINO -->
+            <div class="period">
+                <div class="period-marker">👑</div>
+                <div class="period-header">
+                    <h3 class="period-title">
+                        <span class="period-icon">🏰</span>
+                        Período Joanino
+                    </h3>
+                    <div class="period-years">1808 - 1821</div>
+                </div>
+                
+                <div class="period-description">
+                    A chegada da Família Real Portuguesa em 1808 revolucionou o Rio de Janeiro. De uma cidade colonial modesta, transformou-se na única cidade do mundo a sediar um império europeu fora da Europa. Dom João VI promoveu uma modernização sem precedentes: criou instituições de ensino superior, fundou o Banco do Brasil, abriu os portos, instalou a Imprensa Régia e trouxe a Missão Artística Francesa. O Rio tornou-se cosmopolita, recebendo imigrantes e comerciantes de todo o mundo.
+                </div>
+
+                <div class="key-events">
+                    <h4><i class="fas fa-ship"></i> Transformações Fundamentais</h4>
+                    <ul class="events-list">
+                        <li>
+                            <div class="event-year">1808</div>
+                            <div class="event-description">Chegada da Corte Portuguesa - população dobra em poucos anos</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1808</div>
+                            <div class="event-description">Abertura dos Portos às Nações Amigas - fim do monopólio português</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1810</div>
+                            <div class="event-description">Fundação da Biblioteca Nacional e criação da Academia Militar</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1816</div>
+                            <div class="event-description">Chegada da Missão Artística Francesa - revolução cultural</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1818</div>
+                            <div class="event-description">Fundação do Museu Nacional - primeiro museu científico do país</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="characters">
+                    <div class="character">
+                        <div class="character-avatar">👑</div>
+                        <div class="character-name">Dom João VI</div>
+                        <div class="character-role">Rei de Portugal e Brasil</div>
+                        <div class="character-bio">Transformou o Rio na capital de um império ultramarino, promovendo modernização urbana e desenvolvimento cultural sem precedentes na América.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">🎨</div>
+                        <div class="character-name">Joachim Lebreton</div>
+                        <div class="character-role">Líder da Missão Artística Francesa</div>
+                        <div class="character-bio">Arquiteto e político francês que liderou o grupo de artistas responsável por introduzir o neoclassicismo no Brasil e fundar a Academia Imperial de Belas Artes.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERÍODO IMPERIAL -->
+            <div class="period">
+                <div class="period-marker">👑</div>
+                <div class="period-header">
+                    <h3 class="period-title">
+                        <span class="period-icon">🏛️</span>
+                        Período Imperial
+                    </h3>
+                    <div class="period-years">1822 - 1889</div>
+                </div>
+                
+                <div class="period-description">
+                    Com a Independência do Brasil, o Rio de Janeiro consolidou-se como capital do Império. A cidade viveu seu apogeu como centro político e cultural, recebendo grandes investimentos em infraestrutura. Durante os 67 anos do Império, o Rio transformou-se numa metrópole moderna para os padrões da época, com sistema de esgoto, iluminação a gás, bondes e ferrovias. Foi palco dos grandes eventos nacionais: coroações, casamentos reais, abolição da escravatura e proclamação da república.
+                </div>
+
+                <div class="key-events">
+                    <h4><i class="fas fa-crown"></i> Marcos do Império</h4>
+                    <ul class="events-list">
+                        <li>
+                            <div class="event-year">1822</div>
+                            <div class="event-description">Independência do Brasil - Rio torna-se capital do Império</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1831</div>
+                            <div class="event-description">Abdicação de Dom Pedro I - período regencial</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1840</div>
+                            <div class="event-description">Golpe da Maioridade - Dom Pedro II assume aos 14 anos</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1854</div>
+                            <div class="event-description">Primeira ferrovia do Brasil: Petrópolis-Rio</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1888</div>
+                            <div class="event-description">Lei Áurea - abolição da escravatura assinada no Paço Imperial</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="characters">
+                    <div class="character">
+                        <div class="character-avatar">👑</div>
+                        <div class="character-name">Dom Pedro I</div>
+                        <div class="character-role">Primeiro Imperador do Brasil</div>
+                        <div class="character-bio">O "Libertador", proclamou a Independência e estabeleceu o Rio como capital imperial. Criou a primeira Constituição brasileira e definiu os símbolos nacionais.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">👑</div>
+                        <div class="character-name">Dom Pedro II</div>
+                        <div class="character-role">Segundo Imperador do Brasil</div>
+                        <div class="character-bio">O "Magnânimo", governou por 49 anos promovendo educação, ciência e modernização. Transformou o Rio numa metrópole cosmopolita e centro cultural da América do Sul.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">👸</div>
+                        <div class="character-name">Princesa Isabel</div>
+                        <div class="character-role">A Redentora</div>
+                        <div class="character-bio">Herdeira do trono, assinou a Lei Áurea abolindo a escravidão em 1888. Defensora dos direitos humanos e da modernização do país.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRIMEIRA REPÚBLICA -->
+            <div class="period">
+                <div class="period-marker">🇧🇷</div>
+                <div class="period-header">
+                    <h3 class="period-title">
+                        <span class="period-icon">🏛️</span>
+                        Primeira República
+                    </h3>
+                    <div class="period-years">1889 - 1930</div>
+                </div>
+                
+                <div class="period-description">
+                    A Proclamação da República em 1889 inaugurou uma nova era. O Rio manteve-se como Distrito Federal e capital da República. Este período foi marcado pela Belle Époque tropical com as grandes reformas urbanas de Pereira Passos (1902-1906), que demoliram o centro colonial e criaram uma "Paris tropical". A cidade viveu transformações radicais: construção da Avenida Central (atual Rio Branco), erradicação da febre amarela, modernização do porto e expansão para a Zona Sul.
+                </div>
+
+                <div class="key-events">
+                    <h4><i class="fas fa-flag"></i> Era Republicana</h4>
+                    <ul class="events-list">
+                        <li>
+                            <div class="event-year">1889</div>
+                            <div class="event-description">Proclamação da República no Campo de Santana</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1902-1906</div>
+                            <div class="event-description">Reforma Pereira Passos - modernização radical da cidade</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1904</div>
+                            <div class="event-description">Revolta da Vacina - resistência popular à vacinação obrigatória</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1922</div>
+                            <div class="event-description">Centenário da Independência - grande exposição internacional</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1925</div>
+                            <div class="event-description">Revolução de 1922 e os "18 do Forte" - agitação política</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="characters">
+                    <div class="character">
+                        <div class="character-avatar">⚔️</div>
+                        <div class="character-name">Marechal Deodoro da Fonseca</div>
+                        <div class="character-role">Proclamador da República</div>
+                        <div class="character-bio">Líder militar que proclamou a República no Campo de Santana em 15 de novembro de 1889, tornando-se o primeiro Presidente do Brasil.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">🏗️</div>
+                        <div class="character-name">Pereira Passos</div>
+                        <div class="character-role">O "Haussmann Tropical"</div>
+                        <div class="character-bio">Prefeito revolucionário que transformou o Rio numa metrópole moderna, demolindo cortiços e criando grandes avenidas inspiradas em Paris.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">⚕️</div>
+                        <div class="character-name">Oswaldo Cruz</div>
+                        <div class="character-role">Sanitarista</div>
+                        <div class="character-bio">Médico que erradicou febre amarela, varíola e peste bubônica do Rio, transformando a cidade num modelo de saúde pública mundial.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ERA VARGAS E MODERNIZAÇÃO -->
+            <div class="period">
+                <div class="period-marker">🏭</div>
+                <div class="period-header">
+                    <h3 class="period-title">
+                        <span class="period-icon">🏭</span>
+                        Era Vargas e Modernização
+                    </h3>
+                    <div class="period-years">1930 - 1960</div>
+                </div>
+                
+                <div class="period-description">
+                    O período Vargas marcou a consolidação do Rio como capital federal e símbolo da identidade nacional brasileira. A cidade passou por nova modernização com a construção de grandes obras: Cristo Redentor (1931), Copacabana Palace, estádio do Maracanã para a Copa do Mundo de 1950. O Rio tornou-se a "capital cultural" do Brasil, berço da MPB, capital do carnaval e do cinema nacional. A expansão urbana acelerou-se com o crescimento das favelas e dos bairros da Zona Sul e Norte.
+                </div>
+
+                <div class="key-events">
+                    <h4><i class="fas fa-rocket"></i> Modernização Nacional</h4>
+                    <ul class="events-list">
+                        <li>
+                            <div class="event-year">1930</div>
+                            <div class="event-description">Revolução de 1930 - Getúlio Vargas toma o poder</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1931</div>
+                            <div class="event-description">Inauguração do Cristo Redentor - novo símbolo da cidade</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1950</div>
+                            <div class="event-description">Copa do Mundo no Maracanã - "Maracanaço"</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1955</div>
+                            <div class="event-description">Era JK - início da construção de Brasília</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1960</div>
+                            <div class="event-description">Transferência da capital para Brasília</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="characters">
+                    <div class="character">
+                        <div class="character-avatar">🎩</div>
+                        <div class="character-name">Getúlio Vargas</div>
+                        <div class="character-role">O "Pai dos Pobres"</div>
+                        <div class="character-bio">Governou o Brasil por 19 anos, transformando o Rio no centro do poder nacional e criando a identidade cultural brasileira moderna.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">🎵</div>
+                        <div class="character-name">Carmen Miranda</div>
+                        <div class="character-role">Embaixatriz Cultural</div>
+                        <div class="character-bio">Cantora que levou o Rio e a cultura brasileira para o mundo, tornando-se símbolo internacional do Brasil.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">⚽</div>
+                        <div class="character-name">Pelé</div>
+                        <div class="character-role">Rei do Futebol</div>
+                        <div class="character-bio">Maior jogador de todos os tempos, fez suas primeiras grandes atuações no Maracanã, palco dos maiores momentos do futebol mundial.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIO CONTEMPORÂNEO -->
+            <div class="period">
+                <div class="period-marker">🌟</div>
+                <div class="period-header">
+                    <h3 class="period-title">
+                        <span class="period-icon">🌆</span>
+                        Rio Contemporâneo
+                    </h3>
+                    <div class="period-years">1960 - Presente</div>
+                </div>
+                
+                <div class="period-description">
+                    Após perder o status de capital federal, o Rio reinventou-se como estado da Guanabara (1960-1975) e depois estado do Rio de Janeiro. A cidade enfrentou desafios urbanos típicos das grandes metrópoles: crescimento das favelas, violência urbana, mas também viveu momentos de glória como sede de grandes eventos: Rock in Rio, Jogos Pan-Americanos 2007, Copa do Mundo 2014, Olimpíadas 2016. Hoje é patrimônio mundial da UNESCO e continua sendo o cartão-postal do Brasil.
+                </div>
+
+                <div class="key-events">
+                    <h4><i class="fas fa-globe"></i> Rio Global</h4>
+                    <ul class="events-list">
+                        <li>
+                            <div class="event-year">1975</div>
+                            <div class="event-description">Fusão dos estados do Rio de Janeiro e Guanabara</div>
+                        </li>
+                        <li>
+                            <div class="event-year">1985</div>
+                            <div class="event-description">Primeiro Rock in Rio - Rio como capital mundial do rock</div>
+                        </li>
+                        <li>
+                            <div class="event-year">2012</div>
+                            <div class="event-description">Paisagem Cultural do Rio vira Patrimônio Mundial da UNESCO</div>
+                        </li>
+                        <li>
+                            <div class="event-year">2014</div>
+                            <div class="event-description">Final da Copa do Mundo no Maracanã</div>
+                        </li>
+                        <li>
+                            <div class="event-year">2016</div>
+                            <div class="event-description">Primeira Olimpíada da América do Sul</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="characters">
+                    <div class="character">
+                        <div class="character-avatar">🎸</div>
+                        <div class="character-name">Roberto Medina</div>
+                        <div class="character-role">Criador do Rock in Rio</div>
+                        <div class="character-bio">Empresário que criou o maior festival de rock do mundo, colocando o Rio no mapa da música internacional.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">🏅</div>
+                        <div class="character-name">Eduardo Paes</div>
+                        <div class="character-role">Prefeito Olímpico</div>
+                        <div class="character-bio">Liderou a transformação do Rio para sediar os Jogos Olímpicos de 2016, modernizando a infraestrutura urbana.</div>
+                    </div>
+                    
+                    <div class="character">
+                        <div class="character-avatar">🎭</div>
+                        <div class="character-name">Arlindo Rodrigues</div>
+                        <div class="character-role">Arquiteto do Maracanã</div>
+                        <div class="character-bio">Projetou o estádio que se tornou templo mundial do futebol e palco dos maiores eventos esportivos do planeta.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SEÇÃO DE CURIOSIDADES ===== -->
+    <section class="curiosities">
+        <div class="curiosities-container">
+            <h3>🤔 Curiosidades Incríveis sobre o Rio</h3>
+            <div class="curiosities-grid">
+                <div class="curiosity-card">
+                    <span class="curiosity-icon">🏖️</span>
+                    <h4 class="curiosity-title">Praia Urbana Única</h4>
+                    <p>O Rio é uma das poucas cidades do mundo que possui praias oceânicas dentro da área urbana. Copacabana e Ipanema são praias de classe mundial no coração da metrópole!</p>
+                </div>
+                
+                <div class="curiosity-card">
+                    <span class="curiosity-icon">🎭</span>
+                    <h4 class="curiosity-title">Berço Cultural</h4>
+                    <p>A MPB, a Bossa Nova, o Funk Carioca e o maior carnaval do mundo nasceram aqui. O Rio exportou mais cultura brasileira que qualquer outra cidade!</p>
+                </div>
+                
+                <div class="curiosity-card">
+                    <span class="curiosity-icon">🏔️</span>
+                    <h4 class="curiosity-title">Floresta na Cidade</h4>
+                    <p>A Tijuca é a maior floresta urbana do mundo! Com 3.200 hectares, abriga o Cristo Redentor e centenas de espécies da Mata Atlântica.</p>
+                </div>
+                
+                <div class="curiosity-card">
+                    <span class="curiosity-icon">⚽</span>
+                    <h4 class="curiosity-title">Templo do Futebol</h4>
+                    <p>O Maracanã já recebeu mais de 200 milhões de pessoas! Foi palco de 2 finais de Copa do Mundo e continua sendo o estádio mais famoso do planeta.</p>
+                </div>
+                
+                <div class="curiosity-card">
+                    <span class="curiosity-icon">🌊</span>
+                    <h4 class="curiosity-title">Baía Espetacular</h4>
+                    <p>A Baía de Guanabara tem 412 km² e mais de 130 ilhas! Os navegadores portugueses acharam que era a foz de um rio gigante.</p>
+                </div>
+                
+                <div class="curiosity-card">
+                    <span class="curiosity-icon">🎬</span>
+                    <h4 class="curiosity-title">Hollywood Brasileira</h4>
+                    <p>O Rio foi cenário de mais de 1000 filmes nacionais e internacionais! De James Bond a Velozes e Furiosos, todo mundo quer filmar aqui.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== RODAPÉ EDUCATIVO ===== -->
+    <footer style="background: #2c3e50; color: white; padding: 3rem 0; text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+            <h4 style="font-size: 1.5rem; margin-bottom: 1rem; color: #FFD700;">
+                📚 Material Educativo Desenvolvido por Prof. Carlos Piquet
+            </h4>
+            <p style="margin-bottom: 1rem; opacity: 0.9;">
+                Professor de História - Faculdade Simonsen | Estudante de Redes + MBA em IA - Estácio
+            </p>
+            <p style="margin-bottom: 2rem; opacity: 0.8;">
+                E-mail: carlospiquet.projetos@gmail.com | CNPJ: 27.658.099/0001-70
+            </p>
+            
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem; margin-top: 2rem;">
+                <p style="font-size: 0.9rem; opacity: 0.7;">
+                    © 2024 Carlos Antonio de Oliveira Piquet. Todos os direitos reservados.<br>
+                    Material educativo para uso em sala de aula e pesquisa acadêmica.
+                </p>
+                <div style="margin-top: 1rem;">
+                    <a href="legal.html" style="color: #FFD700; text-decoration: none; margin: 0 10px;">⚖️ Informações Legais</a>
+                    <a href="index.html" style="color: #FFD700; text-decoration: none; margin: 0 10px;">🗺️ Voltar ao Mapa</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT INTERATIVO ===== -->
+    <script>
+        // ===== NAVEGAÇÃO SUAVE =====
+        function scrollToTimeline() {
+            document.getElementById('timeline').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // ===== OBSERVADOR DE INTERSEÇÃO PARA ANIMAÇÕES =====
+        const mainObserverOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const mainObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animar personagens com delay progressivo
+                    const characters = entry.target.querySelectorAll('.character');
+                    characters.forEach((char, index) => {
+                        setTimeout(() => {
+                            char.classList.add('visible');
+                        }, index * 300);
+                    });
+                }
+            });
+        }, mainObserverOptions);
+
+        // ===== OBSERVAR PERÍODOS =====
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.period').forEach(period => {
+                mainObserver.observe(period);
+            });
+        });
+
+        // ===== EFEITO PARALLAX SUAVE =====
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+
+        // ===== INTERATIVIDADE DOS PERSONAGENS =====
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.character').forEach(character => {
+                character.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-15px) scale(1.05)';
+                    this.style.boxShadow = '0 25px 50px rgba(0,0,0,0.4)';
+                });
+                
+                character.addEventListener('mouseleave', function() {
+                    if (this.classList.contains('visible')) {
+                        this.style.transform = 'translateY(0) scale(1)';
+                        this.style.boxShadow = 'none';
+                    }
+                });
+            });
+        });
+
+        // ===== TECLADO DE ACESSIBILIDADE =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Voltar ao topo
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        // ===== PERFORMANCE: LAZY LOADING DE IMAGENS =====
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // ===== MODO ESCURO AUTOMÁTICO =====
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.style.filter = 'brightness(0.9)';
+        }
+    </script>
+</body>
+</html>
+
+    <script>
+        function scrollToTimeline() {
+            document.getElementById('timeline').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        // Animação de scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animar personagens com delay
+                    const characters = entry.target.querySelectorAll('.character');
+                    characters.forEach((char, index) => {
+                        setTimeout(() => {
+                            char.classList.add('visible');
+                        }, index * 200);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observar períodos
+        document.querySelectorAll('.period').forEach(period => {
+            observer.observe(period);
+        });
+
+        // Efeito parallax suave no scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Adicionar interatividade aos personagens
+        document.querySelectorAll('.character').forEach(character => {
+            character.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.05)';
+                this.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)';
+            });
+            
+            character.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
