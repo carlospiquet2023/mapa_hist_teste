@@ -19,8 +19,14 @@
    - Mobile (até 768px)
    - PWA (Progressive Web App)
 
-👨‍💻 AUTOR: Carlos A O Piquet
-📅 ÚLTIMA ATUALIZAÇÃO: 2025
+👨‍💻 AUTOR: Carlos Antonio de Oliveira Piquet
+🏢 CNPJ: 27.658.099/0001-70
+� CONTATO: carlospiquet.projetos@gmail.com
+📅 CRIAÇÃO: Setembro 2024
+⚖️ COPYRIGHT: © 2024 - Todos os direitos reservados
+
+🛡️ OBRA AUTORAL PROTEGIDA POR DIREITOS AUTORAIS
+   Uso não autorizado é expressamente proibido.
 
 ==========================================================================
 */
@@ -1957,10 +1963,8 @@ input:focus {
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--space-4);
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: var(--space-2);
 }
 
 .footer-author {
@@ -1976,6 +1980,53 @@ input:focus {
 .footer-credentials {
     color: var(--neutral-300);
     font-size: 0.7rem;
+}
+
+/* === FOOTER LEGAL STYLES === */
+.footer-legal {
+    margin-top: var(--space-2);
+    border-top: 1px solid rgba(255, 215, 0, 0.3);
+    padding-top: var(--space-2);
+}
+
+.copyright-notice {
+    color: var(--neutral-200);
+    font-size: 0.55rem;
+    margin-bottom: var(--space-1);
+    text-align: center;
+}
+
+.legal-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-1);
+    flex-wrap: wrap;
+}
+
+.legal-links a {
+    color: var(--accent-400);
+    text-decoration: none;
+    font-size: 0.55rem;
+    transition: color 0.3s ease;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.legal-links a:hover {
+    color: var(--accent-300);
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.protection-notice {
+    color: var(--warning-400);
+    font-size: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    background: rgba(255, 152, 0, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
 /* Mobile footer aparecendo NO MAPA */

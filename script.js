@@ -21,8 +21,14 @@
    - Touch gestures otimizados
    - Standalone app support
 
-👨‍💻 AUTOR: Carlos A O Piquet
-📅 ÚLTIMA ATUALIZAÇÃO: 2025
+👨‍💻 AUTOR: Carlos Antonio de Oliveira Piquet
+🏢 CNPJ: 27.658.099/0001-70
+� CONTATO: carlospiquet.projetos@gmail.com
+📅 CRIAÇÃO: Setembro 2024
+⚖️ COPYRIGHT: © 2024 - Todos os direitos reservados
+
+🛡️ OBRA AUTORAL PROTEGIDA POR DIREITOS AUTORAIS
+   Uso não autorizado é expressamente proibido.
 
 ==========================================================================
 */
