@@ -647,31 +647,69 @@ body {
 }
 
 .hamburger-btn {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    color: var(--neutral-200);
-    padding: var(--space-3);
-    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.15) 0%, 
+        rgba(255, 215, 0, 0.08) 50%, 
+        rgba(255, 255, 255, 0.03) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    color: var(--neutral-100);
+    padding: 12px;
+    border-radius: 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    font-size: 1.1rem;
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.1),
+        0 1px 4px rgba(255, 215, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.hamburger-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.2) 0%, 
+        rgba(255, 215, 0, 0.1) 50%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    opacity: 0;
     transition: all 0.3s ease;
+    border-radius: inherit;
 }
 
 .hamburger-btn:hover {
-    background: var(--glass-bg-hover);
-    border-color: var(--accent-400);
-    color: var(--accent-400);
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.25) 0%, 
+        rgba(255, 215, 0, 0.15) 50%, 
+        rgba(255, 255, 255, 0.08) 100%);
+    border-color: rgba(255, 215, 0, 0.4);
+    color: #FFD700;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.15),
+        0 4px 12px rgba(255, 215, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(255, 215, 0, 0.2);
+}
+
+.hamburger-btn:hover::before {
+    opacity: 1;
 }
 
 .hamburger-btn:focus {
-    outline: 2px solid var(--accent-400);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.15),
+        0 4px 12px rgba(255, 215, 0, 0.2),
+        0 0 0 3px rgba(255, 215, 0, 0.4);
 }
 
 .mobile-menu-dropdown {
@@ -701,18 +739,33 @@ body {
 .mobile-menu-item {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: 12px;
     width: 100%;
-    padding: var(--space-4) var(--space-4);
+    padding: 14px 18px;
     background: transparent;
     border: none;
-    color: var(--neutral-200);
+    color: var(--neutral-100);
     text-align: left;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 0;
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-menu-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(90deg, 
+        rgba(255, 215, 0, 0.15) 0%, 
+        rgba(255, 215, 0, 0.05) 100%);
+    transition: width 0.3s ease;
 }
 
 .mobile-menu-item:first-child {
@@ -725,58 +778,294 @@ body {
 
 .mobile-menu-item:hover,
 .mobile-menu-item:focus {
-    background: var(--glass-bg-hover);
-    color: var(--accent-400);
+    background: linear-gradient(90deg, 
+        rgba(255, 215, 0, 0.1) 0%, 
+        rgba(255, 215, 0, 0.05) 100%);
+    color: #FFD700;
     outline: none;
+    transform: translateX(5px);
+}
+
+.mobile-menu-item:hover::before,
+.mobile-menu-item:focus::before {
+    width: 4px;
 }
 
 .mobile-menu-item i {
-    width: 18px;
+    width: 20px;
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-item:hover i {
+    transform: scale(1.1);
+    color: #FFD700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
 }
 
 .btn {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    color: var(--neutral-200);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.1) 0%, 
+        rgba(255, 215, 0, 0.05) 50%, 
+        rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    color: var(--neutral-100);
+    padding: 8px 14px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 6px;
     position: relative;
     overflow: hidden;
+    text-decoration: none;
+    box-shadow: 
+        0 3px 15px rgba(0, 0, 0, 0.12),
+        0 1px 3px rgba(255, 215, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .btn::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--accent-400), var(--accent-600));
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.2) 0%, 
+        rgba(255, 215, 0, 0.1) 50%, 
+        rgba(255, 255, 255, 0.05) 100%);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: all 0.4s ease;
+    border-radius: inherit;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid;
+    border-image: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.3) 0%, 
+        rgba(255, 215, 0, 0.1) 50%, 
+        transparent 100%) 1;
+    border-radius: 12px;
+    transition: all 0.4s ease;
+    opacity: 0;
+}
+
+.btn i {
+    font-size: 0.95rem;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 .btn:hover {
-    background: var(--glass-bg-hover);
-    border-color: var(--accent-400);
-    color: var(--neutral-50);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.25) 0%, 
+        rgba(255, 215, 0, 0.15) 50%, 
+        rgba(255, 255, 255, 0.08) 100%);
+    color: #fff;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 
+        0 6px 25px rgba(0, 0, 0, 0.18),
+        0 3px 12px rgba(255, 215, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(255, 215, 0, 0.3);
 }
 
 .btn:hover::before {
-    opacity: 0.1;
+    opacity: 1;
+}
+
+.btn:hover::after {
+    opacity: 1;
+    border-image: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.6) 0%, 
+        rgba(255, 215, 0, 0.3) 50%, 
+        rgba(255, 255, 255, 0.1) 100%) 1;
+}
+
+.btn:hover i {
+    transform: scale(1.1) rotate(2deg);
+    color: #FFD700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
 }
 
 .btn:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(1.01);
+    transition: all 0.15s ease;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 4px 16px rgba(255, 215, 0, 0.2),
+        0 0 0 3px rgba(255, 215, 0, 0.4);
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 70%);
+    transform: rotate(45deg) translate(-50%, -50%);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.25) 0%, 
+        rgba(255, 193, 7, 0.22) 25%,
+        rgba(28, 29, 35, 0.75) 50%,
+        rgba(23, 24, 30, 0.8) 100%);
+    border-color: rgba(255, 215, 0, 0.6);
+    color: #ffffff;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 8px 25px rgba(255, 215, 0, 0.35),
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(255, 215, 0, 0.2);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.btn:hover::before {
+    opacity: 1;
+}
+
+.btn:hover::after {
+    opacity: 1;
+    transform: rotate(45deg) translate(50%, 50%);
+}
+
+.btn:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 
+        0 4px 15px rgba(255, 215, 0, 0.25),
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn i {
+    font-size: 1.1rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+    transition: all 0.3s ease;
+}
+
+.btn:hover i {
+    transform: scale(1.1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+/* ===== ESTILOS TEMÁTICOS PARA BOTÕES ESPECÍFICOS ===== */
+
+/* Botão Início - Tema Dourado Imperial */
+.btn:has(i.fa-home) {
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.2) 0%, 
+        rgba(255, 193, 7, 0.15) 25%,
+        rgba(28, 29, 35, 0.85) 50%,
+        rgba(23, 24, 30, 0.9) 100%);
+    border-color: rgba(255, 215, 0, 0.4);
+}
+
+.btn:has(i.fa-home):hover {
+    border-color: rgba(255, 215, 0, 0.8);
+    box-shadow: 
+        0 8px 25px rgba(255, 215, 0, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Botão Família Imperial - Tema Roxo Real */
+.btn:has(i.fa-crown) {
+    background: linear-gradient(135deg, 
+        rgba(147, 51, 234, 0.2) 0%, 
+        rgba(126, 34, 206, 0.15) 25%,
+        rgba(28, 29, 35, 0.85) 50%,
+        rgba(23, 24, 30, 0.9) 100%);
+    border-color: rgba(147, 51, 234, 0.4);
+}
+
+.btn:has(i.fa-crown):hover {
+    border-color: rgba(147, 51, 234, 0.8);
+    box-shadow: 
+        0 8px 25px rgba(147, 51, 234, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(147, 51, 234, 0.3);
+}
+
+/* Botão Memória - Tema Rosa Nostalgia */
+.btn:has(i.fa-photo-video) {
+    background: linear-gradient(135deg, 
+        rgba(236, 72, 153, 0.2) 0%, 
+        rgba(219, 39, 119, 0.15) 25%,
+        rgba(28, 29, 35, 0.85) 50%,
+        rgba(23, 24, 30, 0.9) 100%);
+    border-color: rgba(236, 72, 153, 0.4);
+}
+
+.btn:has(i.fa-photo-video):hover {
+    border-color: rgba(236, 72, 153, 0.8);
+    box-shadow: 
+        0 8px 25px rgba(236, 72, 153, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(236, 72, 153, 0.3);
+}
+
+/* Botão História da Cidade - Tema Ciano Cultural */
+.btn:has(i.fa-city) {
+    background: linear-gradient(135deg, 
+        rgba(6, 182, 212, 0.2) 0%, 
+        rgba(14, 165, 233, 0.15) 25%,
+        rgba(28, 29, 35, 0.85) 50%,
+        rgba(23, 24, 30, 0.9) 100%);
+    border-color: rgba(6, 182, 212, 0.4);
+}
+
+.btn:has(i.fa-city):hover {
+    border-color: rgba(6, 182, 212, 0.8);
+    box-shadow: 
+        0 8px 25px rgba(6, 182, 212, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+/* Botão Tela Cheia - Tema Verde Tecnológico */
+.btn:has(i.fa-expand), .btn:has(i.fa-compress) {
+    background: linear-gradient(135deg, 
+        rgba(34, 197, 94, 0.2) 0%, 
+        rgba(22, 163, 74, 0.15) 25%,
+        rgba(28, 29, 35, 0.85) 50%,
+        rgba(23, 24, 30, 0.9) 100%);
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
+.btn:has(i.fa-expand):hover, .btn:has(i.fa-compress):hover {
+    border-color: rgba(34, 197, 94, 0.8);
+    box-shadow: 
+        0 8px 25px rgba(34, 197, 94, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(34, 197, 94, 0.3);
 }
 
 /* === MAIN LAYOUT GRID === */
@@ -2337,27 +2626,192 @@ Estilos para a galeria de fotos históricas
 
 /* ===== BOTÃO SALA DE AULA ===== */
 .btn-sala-aula {
-    background-color: #FFBE76 !important; /* Laranja fraco */
-    color: #333 !important;
-    font-weight: bold !important;
-    border: 2px solid #F0932B !important; /* Borda em laranja mais escuro */
-    transition: all 0.3s ease !important;
-    text-shadow: none !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 140, 0, 0.9) 0%, 
+        rgba(255, 165, 0, 0.8) 50%, 
+        rgba(255, 200, 100, 0.7) 100%) !important;
+    color: #1a1a1a !important;
+    font-weight: 700 !important;
+    border: 2px solid rgba(255, 140, 0, 0.6) !important;
+    padding: 8px 14px !important;
+    font-size: 0.85rem !important;
+    box-shadow: 
+        0 4px 18px rgba(255, 140, 0, 0.25),
+        0 2px 6px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+    letter-spacing: 0.5px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.btn-sala-aula::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 70%);
+    transform: rotate(-45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.btn-sala-aula:hover::before {
+    animation: shimmer 1.5s ease-in-out;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(-45deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(100%) translateY(100%) rotate(-45deg); opacity: 0; }
 }
 
 .btn-sala-aula:hover, .btn-sala-aula:focus {
-    background-color: #F0932B !important; /* Laranja mais forte no hover */
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 120, 0, 1) 0%, 
+        rgba(255, 140, 0, 0.95) 50%, 
+        rgba(255, 180, 80, 0.8) 100%) !important;
+    transform: translateY(-4px) scale(1.05) !important;
+    box-shadow: 
+        0 12px 35px rgba(255, 140, 0, 0.4),
+        0 6px 20px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        0 0 0 2px rgba(255, 140, 0, 0.5) !important;
+    border-color: rgba(255, 120, 0, 0.8) !important;
 }
 
 .mobile-btn-sala-aula {
-    background-color: #FFBE76 !important; /* Laranja fraco */
-    color: #333 !important;
-    font-weight: bold !important;
-    border-left: 3px solid #F0932B !important; /* Borda lateral laranja mais escuro */
+    background: linear-gradient(90deg, 
+        rgba(255, 140, 0, 0.9) 0%, 
+        rgba(255, 165, 0, 0.8) 100%) !important;
+    color: #1a1a1a !important;
+    font-weight: 700 !important;
+    border-left: 4px solid rgba(255, 120, 0, 0.8) !important;
+    box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2) !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3) !important;
 }
 
 .mobile-btn-sala-aula:hover, .mobile-btn-sala-aula:focus {
-    background-color: #F0932B !important; /* Laranja mais forte no hover */
+    background: linear-gradient(90deg, 
+        rgba(255, 120, 0, 1) 0%, 
+        rgba(255, 140, 0, 0.95) 100%) !important;
+    transform: translateX(5px) !important;
+    border-left-width: 6px !important;
+}
+
+/* ===== BOTÃO HISTÓRIA COMPLETA ===== */
+.btn-historia {
+    background: linear-gradient(135deg, 
+        rgba(139, 69, 19, 0.9) 0%, 
+        rgba(210, 105, 30, 0.85) 25%,
+        rgba(160, 82, 45, 0.9) 50%,
+        rgba(139, 69, 19, 0.95) 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    border: 2px solid rgba(210, 105, 30, 0.8) !important;
+    padding: 8px 14px !important;
+    font-size: 0.85rem !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 
+        0 4px 16px rgba(139, 69, 19, 0.35),
+        0 2px 8px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(20px) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.btn-historia::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 223, 186, 0.3) 30%,
+        rgba(255, 228, 196, 0.4) 50%,
+        rgba(255, 218, 185, 0.3) 70%,
+        transparent);
+    transition: all 0.6s ease;
+    z-index: 1;
+}
+
+.btn-historia::after {
+    content: '📜';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.2rem;
+    opacity: 0.3;
+    transition: all 0.4s ease;
+    z-index: 0;
+}
+
+.btn-historia:hover::before {
+    left: 100%;
+}
+
+.btn-historia:hover::after {
+    transform: rotate(15deg) scale(1.2);
+    opacity: 0.6;
+}
+
+.btn-historia:hover, .btn-historia:focus {
+    background: linear-gradient(135deg, 
+        rgba(160, 82, 45, 0.95) 0%, 
+        rgba(205, 133, 63, 0.9) 25%,
+        rgba(222, 184, 135, 0.85) 50%,
+        rgba(160, 82, 45, 0.9) 100%) !important;
+    transform: translateY(-4px) scale(1.05) !important;
+    box-shadow: 
+        0 10px 30px rgba(139, 69, 19, 0.5),
+        0 5px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 25px rgba(210, 105, 30, 0.3) !important;
+    border-color: rgba(210, 105, 30, 1) !important;
+}
+
+.mobile-btn-historia {
+    background: linear-gradient(135deg, 
+        rgba(139, 69, 19, 0.95) 0%, 
+        rgba(210, 105, 30, 0.9) 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    border-left: 4px solid rgba(210, 105, 30, 0.9) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.mobile-btn-historia::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.mobile-btn-historia:hover::before {
+    transform: translateX(100%);
+}
+
+.mobile-btn-historia:hover, .mobile-btn-historia:focus {
+    background: linear-gradient(135deg, #A0522D, #CD853F) !important;
+    transform: translateX(3px) !important;
 }
