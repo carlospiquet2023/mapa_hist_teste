@@ -2283,3 +2283,30 @@ Estilos para a galeria de fotos históricas
         height: 40px;
     }
 }
+
+/* ===== BOTÃO SALA DE AULA ===== */
+.btn-sala-aula {
+    background-color: #FFBE76 !important; /* Laranja fraco */
+    color: #333 !important;
+    font-weight: bold !important;
+    border: 2px solid #F0932B !important; /* Borda em laranja mais escuro */
+    transition: all 0.3s ease !important;
+    text-shadow: none !important;
+}
+
+.btn-sala-aula:hover, .btn-sala-aula:focus {
+    background-color: #F0932B !important; /* Laranja mais forte no hover */
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.mobile-btn-sala-aula {
+    background-color: #FFBE76 !important; /* Laranja fraco */
+    color: #333 !important;
+    font-weight: bold !important;
+    border-left: 3px solid #F0932B !important; /* Borda lateral laranja mais escuro */
+}
+
+.mobile-btn-sala-aula:hover, .mobile-btn-sala-aula:focus {
+    background-color: #F0932B !important; /* Laranja mais forte no hover */
+}
