@@ -205,10 +205,10 @@ function initVideoIntro() {
     
     if (customSubtitles) {
         const subtitleData = [
-            { start: 0, end: 2.5, text: "Sejam todos bem-vindos ao Mapa Histórico do Rio." },
-            { start: 2.5, end: 5, text: "Aqui, vamos explorar o passado da cidade" },
-            { start: 5, end: 6.5, text: "de forma prática e visual," },
-            { start: 6.5, end: 8, text: "trazendo a história à vida." }
+            { start: 6, end: 9, text: "Sejam todos bem-vindos ao Mapa Histórico do Rio." },
+            { start: 9, end: 11.5, text: "Aqui, vamos explorar o passado da cidade" },
+            { start: 11.5, end: 13, text: "de forma prática e visual," },
+            { start: 13, end: 14.5, text: "trazendo a história à vida." }
         ];
         
         const showSubtitles = () => {
