@@ -84,15 +84,12 @@ function initVideoIntro() {
             if (video.muted) {
                 soundIcon.className = 'fas fa-volume-mute';
                 soundToggle.title = 'Ativar Som';
-                if (isMobile) {
-                    // Em mobile, adiciona dica visual
-                    soundToggle.style.animation = 'pulse 2s infinite';
-                }
-            } else {
-                soundIcon.className = 'fas fa-volume-up';
-                soundToggle.title = 'Desligar Som';
-                soundToggle.style.animation = '';
+                if (isMobile) soundToggle.style.animation = 'pulse 2s infinite';
+                return;
             }
+            soundIcon.className = 'fas fa-volume-up';
+            soundToggle.title = 'Desligar Som';
+            soundToggle.style.animation = '';
         };
         
         // Configuração inicial
@@ -138,14 +135,9 @@ function initVideoIntro() {
     const startVideo = () => {
         video.play().then(() => {
             console.log('Vídeo iniciado com sucesso');
-            if (isMobile) {
-                console.log('Mobile: vídeo iniciado mudo, aguardando interação do usuário');
-            } else {
-                // Desktop: garantir que o volume está correto
-                if (!video.muted) {
-                    video.volume = 0.8;
-                }
-            }
+            if (isMobile) console.log('Mobile: vídeo iniciado mudo, aguardando interação do usuário');
+            // Garantir volume adequado quando não estiver mudo
+            if (!video.muted) video.volume = 0.8;
         }).catch(error => {
             console.log('Erro ao reproduzir vídeo:', error);
             
@@ -248,6 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar intro de vídeo
     initVideoIntro();
+
+    // ================= Acessibilidade e Tela Cheia =================
+    initAccessibility();
+    initFullscreenButtons();
     
     /**
      * DETECÇÃO DE DISPOSITIVO
@@ -326,6 +322,618 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('touchstart', function() {}, { passive: true });
     }
 });
+
+//=============================================================================
+// ♿ Acessibilidade: painel e preferências
+//=============================================================================
+function initAccessibility() {
+    const a11yBtn = document.getElementById('a11yBtn');
+    const a11yPanel = document.getElementById('a11yPanel');
+    const a11yClose = document.getElementById('a11yClose');
+    if (!a11yBtn || !a11yPanel) return;
+
+    // Controles
+    const chkContrast = document.getElementById('a11yContrast');
+    const chkDyslexia = document.getElementById('a11yDyslexia');
+    const chkReduceMotion = document.getElementById('a11yReduceMotion');
+    const chkHighlight = document.getElementById('a11yHighlight');
+    const chkMute = document.getElementById('a11yMuteMedia');
+    const fontPlus = document.getElementById('fontPlus');
+    const fontMinus = document.getElementById('fontMinus');
+    const fontReset = document.getElementById('fontReset');
+
+    const state = loadA11yState();
+    applyA11yState(state);
+
+    // Abrir/fechar painel
+    const closePanel = () => {
+        a11yPanel.removeAttribute('open');
+        try { a11yPanel.close(); } catch {}
+        a11yBtn.setAttribute('aria-expanded', 'false');
+        // Garantir que o botão se mantenha acessível
+        setTimeout(() => a11yBtn.focus(), 10);
+        // Remover backdrop se houver
+        const backdrop = document.querySelector('.a11y-backdrop');
+        if (backdrop) backdrop.remove();
+    };
+    
+    const openPanel = () => {
+        // Adicionar backdrop para fechar ao clicar fora
+        const backdrop = document.createElement('div');
+        backdrop.className = 'a11y-backdrop';
+        backdrop.addEventListener('click', closePanel);
+        document.body.appendChild(backdrop);
+        
+        // Abrir painel
+        a11yPanel.setAttribute('open', '');
+        try { a11yPanel.show(); } catch {}
+        a11yBtn.setAttribute('aria-expanded', 'true');
+        // Manter o foco no painel para navegação por teclado
+        setTimeout(() => a11yPanel.focus(), 50);
+    };
+    
+    const togglePanel = () => {
+        const open = a11yPanel.hasAttribute('open');
+        if (open) {
+            closePanel();
+        } else {
+            openPanel();
+        }
+    };
+    a11yBtn.addEventListener('click', togglePanel);
+    a11yClose?.addEventListener('click', togglePanel);
+    a11yPanel.addEventListener('keydown', (e) => { if (e.key === 'Escape') togglePanel(); });
+
+    // Teclado: Alt + A abre/fecha
+    document.addEventListener('keydown', (e) => {
+        if (e.altKey && (e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            togglePanel();
+        }
+    });
+
+    // Bind inputs
+    bindToggle(chkContrast, 'contrast', (v) => document.body.classList.toggle('high-contrast', v));
+    bindToggle(chkDyslexia, 'dyslexia', (v) => document.body.classList.toggle('dyslexia-font', v));
+    bindToggle(chkReduceMotion, 'reduceMotion', (v) => document.body.classList.toggle('reduced-motion', v));
+    bindToggle(chkHighlight, 'highlight', (v) => document.body.classList.toggle('highlight-focus', v));
+    bindToggle(chkMute, 'muteMedia', (v) => setMediaMuted(v));
+    
+    // Leitor de tela
+    const chkScreenReader = document.getElementById('a11yScreenReader');
+    const chkAutoRead = document.getElementById('a11yAutoRead');
+    const speechRateSlider = document.getElementById('speechRate');
+    const speechRateValue = document.getElementById('speechRateValue');
+    const screenReaderOptions = document.getElementById('screenReaderOptions');
+    
+    // Exibir/ocultar opções do leitor de tela
+    if (chkScreenReader && screenReaderOptions) {
+        bindToggle(chkScreenReader, 'screenReader', (v) => {
+            toggleScreenReader(v);
+            screenReaderOptions.style.display = v ? 'block' : 'none';
+        });
+        
+        // Estado inicial
+        const state = loadA11yState();
+        screenReaderOptions.style.display = state.screenReader ? 'block' : 'none';
+    }
+    
+    // Leitura automática ao passar o mouse
+    if (chkAutoRead) {
+        bindToggle(chkAutoRead, 'autoRead', (v) => {
+            setAutoRead(v);
+        });
+    }
+    
+    // Velocidade da fala
+    if (speechRateSlider && speechRateValue) {
+        // Inicializar valor do slider
+        const state = loadA11yState();
+        const rate = state.speechRate || 1;
+        speechRateSlider.value = rate;
+        speechRateValue.textContent = `${rate}x`;
+        
+        // Atualizar ao mudar o slider
+        speechRateSlider.addEventListener('input', () => {
+            const rate = parseFloat(speechRateSlider.value);
+            speechRateValue.textContent = `${rate.toFixed(1)}x`;
+            
+            const s = loadA11yState();
+            s.speechRate = rate;
+            saveA11yState(s);
+        });
+    }
+
+    // Fonte
+    fontPlus?.addEventListener('click', () => adjustFontSize(0.05));
+    fontMinus?.addEventListener('click', () => adjustFontSize(-0.05));
+    fontReset?.addEventListener('click', () => setFontScale(1));
+    
+    // Botão de redefinição de emergência
+    const resetAllBtn = document.getElementById('resetAllSettings');
+    if (resetAllBtn) {
+        resetAllBtn.addEventListener('click', resetAllAccessibilitySettings);
+    }
+}
+
+function bindToggle(el, key, apply) {
+    if (!el) return;
+    const state = loadA11yState();
+    el.checked = !!state[key];
+    apply(!!state[key]);
+    el.addEventListener('change', () => {
+        const s = loadA11yState();
+        s[key] = el.checked;
+        saveA11yState(s);
+        apply(el.checked);
+    });
+}
+
+function setMediaMuted(muted) {
+    document.querySelectorAll('video, audio').forEach(m => {
+        m.muted = muted;
+        if (muted && !m.paused) m.pause();
+    });
+}
+
+function adjustFontSize(delta) {
+    const s = loadA11yState();
+    const current = s.fontScale || 1;
+    // Limita o tamanho máximo a 1.3 e incrementos menores para melhor controle
+    const next = Math.min(1.3, Math.max(0.8, +(current + delta).toFixed(2)));
+    setFontScale(next);
+}
+
+function setFontScale(scale) {
+    const s = loadA11yState();
+    s.fontScale = scale;
+    saveA11yState(s);
+    document.documentElement.style.setProperty('font-size', `${16 * scale}px`);
+    
+    // Atualizar o botão de reset com a porcentagem atual
+    const fontResetBtn = document.getElementById('fontReset');
+    if (fontResetBtn) {
+        const percent = Math.round(scale * 100);
+        fontResetBtn.textContent = `${percent}%`;
+        
+        // Destacar visualmente se não estiver no padrão
+        if (scale !== 1) {
+            fontResetBtn.classList.add('active-size');
+            
+            // Atualiza os botões +/- para mostrar quais opções ainda estão disponíveis
+            const fontPlus = document.getElementById('fontPlus');
+            const fontMinus = document.getElementById('fontMinus');
+            
+            if (fontPlus) {
+                fontPlus.disabled = scale >= 1.3;
+                fontPlus.classList.toggle('disabled', scale >= 1.3);
+            }
+            
+            if (fontMinus) {
+                fontMinus.disabled = scale <= 0.8;
+                fontMinus.classList.toggle('disabled', scale <= 0.8);
+            }
+        } else {
+            fontResetBtn.classList.remove('active-size');
+            
+            // Reset dos botões
+            const fontPlus = document.getElementById('fontPlus');
+            const fontMinus = document.getElementById('fontMinus');
+            
+            if (fontPlus) {
+                fontPlus.disabled = false;
+                fontPlus.classList.remove('disabled');
+            }
+            
+            if (fontMinus) {
+                fontMinus.disabled = false;
+                fontMinus.classList.remove('disabled');
+            }
+        }
+    }
+}
+
+function loadA11yState() {
+    try { return JSON.parse(localStorage.getItem('a11yState') || '{}'); } catch { return {}; }
+}
+function saveA11yState(state) {
+    try { localStorage.setItem('a11yState', JSON.stringify(state)); } catch {}
+}
+function applyA11yState(s) {
+    if (!s) return;
+    
+    if (s.fontScale) {
+        document.documentElement.style.setProperty('font-size', `${16 * s.fontScale}px`);
+        // Atualizar o botão de reset com a porcentagem atual
+        const fontResetBtn = document.getElementById('fontReset');
+        if (fontResetBtn) {
+            const percent = Math.round(s.fontScale * 100);
+            fontResetBtn.textContent = `${percent}%`;
+            if (s.fontScale !== 1) {
+                fontResetBtn.classList.add('active-size');
+            }
+        }
+    }
+    
+    if (s.contrast) document.body.classList.add('high-contrast');
+    if (s.dyslexia) document.body.classList.add('dyslexia-font');
+    if (s.reduceMotion) document.body.classList.add('reduced-motion');
+    if (s.highlight) document.body.classList.add('highlight-focus');
+    if (s.muteMedia) setMediaMuted(true);
+    if (s.screenReader) toggleScreenReader(true);
+    if (s.autoRead) setAutoRead(true);
+}
+
+// Variáveis globais para o leitor de tela
+let currentSpeech = null;
+let isScreenReaderActive = false;
+let isAutoReadActive = false;
+
+// Função para ativar/desativar o leitor de tela
+function toggleScreenReader(active) {
+    isScreenReaderActive = active;
+    
+    if (active) {
+        initScreenReader();
+    } else {
+        stopSpeaking();
+        removeClickListeners();
+    }
+}
+
+// Inicializa o leitor de tela
+function initScreenReader() {
+    if (!window.speechSynthesis) {
+        alert("Desculpe, seu navegador não suporta a API de Síntese de Voz.");
+        return;
+    }
+    
+    // Adicionar ouvintes de clique para elementos interativos
+    addClickListeners();
+}
+
+// Adiciona ouvintes de clique a elementos interativos
+function addClickListeners() {
+    // Remover qualquer listener anterior
+    removeClickListeners();
+    
+    // Adicionar listener para todos elementos clicáveis
+    document.addEventListener('click', handleScreenReaderClick);
+    
+    // Se a leitura automática estiver ativa, adicionar ouvintes de hover
+    if (isAutoReadActive) {
+        document.addEventListener('mouseover', handleScreenReaderHover);
+    }
+}
+
+// Remove os ouvintes de eventos
+function removeClickListeners() {
+    document.removeEventListener('click', handleScreenReaderClick);
+    document.removeEventListener('mouseover', handleScreenReaderHover);
+}
+
+// Configura a leitura automática ao passar o mouse
+function setAutoRead(active) {
+    isAutoReadActive = active;
+    
+    if (active && isScreenReaderActive) {
+        document.addEventListener('mouseover', handleScreenReaderHover);
+    } else {
+        document.removeEventListener('mouseover', handleScreenReaderHover);
+    }
+}
+
+// Lida com cliques para leitura
+function handleScreenReaderClick(event) {
+    if (!isScreenReaderActive) return;
+    
+    // Ignora cliques em elementos do painel de acessibilidade
+    if (event.target.closest('.a11y-panel')) return;
+    
+    const element = getRelevantElement(event.target);
+    if (element) {
+        speakElement(element);
+    }
+}
+
+// Lida com hover para leitura automática
+function handleScreenReaderHover(event) {
+    if (!isScreenReaderActive || !isAutoReadActive) return;
+    
+    // Ignora hover em elementos do painel de acessibilidade
+    if (event.target.closest('.a11y-panel')) return;
+    
+    const element = getRelevantElement(event.target);
+    if (element && isSignificantElement(element)) {
+        speakElement(element);
+    }
+}
+
+// Obtém o elemento mais relevante para leitura
+function getRelevantElement(target) {
+    // Verificar se o elemento é interativo
+    if (target.tagName === 'BUTTON' || 
+        target.tagName === 'A' || 
+        target.tagName === 'INPUT' || 
+        target.tagName === 'SELECT' || 
+        target.tagName === 'TEXTAREA') {
+        return target;
+    }
+    
+    // Para outros elementos, procurar o contêiner com conteúdo significativo
+    let current = target;
+    while (current !== document.body) {
+        // Verificar headings
+        if (current.tagName === 'H1' || 
+            current.tagName === 'H2' || 
+            current.tagName === 'H3' || 
+            current.tagName === 'H4' || 
+            current.tagName === 'H5' || 
+            current.tagName === 'H6' ||
+            current.tagName === 'P' ||
+            current.className === 'info-panel' ||
+            current.className === 'curiosity-item') {
+            return current;
+        }
+        
+        // Verificar aria-label
+        if (current.getAttribute('aria-label')) {
+            return current;
+        }
+        
+        // Verificar role
+        if (current.getAttribute('role')) {
+            return current;
+        }
+        
+        current = current.parentElement;
+    }
+    
+    return target; // Retorna o alvo original se nenhum contêiner relevante for encontrado
+}
+
+// Verifica se um elemento é significativo o suficiente para leitura automática
+function isSignificantElement(element) {
+    // Para leitura automática, só queremos elementos significativos
+    return (
+        element.tagName === 'H1' || 
+        element.tagName === 'H2' || 
+        element.tagName === 'H3' || 
+        element.tagName === 'H4' || 
+        element.tagName === 'H5' || 
+        element.tagName === 'H6' ||
+        element.tagName === 'BUTTON' ||
+        element.tagName === 'A' ||
+        element.className === 'info-title' ||
+        element.getAttribute('aria-label')
+    );
+}
+
+// Faz a leitura do texto do elemento
+function speakElement(element) {
+    // Parar qualquer leitura atual
+    stopSpeaking();
+    
+    // Destacar elemento sendo lido
+    removeHighlights();
+    element.classList.add('screen-reader-highlight');
+    
+    // Obter texto para leitura
+    let textToSpeak = getTextToSpeak(element);
+    
+    if (!textToSpeak) return;
+    
+    // Criar nova instância de fala
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    
+    // Configurar velocidade da fala baseada nas preferências
+    const state = loadA11yState();
+    utterance.rate = state.speechRate || 1;
+    
+    // Configurar idioma para português do Brasil
+    utterance.lang = 'pt-BR';
+    
+    // Evento de finalização
+    utterance.onend = function() {
+        element.classList.remove('screen-reader-highlight');
+        currentSpeech = null;
+    };
+    
+    // Armazenar referência e iniciar fala
+    currentSpeech = utterance;
+    window.speechSynthesis.speak(utterance);
+}
+
+// Remove todos os destaques de leitura
+function removeHighlights() {
+    document.querySelectorAll('.screen-reader-highlight').forEach(el => {
+        el.classList.remove('screen-reader-highlight');
+    });
+}
+
+// Extrai o texto mais apropriado para leitura de um elemento
+function getTextToSpeak(element) {
+    // Verificar aria-label primeiro
+    if (element.getAttribute('aria-label')) {
+        return element.getAttribute('aria-label');
+    }
+    
+    // Verificar aria-labelledby
+    const labelledById = element.getAttribute('aria-labelledby');
+    if (labelledById) {
+        const labelElement = document.getElementById(labelledById);
+        if (labelElement) {
+            return labelElement.textContent;
+        }
+    }
+    
+    // Botões com ícones, tentar encontrar texto alternativo
+    if (element.tagName === 'BUTTON' && !element.textContent.trim()) {
+        // Verificar por i.fa-* e tentar inferir um nome
+        const icon = element.querySelector('i[class*="fa-"]');
+        if (icon) {
+            const classList = Array.from(icon.classList);
+            const faClass = classList.find(c => c.startsWith('fa-'));
+            if (faClass) {
+                return faClass.replace('fa-', '').replace(/-/g, ' ');
+            }
+        }
+    }
+    
+    // Para links e botões, ler tanto o texto quanto o title
+    if (element.tagName === 'A' || element.tagName === 'BUTTON') {
+        let text = element.textContent.trim();
+        if (element.title) {
+            text = text ? `${text} - ${element.title}` : element.title;
+        }
+        return text;
+    }
+    
+    // Para painéis de informação, ler o título primeiro
+    if (element.className === 'info-panel') {
+        const title = element.querySelector('.info-title');
+        if (title) {
+            return title.textContent + ". Clique novamente para mais detalhes.";
+        }
+    }
+    
+    // Para itens de curiosidade, ler o título primeiro
+    if (element.className === 'curiosity-item') {
+        const title = element.querySelector('h4');
+        if (title) {
+            return title.textContent + ". " + element.textContent.replace(title.textContent, '');
+        }
+    }
+    
+    // Para outros elementos, usar o texto interno
+    return element.textContent.trim();
+}
+
+// Para a fala atual
+function stopSpeaking() {
+    if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+    }
+    
+    if (currentSpeech) {
+        currentSpeech = null;
+        removeHighlights();
+    }
+}
+
+// Limpar todas as configurações de acessibilidade
+function resetAllAccessibilitySettings() {
+    // Parar o leitor de tela se estiver ativo
+    stopSpeaking();
+    toggleScreenReader(false);
+    
+    // Remover do localStorage
+    try { localStorage.removeItem('a11yState'); } catch {}
+    
+    // Remover classes do body
+    document.body.classList.remove('high-contrast', 'dyslexia-font', 'reduced-motion', 'highlight-focus');
+    
+    // Resetar tamanho da fonte para o padrão
+    document.documentElement.style.setProperty('font-size', '16px');
+    
+    // Atualizar botão de tamanho
+    const fontResetBtn = document.getElementById('fontReset');
+    if (fontResetBtn) {
+        fontResetBtn.textContent = '100%';
+        fontResetBtn.classList.remove('active-size');
+    }
+    
+    // Reset dos botões de fonte
+    const fontPlus = document.getElementById('fontPlus');
+    const fontMinus = document.getElementById('fontMinus');
+    
+    if (fontPlus) {
+        fontPlus.disabled = false;
+        fontPlus.classList.remove('disabled');
+    }
+    
+    if (fontMinus) {
+        fontMinus.disabled = false;
+        fontMinus.classList.remove('disabled');
+    }
+    
+    // Reset do slider de velocidade da fala
+    const speechRateSlider = document.getElementById('speechRate');
+    const speechRateValue = document.getElementById('speechRateValue');
+    if (speechRateSlider) speechRateSlider.value = 1;
+    if (speechRateValue) speechRateValue.textContent = '1.0x';
+    
+    // Ocultar opções de leitor de tela
+    const screenReaderOptions = document.getElementById('screenReaderOptions');
+    if (screenReaderOptions) screenReaderOptions.style.display = 'none';
+    
+    // Desmarcar todas as caixas de seleção
+    document.querySelectorAll('#a11yPanel input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    // Habilitar mídias
+    setMediaMuted(false);
+    
+    // Fechar o painel com animação de confirmação
+    const a11yPanel = document.getElementById('a11yPanel');
+    if (a11yPanel?.hasAttribute('open')) {
+        // Adicionar classe de feedback visual
+        a11yPanel.classList.add('reset-success');
+        
+        // Remover backdrop
+        const backdrop = document.querySelector('.a11y-backdrop');
+        if (backdrop) backdrop.remove();
+        
+        // Pequeno delay para mostrar o feedback antes de fechar
+        setTimeout(() => {
+            a11yPanel.removeAttribute('open');
+            try { a11yPanel.close(); } catch {}
+            a11yPanel.classList.remove('reset-success');
+            const a11yBtn = document.getElementById('a11yBtn');
+            if (a11yBtn) {
+                a11yBtn.setAttribute('aria-expanded', 'false');
+                // Garantir que o botão se mantenha acessível
+                setTimeout(() => a11yBtn.focus(), 50);
+            }
+        }, 800);
+    }
+}
+
+//=============================================================================
+// ⛶ Tela Cheia
+//=============================================================================
+function initFullscreenButtons() {
+    const desktopBtn = document.getElementById('fullscreenBtn');
+    const mobileBtn = document.getElementById('fullscreenBtnMobile');
+    const setIcon = (isFs) => {
+        const iconD = document.getElementById('fullscreenIcon');
+        const iconM = document.getElementById('fullscreenIconMobile');
+        iconD && (iconD.className = isFs ? 'fas fa-compress' : 'fas fa-expand');
+        iconM && (iconM.className = isFs ? 'fas fa-compress' : 'fas fa-expand');
+        desktopBtn?.setAttribute('aria-label', isFs ? 'Sair de tela cheia' : 'Ativar tela cheia');
+        mobileBtn?.setAttribute('aria-label', isFs ? 'Sair de tela cheia' : 'Ativar tela cheia');
+        desktopBtn?.setAttribute('aria-pressed', String(isFs));
+        mobileBtn?.setAttribute('aria-pressed', String(isFs));
+    };
+
+    async function toggleFullscreen() {
+        try {
+            if (!document.fullscreenElement) {
+                await document.documentElement.requestFullscreen();
+                setIcon(true);
+            } else {
+                await document.exitFullscreen();
+                setIcon(false);
+            }
+        } catch (e) { console.warn('Tela cheia não suportada', e); }
+        if (window.map?.invalidateSize) setTimeout(() => window.map.invalidateSize(), 300);
+    }
+
+    desktopBtn?.addEventListener('click', toggleFullscreen);
+    mobileBtn?.addEventListener('click', toggleFullscreen);
+    document.addEventListener('fullscreenchange', () => setIcon(!!document.fullscreenElement));
+}
 
 //=============================================================================
 // 🏛️ BASE DE DADOS HISTÓRICOS
@@ -1754,21 +2362,18 @@ function mostrarPeriodoHistorico(periodo) {
 // ===== FILTROS =====
 function filterCategory(categoria) {
     // Atualizar botão ativo
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.remove('active'); btn.setAttribute('aria-pressed', 'false'); });
     
     // Encontrar e ativar o botão correto
-    const buttons = document.querySelectorAll('.filter-btn');
-    buttons.forEach(btn => {
-        if ((categoria === 'all' && btn.textContent.trim() === 'Todos') ||
-            (categoria === 'museum' && btn.textContent.trim() === 'Museus') ||
-            (categoria === 'church' && btn.textContent.trim() === 'Igrejas') ||
-            (categoria === 'palace' && btn.textContent.trim() === 'Palácios') ||
-            (categoria === 'monument' && btn.textContent.trim() === 'Monumentos') ||
-            (categoria === 'culture' && btn.textContent.trim() === 'Cultura') ||
-            (categoria === 'library' && btn.textContent.trim() === 'Bibliotecas') ||
-            (categoria === 'square' && btn.textContent.trim() === 'Praças') ||
-            (categoria === 'bunker' && btn.textContent.trim() === 'Bunker')) {
+    const mapByCat = {
+        all: 'Todos', museum: 'Museus', church: 'Igrejas', palace: 'Palácios',
+        monument: 'Monumentos', culture: 'Cultura', library: 'Bibliotecas', square: 'Praças', bunker: 'Bunker'
+    };
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        const label = btn.textContent.trim();
+        if (label.includes(mapByCat[categoria])) {
             btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
         }
     });
     

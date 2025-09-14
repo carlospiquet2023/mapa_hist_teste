@@ -31,6 +31,9 @@
     
     <!-- Font Awesome: Ícones vetoriais -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fonte acessível para leitura (fallback caso disponível) -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- ===== ESTILOS PERSONALIZADOS ===== -->
     <link rel="stylesheet" href="style.css">
@@ -39,6 +42,7 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#map">Pular para o mapa</a>
     <!-- ===== INTRO DE VÍDEO ===== -->
     <!-- Overlay fullscreen com vídeo de introdução -->
     <div class="video-intro-overlay" id="videoIntroOverlay">
@@ -120,6 +124,11 @@
                         <i class="fas fa-city"></i>
                         História do Rio de Janeiro
                     </button>
+                    <!-- Botão de tela cheia (desktop) -->
+                    <button class="btn" id="fullscreenBtn" aria-pressed="false" aria-label="Ativar tela cheia" title="Tela cheia (F11)">
+                        <i class="fas fa-expand" id="fullscreenIcon"></i>
+                        
+                    </button>
                 </div>
                 
                 <!-- MENU MOBILE: Menu hamburger para dispositivos móveis -->
@@ -145,6 +154,10 @@
                         <button class="mobile-menu-item" onclick="mostrarHistoriaRJ(); closeMobileMenu()">
                             <i class="fas fa-city"></i>
                             História do Rio de Janeiro
+                        </button>
+                        <button class="mobile-menu-item" id="fullscreenBtnMobile" onclick="closeMobileMenu()" aria-pressed="false" aria-label="Ativar tela cheia">
+                            <i class="fas fa-expand" id="fullscreenIconMobile"></i>
+                            Tela Cheia
                         </button>
                     </div>
                 </div>
@@ -172,19 +185,19 @@
             <div class="section">
                 <h3 class="section-title">
                     <i class="fas fa-filter"></i>
-                    Categorias
+                    Filtros Inteligentes
                 </h3>
                 <!-- Grid responsivo de botões de filtro -->
                 <div class="filter-grid">
-                    <button class="filter-btn active" onclick="filterCategory('all')">Todos</button>
-                    <button class="filter-btn" onclick="filterCategory('museum')">Museus</button>
-                    <button class="filter-btn" onclick="filterCategory('church')">Igrejas</button>
-                    <button class="filter-btn" onclick="filterCategory('palace')">Palácios</button>
-                    <button class="filter-btn" onclick="filterCategory('monument')">Monumento</button>
-                    <button class="filter-btn" onclick="filterCategory('culture')">Cultura</button>
-                    <button class="filter-btn" onclick="filterCategory('library')">Biblioteca</button>
-                    <button class="filter-btn" onclick="filterCategory('square')">Praças</button>
-                    <button class="filter-btn" onclick="filterCategory('bunker')">Bunker</button>
+                    <button class="filter-btn active" onclick="filterCategory('all')" aria-pressed="true"><i class="fa-solid fa-globe"></i><span>Todos</span></button>
+                    <button class="filter-btn" onclick="filterCategory('museum')" aria-pressed="false"><i class="fa-solid fa-landmark"></i><span>Museus</span></button>
+                    <button class="filter-btn" onclick="filterCategory('church')" aria-pressed="false"><i class="fa-solid fa-church"></i><span>Igrejas</span></button>
+                    <button class="filter-btn" onclick="filterCategory('palace')" aria-pressed="false"><i class="fa-solid fa-crown"></i><span>Palácios</span></button>
+                    <button class="filter-btn" onclick="filterCategory('monument')" aria-pressed="false"><i class="fa-solid fa-archway"></i><span>Monumentos</span></button>
+                    <button class="filter-btn" onclick="filterCategory('culture')" aria-pressed="false"><i class="fa-solid fa-masks-theater"></i><span>Cultura</span></button>
+                    <button class="filter-btn" onclick="filterCategory('library')" aria-pressed="false"><i class="fa-solid fa-book"></i><span>Bibliotecas</span></button>
+                    <button class="filter-btn" onclick="filterCategory('square')" aria-pressed="false"><i class="fa-solid fa-square"></i><span>Praças</span></button>
+                    <button class="filter-btn" onclick="filterCategory('bunker')" aria-pressed="false"><i class="fa-solid fa-shield-halved"></i><span>Bunker</span></button>
                 </div>
             </div>
 
@@ -241,7 +254,96 @@
         <!-- Container que abriga o mapa interativo do Leaflet -->
         <div class="main-content">
             <!-- Div onde o mapa será renderizado pelo JavaScript -->
-            <div id="map"></div>
+            <div id="map" role="region" aria-label="Mapa interativo do Centro do Rio" tabindex="0"></div>
+            
+            <!-- Acessibilidade: botão flutuante e painel -->
+            <div class="a11y-launcher" aria-hidden="false">
+                <button id="a11yBtn" class="a11y-btn" aria-label="Abrir menu de acessibilidade" aria-controls="a11yPanel" aria-expanded="false" title="Acessibilidade (Alt + A)">
+                    <i class="fa-solid fa-universal-access"></i>
+                    <span class="sr-only">Acessibilidade</span>
+                </button>
+                <div class="a11y-label-text"></div>
+                <dialog id="a11yPanel" class="a11y-panel" aria-labelledby="a11yTitle">
+                    <div class="a11y-header">
+                        <h4 id="a11yTitle"><i class="fa-solid fa-universal-access"></i> Acessibilidade</h4>
+                        <button class="a11y-close" id="a11yClose" aria-label="Fechar painel"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="a11y-content">
+                        <div class="a11y-group">
+                            <span class="a11y-label" id="lblContrast"><i class="fa-solid fa-circle-half-stroke"></i> Alto contraste</span>
+                            <div class="switch">
+                                <input type="checkbox" id="a11yContrast" aria-labelledby="lblContrast">
+                                <label for="a11yContrast" class="slider"></label>
+                            </div>
+                        </div>
+                        <div class="a11y-group">
+                            <span class="a11y-label" id="lblText"><i class="fa-solid fa-text-height"></i> Tamanho do texto</span>
+                            <div class="a11y-actions">
+                                <button class="chip" id="fontMinus" aria-label="Diminuir fonte">A-</button>
+                                <button class="chip" id="fontReset" aria-label="Redefinir fonte">100%</button>
+                                <button class="chip" id="fontPlus" aria-label="Aumentar fonte">A+</button>
+                            </div>
+                        </div>
+                        <div class="a11y-group emergency-reset">
+                            <button id="resetAllSettings" class="reset-all-btn" aria-label="Redefinir todas as configurações">
+                                <i class="fa-solid fa-rotate-left"></i> Redefinir tudo (emergência)
+                            </button>
+                        </div>
+                        <div class="a11y-group">
+                            <span class="a11y-label" id="lblDyslexia"><i class="fa-solid fa-book-open"></i> Modo dislexia</span>
+                            <div class="switch">
+                                <input type="checkbox" id="a11yDyslexia" aria-labelledby="lblDyslexia">
+                                <label for="a11yDyslexia" class="slider"></label>
+                            </div>
+                        </div>
+                        <div class="a11y-group">
+                            <span class="a11y-label" id="lblReduceMotion"><i class="fa-solid fa-wave-square"></i> Reduzir animações</span>
+                            <div class="switch">
+                                <input type="checkbox" id="a11yReduceMotion" aria-labelledby="lblReduceMotion">
+                                <label for="a11yReduceMotion" class="slider"></label>
+                            </div>
+                        </div>
+                        <div class="a11y-group">
+                            <span class="a11y-label" id="lblHighlight"><i class="fa-solid fa-highlighter"></i> Destacar links e foco</span>
+                            <div class="switch">
+                                <input type="checkbox" id="a11yHighlight" aria-labelledby="lblHighlight">
+                                <label for="a11yHighlight" class="slider"></label>
+                            </div>
+                        </div>
+                        <div class="a11y-group">
+                            <span class="a11y-label" id="lblMuteMedia"><i class="fa-solid fa-volume-xmark"></i> Silenciar mídias</span>
+                            <div class="switch">
+                                <input type="checkbox" id="a11yMuteMedia" aria-labelledby="lblMuteMedia">
+                                <label for="a11yMuteMedia" class="slider"></label>
+                            </div>
+                        </div>
+                        <div class="a11y-group">
+                            <span class="a11y-label" id="lblScreenReader"><i class="fa-solid fa-volume-high"></i> Leitor de tela</span>
+                            <div class="switch">
+                                <input type="checkbox" id="a11yScreenReader" aria-labelledby="lblScreenReader">
+                                <label for="a11yScreenReader" class="slider"></label>
+                            </div>
+                        </div>
+                        <div id="screenReaderOptions" style="display: none;">
+                            <div class="a11y-group screen-reader-option">
+                                <span class="a11y-label" id="lblAutoRead"><i class="fa-solid fa-eye"></i> Leitura automática</span>
+                                <div class="switch">
+                                    <input type="checkbox" id="a11yAutoRead" aria-labelledby="lblAutoRead">
+                                    <label for="a11yAutoRead" class="slider"></label>
+                                </div>
+                            </div>
+                            <div class="a11y-group reader-controls">
+                                <span class="a11y-label"><i class="fa-solid fa-sliders"></i> Velocidade da fala</span>
+                                <div class="a11y-actions">
+                                    <input type="range" id="speechRate" min="0.5" max="2" step="0.1" value="1" class="speech-rate-slider">
+                                    <span id="speechRateValue">1.0x</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="a11y-hint">Dica: use Alt + A para abrir/fechar este painel rapidamente.</p>
+                    </div>
+                </dialog>
+            </div>
             
             <!-- === RODAPÉ MOBILE DESTACADO === -->
             <!-- Rodapé visível diretamente sobre o mapa em dispositivos móveis -->
