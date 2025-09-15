@@ -1564,30 +1564,33 @@ function initMap() {
 // ===== CRIAR MARCADORES =====
 function criarMarcadores() {
     pontosHistoricos.forEach(ponto => {
-        // Criar ícone personalizado
+        // Criar ícone personalizado com estrutura melhorada
+        // Usando dois divs aninhados: o externo para animações e o interno para conteúdo
         const iconHtml = `
-            <div style="
-                background-color: ${coresCategorias[ponto.categoria] || '#FFD700'};
-                width: 25px;
-                height: 25px;
-                border-radius: 50%;
-                border: 3px solid white;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: bold;
-                font-size: 12px;
-            ">${ponto.id}</div>
+            <div class="marcador-container" data-id="${ponto.id}" data-categoria="${ponto.categoria}">
+                <div class="marcador-conteudo" style="
+                    background-color: ${coresCategorias[ponto.categoria] || '#FFD700'};
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50%;
+                    border: 3px solid white;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 12px;
+                ">${ponto.id}</div>
+            </div>
         `;
 
         const marcador = L.marker(ponto.coords, {
             icon: L.divIcon({
                 className: 'marcador-personalizado',
                 html: iconHtml,
-                iconSize: [25, 25],
-                iconAnchor: [12, 12]
+                iconSize: [35, 35], // Aumentado para acomodar o contêiner
+                iconAnchor: [17, 17]
             })
         }).addTo(map);
 
@@ -1913,7 +1916,47 @@ function focarEmPonto(nomePonto) {
     }
 }
 
-// ===== FUNÇÃO PARA DESTACAR MÚLTIPLOS PONTOS POR CATEGORIA =====
+// ===== FUNÇÃO PARA DESTACAR VISUALMENTE PONTOS POR CATEGORIA =====
+function destacarVisualmentePorCategoria(categoria) {
+    const pontosDestacados = pontosHistoricos.filter(p => p.categoria === categoria);
+    
+    if (pontosDestacados.length > 0) {
+        // Calcular coordenadas centrais dos pontos destacados
+        const lats = pontosDestacados.map(p => p.coords[0]);
+        const lngs = pontosDestacados.map(p => p.coords[1]);
+        const centerLat = lats.reduce((a, b) => a + b) / lats.length;
+        const centerLng = lngs.reduce((a, b) => a + b) / lngs.length;
+        
+        // Sem alterar a visualização do mapa para não desorientar o usuário
+        // map.setView([centerLat, centerLng], 16); 
+        
+        // Destacar todos os marcadores da categoria sem remover outros e sem animação de escala
+        marcadores.forEach(marcador => {
+            // Verificar se o marcador pertence à categoria
+            const ponto = marcador.pontoData;
+            if (ponto && ponto.categoria === categoria) {
+                const markerElement = marcador.getElement();
+                
+                if (markerElement) {
+                    // Apenas aumentar z-index e aplicar efeito de sombra
+                    markerElement.classList.add('highlighted-marker');
+                    markerElement.style.zIndex = '1000';
+                    
+                    // Aplicar destaque visual com filtro CSS que não afeta o conteúdo interno
+                    markerElement.style.filter = 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.8))';
+                    
+                    // Remover efeitos após um tempo
+                    setTimeout(() => {
+                        markerElement.classList.remove('highlighted-marker');
+                        markerElement.style.filter = '';
+                    }, 5000);
+                }
+            }
+        });
+    }
+}
+
+// ===== FUNÇÃO ORIGINAL PARA DESTACAR MÚLTIPLOS PONTOS POR CATEGORIA =====
 function destacarPontosPorCategoria(categoria) {
     const pontosDestacados = pontosHistoricos.filter(p => p.categoria === categoria);
     
@@ -1927,8 +1970,13 @@ function destacarPontosPorCategoria(categoria) {
         // Centralizar no grupo de pontos
         map.setView([centerLat, centerLng], 16);
         
-        // Garantir que todos os marcadores sejam visíveis primeiro
+        // Garantir que todos os marcadores sejam visíveis primeiro - tanto CSS quanto adição ao mapa
         marcadores.forEach(marcador => {
+            // Adicionar o marcador ao mapa se não estiver presente
+            if (!map.hasLayer(marcador)) {
+                marcador.addTo(map);
+            }
+            
             const icon = marcador.getElement();
             if (icon) {
                 icon.style.visibility = 'visible';
@@ -2081,39 +2129,25 @@ function showNotification(message, type = 'info') {
 
 // ===== MOSTRAR HISTÓRIA DO RIO DE JANEIRO =====
 function mostrarHistoriaRJ() {
-    // Focar na Praça XV - coração histórico da cidade
-    focarEmPonto("Praça XV de Novembro");
-    
-    // Destacar pontos históricos principais em sequência
-    setTimeout(() => {
-        // Primeiro destacar igrejas históricas
-        destacarPontosPorCategoria('church');
-        
-        // Depois monumentos
-        setTimeout(() => {
-            destacarPontosPorCategoria('monument');
-        }, 2000);
-        
-        // Por último, museus históricos
-        setTimeout(() => {
-            destacarPontosPorCategoria('museum');
-        }, 4000);
-    }, 1000);
+    // Primeiro, garantir que todos os pontos estejam visíveis desde o início
+    filtroAtivo = 'all';
+    aplicarFiltros();
     
     // Remover classe active de todos os filtros
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     
-    // Mostrar todos os pontos
-    filtroAtivo = 'all';
-    aplicarFiltros();
+    // Ativar o botão "Todos"
+    const todosBtn = document.querySelector('.filter-btn');
+    if (todosBtn) {
+        todosBtn.classList.add('active');
+        todosBtn.setAttribute('aria-pressed', 'true');
+    }
     
-    // Rolar sidebar para a seção de informações após carregar o conteúdo
-    setTimeout(() => {
-        scrollToInfoSection();
-    }, 500);
-
+    // Carregar conteúdo na sidebar primeiro
     const infoSection = document.getElementById('infoSection');
     infoSection.style.display = 'block';
+    
+    // Preencher o conteúdo HTML
     infoSection.innerHTML = `
         <div class="info-panel">
             <h3 class="info-title">🏛️ História do Rio de Janeiro</h3>
@@ -2218,15 +2252,92 @@ function mostrarHistoriaRJ() {
             </button>
         </div>
     `;
+    
+    // Só depois fazer as animações do mapa
+    setTimeout(() => {
+        // Mostrar uma visão ampla do centro do Rio de Janeiro
+        // Coordenadas centralizadas e zoom ajustado para mostrar todos os pontos como na imagem
+        const centroRio = [-22.905, -43.175];
+        map.setView(centroRio, 14, { 
+            animate: true, 
+            duration: 1.0
+        });
+        
+        // Destacar categorias em sequência, sem afetar a visibilidade geral
+        setTimeout(() => {
+            // Apenas destacar visualmente (pulsar) sem alterar a visibilidade ou focar em um ponto
+            destacarVisualmentePorCategoria('church');
+            
+            setTimeout(() => {
+                destacarVisualmentePorCategoria('monument');
+            }, 2000);
+            
+            setTimeout(() => {
+                destacarVisualmentePorCategoria('museum');
+            }, 4000);
+            
+            // Após alguns segundos, destacar todos os marcadores brevemente
+            setTimeout(() => {
+                marcadores.forEach(marcador => {
+                    const markerElement = marcador.getElement();
+                    if (markerElement) {
+                        // Usar apenas efeito de sombra sem animação de escala
+                        markerElement.classList.add('highlighted-marker');
+                        markerElement.style.filter = 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.8))';
+                        
+                        setTimeout(() => {
+                            markerElement.classList.remove('highlighted-marker');
+                            markerElement.style.filter = '';
+                        }, 2000);
+                    }
+                });
+            }, 6000);
+        }, 1500);
+        
+        // Rolar sidebar para a seção de informações
+        scrollToInfoSection();
+    }, 300);
+}
+
+// ===== FUNÇÃO PARA DESTACAR LOCAIS IMPERIAIS =====
+function destacarLocaisImperiais() {
+    // Lista de locais relacionados à família imperial
+    const locaisImperiais = ["Paço Imperial", "Quinta da Boa Vista", "Palácio Imperial", "Museu Nacional", "Palácio do Catete", "Igreja Nossa Senhora do Carmo"];
+    
+    // Destacar cada local imperial com efeito de sombra amarela
+    marcadores.forEach(marcador => {
+        const ponto = marcador.pontoData;
+        if (ponto && locaisImperiais.includes(ponto.nome)) {
+            const markerElement = marcador.getElement();
+            if (markerElement) {
+                // Aplicar classe de destaque com sombra amarela
+                markerElement.classList.add('pulsing-marker');
+                
+                // Remover após 5 segundos
+                setTimeout(() => {
+                    markerElement.classList.remove('pulsing-marker');
+                }, 5000);
+            }
+        }
+    });
 }
 
 // ===== MOSTRAR FAMÍLIA IMPERIAL =====
 function toggleImperialFamily() {
+    // Primeiro, garantir que todos os pontos estejam visíveis
+    filtroAtivo = 'all';
+    aplicarFiltros();
+    
     // Focar no Paço Imperial - centro da família real
     focarEmPonto("Paço Imperial");
     
     // Mostrar informações da família imperial
     mostrarFamiliaImperial();
+    
+    // Destacar os pontos relacionados com a família imperial com efeito de sombra amarela pulsante
+    setTimeout(() => {
+        destacarLocaisImperiais();
+    }, 800);
     
     // Rolar sidebar para a seção de informações após carregar o conteúdo
     setTimeout(() => {

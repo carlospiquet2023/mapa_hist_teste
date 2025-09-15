@@ -2896,6 +2896,40 @@ Animações especiais para destacar pontos no mapa quando navegação é ativada
     z-index: 1000 !important;
 }
 
+/* Estilo para o contêiner do marcador */
+.marcador-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    position: relative;
+}
+
+/* Estilo para o conteúdo do marcador */
+.marcador-conteudo {
+    position: relative;
+    z-index: 2; /* Garante que o número fique sempre visível */
+}
+
+/* Classe para marcadores destacados com brilho sem animação */
+.highlighted-marker {
+    transition: filter 0.5s ease;
+}
+
+/* Classe para fazer marcadores pulsar sem afetar o conteúdo interno */
+.pulsing-marker .marcador-container {
+    animation: glow-border 1.5s ease-in-out infinite; /* Animação de brilho pulsante */
+    z-index: 1002 !important;
+}
+
+/* Animação de brilho suave em vez de escala */
+@keyframes glow-border {
+    0% { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7)); }
+    50% { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1)); }
+    100% { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7)); }
+}
+
 /* Hover melhorado para marcadores */
 .leaflet-marker-icon:hover {
     transform: scale(1.1);
