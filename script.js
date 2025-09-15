@@ -1790,6 +1790,11 @@ function mostrarDetalhes(id) {
     if (temGaleria) {
         inicializarGaleriaImagens();
     }
+    
+    // Rolar sidebar para a seção de informações
+    setTimeout(() => {
+        scrollToInfoSection();
+    }, 300);
 }
 
 // ===== FUNÇÕES DE NAVEGAÇÃO =====

@@ -741,7 +741,7 @@ body {
     align-items: center;
     gap: 12px;
     width: 100%;
-    padding: 14px 18px;
+    padding: 12px 18px;
     background: transparent;
     border: none;
     color: var(--neutral-100);
@@ -749,10 +749,12 @@ body {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 0;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
+    min-height: 42px;
 }
 
 .mobile-menu-item::before {
@@ -813,10 +815,10 @@ body {
     border: 2px solid transparent;
     background-clip: padding-box;
     color: var(--neutral-100);
-    padding: 8px 14px;
+    padding: 8px 12px !important;
     border-radius: 12px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.75rem !important;
     font-weight: 600;
     letter-spacing: 0.025em;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -826,6 +828,8 @@ body {
     position: relative;
     overflow: hidden;
     text-decoration: none;
+    white-space: nowrap;
+    min-height: 36px;
     box-shadow: 
         0 3px 15px rgba(0, 0, 0, 0.12),
         0 1px 3px rgba(255, 215, 0, 0.08),
@@ -1087,7 +1091,7 @@ body {
     border-right: 1px solid var(--glass-border);
     padding: var(--space-6);
     overflow-y: auto;
-    margin-top: calc(var(--header-height) + 24px); /* Aumentado o espaçamento para evitar sobreposição com o cabeçalho */
+    margin-top: calc(var(--header-height) + 45px); /* Aumentado para evitar sobreposição com o cabeçalho */
     position: relative;
 }
 
@@ -1143,6 +1147,10 @@ body {
 /* === SIDEBAR COMPONENTS === */
 .section {
     margin-bottom: var(--space-8);
+}
+
+.section:first-child {
+    padding-top: 10px; /* Espaço extra para a primeira seção não ficar escondida */
 }
 
 .section:last-child {
@@ -2633,8 +2641,8 @@ Estilos para a galeria de fotos históricas
     color: #1a1a1a !important;
     font-weight: 700 !important;
     border: 2px solid rgba(255, 140, 0, 0.6) !important;
-    padding: 8px 14px !important;
-    font-size: 0.85rem !important;
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
     box-shadow: 
         0 4px 18px rgba(255, 140, 0, 0.25),
         0 2px 6px rgba(0, 0, 0, 0.12),
@@ -2643,6 +2651,8 @@ Estilos para a galeria de fotos históricas
     letter-spacing: 0.5px !important;
     position: relative !important;
     overflow: hidden !important;
+    white-space: nowrap !important;
+    min-height: 36px !important;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 
@@ -2715,11 +2725,13 @@ Estilos para a galeria de fotos históricas
     color: #ffffff !important;
     font-weight: 700 !important;
     border: 2px solid rgba(210, 105, 30, 0.8) !important;
-    padding: 8px 14px !important;
-    font-size: 0.85rem !important;
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6) !important;
     position: relative !important;
     overflow: hidden !important;
+    white-space: nowrap !important;
+    min-height: 36px !important;
     box-shadow: 
         0 4px 16px rgba(139, 69, 19, 0.35),
         0 2px 8px rgba(0, 0, 0, 0.25),
