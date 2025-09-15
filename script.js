@@ -942,6 +942,43 @@ function initFullscreenButtons() {
 }
 
 //=============================================================================
+// 🗺️ FUNÇÕES DE MANIPULAÇÃO DE POPUPS
+//=============================================================================
+
+/**
+ * Centraliza o mapa em um ponto e abre o popup de maneira otimizada
+ * @param {Array} coords - Coordenadas [lat, lng]
+ * @param {Object} marcador - Objeto marcador do Leaflet
+ * @param {number} zoom - Nível de zoom (opcional)
+ */
+function centrarEAbrirPopup(coords, marcador, zoom = 17) {
+    // Primeiro, centralizar o mapa nas coordenadas com o zoom apropriado
+    map.setView(coords, zoom, {
+        animate: true,
+        duration: 0.3
+    });
+    
+    // Abrir o popup após um pequeno atraso
+    setTimeout(() => {
+        marcador.openPopup();
+        
+        // Ajustar posição após popup abrir para ficar no centro da tela
+        setTimeout(() => {
+            // Pegar altura do popup para calcular offset
+            const popupElement = document.querySelector('.leaflet-popup');
+            if (popupElement) {
+                const popupHeight = popupElement.offsetHeight;
+                // Ajustar a posição do mapa para centralizar o popup
+                map.panBy([0, -popupHeight/4], {
+                    animate: true,
+                    duration: 0.3
+                });
+            }
+        }, 100);
+    }, 100);
+}
+
+//=============================================================================
 // 🏛️ BASE DE DADOS HISTÓRICOS
 //=============================================================================
 
@@ -1576,15 +1613,42 @@ function criarMarcadores() {
             </div>
         `;
         
-        marcador.bindPopup(popupContent);
+        // Configuração avançada do popup para centralização e posicionamento ideal
+        const popupOptions = {
+            maxWidth: 320,              // Largura máxima para controlar o tamanho
+            minWidth: 280,              // Largura mínima para garantir legibilidade
+            autoPan: true,              // Auto-centralizar no mapa
+            autoPanPaddingTopLeft: [50, 50],  // Padding para evitar bordas
+            autoPanPaddingBottomRight: [50, 50],
+            keepInView: true,           // Manter popup no view do mapa
+            className: 'popup-centralizado' // Classe para estilização específica
+        };
+        
+        marcador.bindPopup(popupContent, popupOptions);
         
         // Evento para inicializar a galeria quando o popup for aberto
         marcador.on('popupopen', function() {
             inicializarGaleriaImagens();
+            
+            // Centralizar o mapa no ponto após abrir o popup
+            setTimeout(() => {
+                // Ajustar offset para centralizar considerando o tamanho do popup
+                const popupHeight = document.querySelector('.leaflet-popup').offsetHeight;
+                map.panTo(ponto.coords, {
+                    animate: true,
+                    duration: 0.5,
+                    // Offset vertical para centralizar popup na tela
+                    offset: [0, -popupHeight/4]
+                });
+            }, 100);
         });
 
-        // Evento de clique
+        // Evento de clique usando a função centralizada
         marcador.on('click', () => {
+            // Usar nossa função de centralização e abertura de popup
+            centrarEAbrirPopup(ponto.coords, marcador, 17);
+            
+            // Mostra os detalhes na barra lateral
             mostrarDetalhes(ponto.id);
         });
 
@@ -1749,8 +1813,15 @@ function mostrarDetalhes(id) {
     const ponto = pontosHistoricos.find(p => p.id === id);
     if (!ponto) return;
 
-    // Centralizar no ponto
-    map.setView(ponto.coords, 17);
+    // Encontrar o marcador correspondente para abrir o popup centralizado
+    const marcador = marcadores.find(m => m.pontoData && m.pontoData.id === id);
+    if (marcador) {
+        // Usar nossa função de centralização
+        centrarEAbrirPopup(ponto.coords, marcador, 17);
+    } else {
+        // Fallback para o comportamento anterior se não encontrar o marcador
+        map.setView(ponto.coords, 17);
+    }
 
     // Mostrar informações na sidebar
     const infoSection = document.getElementById('infoSection');
@@ -1856,15 +1927,32 @@ function destacarPontosPorCategoria(categoria) {
         // Centralizar no grupo de pontos
         map.setView([centerLat, centerLng], 16);
         
+        // Garantir que todos os marcadores sejam visíveis primeiro
+        marcadores.forEach(marcador => {
+            const icon = marcador.getElement();
+            if (icon) {
+                icon.style.visibility = 'visible';
+                icon.style.opacity = '1';
+                icon.style.display = 'block';
+            }
+        });
+        
         // Piscar todos os marcadores da categoria
         marcadores.forEach(marcador => {
             const ponto = pontosHistoricos.find(p => p.nome === marcador.options.title);
             if (ponto && ponto.categoria === categoria) {
                 const icon = marcador.getElement();
                 if (icon) {
+                    // Garantir que o marcador seja visível
+                    icon.style.visibility = 'visible';
+                    icon.style.opacity = '1';
+                    icon.style.zIndex = '1000';
                     icon.style.animation = 'pulse 1.5s ease-in-out 4';
                     setTimeout(() => {
                         icon.style.animation = '';
+                        // Manter visibilidade após animação
+                        icon.style.visibility = 'visible';
+                        icon.style.opacity = '1';
                     }, 6000);
                 }
             }
@@ -1961,19 +2049,20 @@ function showNotification(message, type = 'info') {
     // Estilos inline para garantir que apareça corretamente
     notification.style.cssText = `
         position: fixed;
-        top: 80px;
+        top: 20px;
         right: 20px;
         background: linear-gradient(135deg, #FFD700, #FFA500);
         color: #333;
-        padding: 12px 20px;
-        border-radius: 8px;
+        padding: 6px 12px;
+        border-radius: 6px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        z-index: 10000;
+        z-index: 9999;
         font-weight: 500;
         border: 1px solid rgba(255,255,255,0.3);
         animation: slideInRight 0.3s ease-out;
-        max-width: 300px;
-        font-size: 14px;
+        max-width: 220px;
+        font-size: 11px;
+        text-align: center;
     `;
     
     // Adicionar ao DOM
@@ -2135,11 +2224,6 @@ function mostrarHistoriaRJ() {
 function toggleImperialFamily() {
     // Focar no Paço Imperial - centro da família real
     focarEmPonto("Paço Imperial");
-    
-    // Destacar também outros pontos relacionados à família imperial
-    setTimeout(() => {
-        destacarPontosPorCategoria('palace');
-    }, 1000);
     
     // Mostrar informações da família imperial
     mostrarFamiliaImperial();
