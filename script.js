@@ -1808,6 +1808,65 @@ function voltarInicio() {
     aplicarFiltros();
 }
 
+// ===== FUNÇÃO AUXILIAR PARA NAVEGAÇÃO INTELIGENTE =====
+function focarEmPonto(nomePonto) {
+    const ponto = pontosHistoricos.find(p => p.nome === nomePonto);
+    if (ponto) {
+        // Centralizar mapa no ponto com zoom maior para destaque
+        map.setView(ponto.coords, 18);
+        
+        // Piscar o marcador para destacar
+        const marcador = marcadores.find(m => m.options.title === nomePonto);
+        if (marcador) {
+            // Animar o marcador com pulsação
+            const icon = marcador.getElement();
+            if (icon) {
+                icon.style.animation = 'pulse 2s ease-in-out 3';
+                setTimeout(() => {
+                    icon.style.animation = '';
+                }, 6000);
+            }
+        }
+        
+        // Abrir popup do marcador automaticamente
+        setTimeout(() => {
+            if (marcador) {
+                marcador.openPopup();
+            }
+        }, 500);
+    }
+}
+
+// ===== FUNÇÃO PARA DESTACAR MÚLTIPLOS PONTOS POR CATEGORIA =====
+function destacarPontosPorCategoria(categoria) {
+    const pontosDestacados = pontosHistoricos.filter(p => p.categoria === categoria);
+    
+    if (pontosDestacados.length > 0) {
+        // Calcular coordenadas centrais dos pontos destacados
+        const lats = pontosDestacados.map(p => p.coords[0]);
+        const lngs = pontosDestacados.map(p => p.coords[1]);
+        const centerLat = lats.reduce((a, b) => a + b) / lats.length;
+        const centerLng = lngs.reduce((a, b) => a + b) / lngs.length;
+        
+        // Centralizar no grupo de pontos
+        map.setView([centerLat, centerLng], 16);
+        
+        // Piscar todos os marcadores da categoria
+        marcadores.forEach(marcador => {
+            const ponto = pontosHistoricos.find(p => p.nome === marcador.options.title);
+            if (ponto && ponto.categoria === categoria) {
+                const icon = marcador.getElement();
+                if (icon) {
+                    icon.style.animation = 'pulse 1.5s ease-in-out 4';
+                    setTimeout(() => {
+                        icon.style.animation = '';
+                    }, 6000);
+                }
+            }
+        });
+    }
+}
+
 function resetMap() {
     voltarInicio();
 }
@@ -1845,14 +1904,119 @@ function mostrarCuriosidadeCategoria(categoria) {
     `;
 }
 
+// ===== FUNÇÃO PARA ROLAR PARA A SEÇÃO DE INFORMAÇÕES =====
+function scrollToInfoSection() {
+    const infoSection = document.getElementById('infoSection');
+    const sidebar = document.querySelector('.sidebar');
+    
+    if (infoSection && sidebar) {
+        // Adicionar um efeito visual de destaque
+        infoSection.style.border = '2px solid #FFD700';
+        infoSection.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.5)';
+        infoSection.style.transition = 'all 0.5s ease';
+        
+        // Calcular a posição da seção de informações relativa ao topo da sidebar
+        const sidebarRect = sidebar.getBoundingClientRect();
+        const infoRect = infoSection.getBoundingClientRect();
+        const scrollPosition = infoSection.offsetTop - 20; // 20px de margem
+        
+        // Fazer o scroll suave
+        sidebar.scrollTo({
+            top: scrollPosition,
+            behavior: 'smooth'
+        });
+        
+        // Remover o destaque após 3 segundos
+        setTimeout(() => {
+            infoSection.style.border = '';
+            infoSection.style.boxShadow = '';
+        }, 3000);
+        
+        // Mostrar uma mensagem visual para o usuário
+        showNotification('📍 Conteúdo carregado no menu lateral!', 'success');
+    }
+}
+
+// ===== FUNÇÃO PARA MOSTRAR NOTIFICAÇÕES =====
+function showNotification(message, type = 'info') {
+    // Remover notificação existente se houver
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Criar nova notificação
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-info-circle"></i>
+        <span>${message}</span>
+    `;
+    
+    // Estilos inline para garantir que apareça corretamente
+    notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        color: #333;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-weight: 500;
+        border: 1px solid rgba(255,255,255,0.3);
+        animation: slideInRight 0.3s ease-out;
+        max-width: 300px;
+        font-size: 14px;
+    `;
+    
+    // Adicionar ao DOM
+    document.body.appendChild(notification);
+    
+    // Remover após 4 segundos
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-in';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 300);
+    }, 4000);
+}
+
 // ===== MOSTRAR HISTÓRIA DO RIO DE JANEIRO =====
 function mostrarHistoriaRJ() {
+    // Focar na Praça XV - coração histórico da cidade
+    focarEmPonto("Praça XV de Novembro");
+    
+    // Destacar pontos históricos principais em sequência
+    setTimeout(() => {
+        // Primeiro destacar igrejas históricas
+        destacarPontosPorCategoria('church');
+        
+        // Depois monumentos
+        setTimeout(() => {
+            destacarPontosPorCategoria('monument');
+        }, 2000);
+        
+        // Por último, museus históricos
+        setTimeout(() => {
+            destacarPontosPorCategoria('museum');
+        }, 4000);
+    }, 1000);
+    
     // Remover classe active de todos os filtros
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     
     // Mostrar todos os pontos
     filtroAtivo = 'all';
     aplicarFiltros();
+    
+    // Rolar sidebar para a seção de informações após carregar o conteúdo
+    setTimeout(() => {
+        scrollToInfoSection();
+    }, 500);
 
     const infoSection = document.getElementById('infoSection');
     infoSection.style.display = 'block';
@@ -1964,7 +2128,21 @@ function mostrarHistoriaRJ() {
 
 // ===== MOSTRAR FAMÍLIA IMPERIAL =====
 function toggleImperialFamily() {
+    // Focar no Paço Imperial - centro da família real
+    focarEmPonto("Paço Imperial");
+    
+    // Destacar também outros pontos relacionados à família imperial
+    setTimeout(() => {
+        destacarPontosPorCategoria('palace');
+    }, 1000);
+    
+    // Mostrar informações da família imperial
     mostrarFamiliaImperial();
+    
+    // Rolar sidebar para a seção de informações após carregar o conteúdo
+    setTimeout(() => {
+        scrollToInfoSection();
+    }, 500);
 }
 
 function mostrarFamiliaImperial() {
