@@ -55,7 +55,7 @@
             data-wc-autoplay-ok="true"
             aria-label="Vídeo de introdução do Mapa Histórico do Rio de Janeiro"
             title="Intro - Centro Histórico do Rio de Janeiro">
-            <source src="https://i.imgur.com/z4UhFJK.mp4" type="video/mp4">
+            <source src="https://i.imgur.com/M5UfSIi.mp4" type="video/mp4">
             <!-- Legendas nativas DESABILITADAS para evitar duplicação -->
             <track kind="subtitles" src="subtitles/pt-br.vtt" srclang="pt-br" label="Português (Brasil)">
             <track kind="descriptions" src="subtitles/descriptions-pt-br.vtt" srclang="pt-br" label="Descrição Audiovisual">
@@ -108,19 +108,19 @@
                 
                 <!-- MENU DESKTOP: Visível apenas em telas grandes -->
                 <div class="desktop-menu">
-                    <button class="btn" onclick="resetMap()">
+                    <button class="btn" onclick="resetMap()" title="Voltar à visão inicial do mapa">
                         <i class="fas fa-home"></i>
                         Início
                     </button>
-                    <button class="btn" onclick="toggleImperialFamily()">
+                    <button class="btn" onclick="toggleImperialFamily()" title="Explorar locais da Família Imperial - foca no Paço Imperial">
                         <i class="fas fa-crown"></i>
                         Família Imperial
                     </button>
-                    <button class="btn" onclick="abrirMemoria()">
+                    <button class="btn" onclick="abrirMemoria()" title="Galeria de fotos históricas do Centro do Rio">
                         <i class="fas fa-photo-video"></i>
                         Memória
                     </button>
-                    <button class="btn" onclick="mostrarHistoriaRJ()">
+                    <button class="btn" onclick="mostrarHistoriaRJ()" title="Explorar a história do Rio - foca na Praça XV e pontos históricos">
                         <i class="fas fa-city"></i>
                         História do Rio de Janeiro
                     </button>
@@ -147,19 +147,19 @@
                     </button>
                     <!-- Dropdown do menu mobile -->
                     <div class="mobile-menu-dropdown" id="mobileMenuDropdown">
-                        <button class="mobile-menu-item" onclick="resetMap(); closeMobileMenu()">
+                        <button class="mobile-menu-item" onclick="resetMap(); closeMobileMenu()" title="Voltar à visão inicial">
                             <i class="fas fa-home"></i>
                             Início
                         </button>
-                        <button class="mobile-menu-item" onclick="toggleImperialFamily(); closeMobileMenu()">
+                        <button class="mobile-menu-item" onclick="toggleImperialFamily(); closeMobileMenu()" title="Família Imperial → Paço Imperial">
                             <i class="fas fa-crown"></i>
                             Família Imperial
                         </button>
-                        <button class="mobile-menu-item" onclick="abrirMemoria(); closeMobileMenu()">
+                        <button class="mobile-menu-item" onclick="abrirMemoria(); closeMobileMenu()" title="Galeria de fotos históricas">
                             <i class="fas fa-photo-video"></i>
                             Memória
                         </button>
-                        <button class="mobile-menu-item" onclick="mostrarHistoriaRJ(); closeMobileMenu()">
+                        <button class="mobile-menu-item" onclick="mostrarHistoriaRJ(); closeMobileMenu()" title="História do Rio → Praça XV">
                             <i class="fas fa-city"></i>
                             História do Rio de Janeiro
                         </button>

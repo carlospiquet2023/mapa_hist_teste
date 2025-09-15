@@ -158,7 +158,7 @@ Overlay de vídeo que cobre toda a tela na inicialização
     opacity: 1;
     transition: opacity 1.5s ease-out, transform 1.5s ease-out;
     overflow: hidden;
-    padding-bottom: 10vh; /* Espaço adicional na parte inferior para as legendas */
+    padding: 2vh 0 8vh; /* Padding superior para evitar corte da cabeça e inferior para legendas */
 }
 
 .video-intro-overlay.fade-out {
@@ -169,12 +169,13 @@ Overlay de vídeo que cobre toda a tela na inicialização
 
 .video-intro-overlay video {
     width: 90%;
-    height: 80%;
-    object-fit: contain; /* Mantido contain para garantir que todo o vídeo seja visível */
-    max-height: 80vh;
+    height: 85%; /* Aumentado de 80% para 85% */
+    object-fit: contain; /* Mantém proporções sem cortar */
+    max-height: 85vh; /* Aumentado de 80vh para 85vh */
     max-width: 90vw;
     display: block;
     margin: 0 auto; /* Centraliza o vídeo horizontalmente */
+    margin-top: 2vh; /* Pequena margem superior para garantir que a cabeça não seja cortada */
     background-color: #000; /* Fundo preto para as áreas não cobertas pelo vídeo */
     position: relative;
     z-index: 1; /* Garante que o vídeo esteja em uma camada inferior às legendas */
@@ -403,17 +404,19 @@ Overlay de vídeo que cobre toda a tela na inicialização
 /* Garantir responsividade para diferentes orientações */
 @media (orientation: portrait) {
     .video-intro-overlay video {
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
+        width: 95vw;
+        height: 85vh;
+        object-fit: contain; /* Mudado de cover para contain para não cortar */
+        object-position: center top; /* Posiciona o vídeo centralizado no topo */
     }
 }
 
 @media (orientation: landscape) {
     .video-intro-overlay video {
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
+        width: 90vw;
+        height: 85vh;
+        object-fit: contain; /* Mudado de cover para contain para não cortar */
+        object-position: center; /* Mantém centralizado */
     }
 }
 
