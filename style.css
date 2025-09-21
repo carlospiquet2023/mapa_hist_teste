@@ -168,11 +168,11 @@ Overlay de vídeo que cobre toda a tela na inicialização
 }
 
 .video-intro-overlay video {
-    width: 90%;
-    height: 85%; /* Aumentado de 80% para 85% */
+    width: 100%;
+    height: 100%; /* Aumentado de 80% para 85% */
     object-fit: contain; /* Mantém proporções sem cortar */
-    max-height: 85vh; /* Aumentado de 80vh para 85vh */
-    max-width: 90vw;
+    max-height: 100vh; /* Aumentado de 80vh para 85vh */
+    max-width: 100vw;
     display: block;
     margin: 0 auto; /* Centraliza o vídeo horizontalmente */
     margin-top: 2vh; /* Pequena margem superior para garantir que a cabeça não seja cortada */
@@ -1073,6 +1073,17 @@ body {
         0 4px 15px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.3),
         0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+/* Botão Carteirinha - Tema Azul Claro */
+.btn:has(i.fa-id-card) {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+}
+
+.btn:has(i.fa-id-card):hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    color: white;
 }
 
 /* === MAIN LAYOUT GRID === */
