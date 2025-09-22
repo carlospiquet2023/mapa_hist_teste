@@ -1007,8 +1007,8 @@ body {
 
 /* ===== Utilitário: variante de botão menor ===== */
 .btn-sm {
-    padding: 6px 10px !important; /* reduz padding para botão menor */
-    font-size: 0.7rem !important;  /* reduz texto */
+    padding: 6px 8px !important; /* reduz padding para botão menor */
+    font-size: 0.5rem !important;  /* reduz texto */
     border-radius: 10px !important; /* mantém visual arredondado, ligeiramente menor */
     min-height: 32px !important;    /* reduz altura mínima */
 }
