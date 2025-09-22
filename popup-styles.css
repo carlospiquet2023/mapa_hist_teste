@@ -51,3 +51,43 @@
 .popup-button:hover {
     background-color: var(--primary-700);
 }
+
+/* Ajustes específicos para mobile: limitar popup e permitir scroll interno quando necessário */
+@media (max-width: 600px) {
+    .popup-container {
+        max-width: 84vw; /* ocupar a maior parte da largura da tela, com margem */
+        font-size: 0.95rem;
+    }
+
+    /* Limitar a largura e a altura do wrapper do Leaflet e permitir scroll no conteúdo */
+    .leaflet-popup-content-wrapper {
+        max-width: 88vw !important;
+        max-height: 62vh !important; /* não ocupar toda a tela verticalmente */
+        padding: 8px !important;
+        overflow: hidden !important;
+    }
+
+    /* Tornar o conteúdo interno rolável sem aumentar o popup além do limite */
+    .leaflet-popup-content {
+        max-height: 56vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 6px; /* espaço para scrollbar */
+    }
+
+    .popup-image {
+        height: 120px; /* reduzir imagem no mobile */
+        max-width: 100%;
+    }
+
+    .popup-title { font-size: 1rem; }
+    .popup-subtitle, .popup-description { font-size: 0.85rem; }
+
+    /* Diminuir botão para caber melhor */
+    .popup-button { padding: 8px 10px; font-size: 0.85rem; }
+}
+
+/* Se o usuário preferir que popups não apareçam em mobile, esconder o contêiner do Leaflet popup */
+@media (max-width: 600px) {
+    .leaflet-popup { display: none !important; }
+}
