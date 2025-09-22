@@ -10,30 +10,39 @@
 -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+/* Estilos globais para reset e fundo da página */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #2d3748;
-  }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #2d3748;
+}
 
-  .container {
-    max-width: 1400px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: start;
+h6{
+  text-align: center;
+  
+}
+
+/* Lapxy
+  color: rgba(0, 0, 0, 0.7);
+  margin-top: -5px;out do container principal */
+.container {
+  max-width: 1400px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
   }
 
   @media (max-width: 1024px) {
@@ -44,22 +53,21 @@
   }
 
   /* Formulário */
-  .form-section {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 24px;
-    padding: 40px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
+/* Estilos da seção do formulário */
+.form-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-  .form-section:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 35px 70px rgba(0, 0, 0, 0.15);
-  }
-
-  h1 {
+.form-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.15);
+}  h1 {
     color: #1a202c;
     font-size: 32px;
     font-weight: 800;
@@ -76,6 +84,7 @@
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   }
 
+  /* Subtítulo da página */
   .subtitle {
     color: #718096;
     font-size: 16px;
@@ -83,6 +92,7 @@
     font-weight: 500;
   }
 
+  /* Grupo de campos do formulário */
   .form-group {
     margin-bottom: 20px;
   }
@@ -119,6 +129,7 @@
     transform: scale(1.02);
   }
 
+  /* Linha do formulário com duas colunas */
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -154,22 +165,26 @@
     cursor: pointer;
   }
 
+  /* Conteúdo interno da área de upload */
   .photo-upload-content {
     text-align: center;
     padding: 20px;
   }
 
+  /* Ícone de upload de foto */
   .photo-upload-icon {
     font-size: 40px;
     margin-bottom: 8px;
   }
 
+  /* Texto da área de upload */
   .photo-upload-text {
     color: #64748b;
     font-size: 14px;
     font-weight: 500;
   }
 
+  /* Preview da foto carregada */
   .photo-preview {
     position: absolute;
     width: 100%;
@@ -186,6 +201,7 @@
     margin-top: 8px;
   }
 
+  /* Chip individual das condições médicas */
   .condition-chip {
     background: #fee2e2;
     color: #dc2626;
@@ -313,6 +329,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 12px; /* reduzido */
+    position: relative; /* necessário para centralizar .logo-text sem deslocar o logo */
   }
 
   .logo-section {
@@ -321,17 +338,29 @@
     gap: 8px; /* reduzido */
   }
 
+  /* Imagem do logo */
   .logo-img {
     width: 36px; /* reduzido */
     height: 36px;
     object-fit: contain;
   }
 
+  /* Container do texto do logo */
   .logo-text {
     display: flex;
     flex-direction: column;
+    /* centralizar o bloco de texto em relação ao card sem afetar o logo
+       usamos posicionamento absoluto dentro de .card-header */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 240px; /* largura máxima do bloco centralizado */
+    pointer-events: none; /* não atrapalha cliques no header */
   }
 
+  /* Nome da organização */
   .org-name {
     font-size: 15px; /* leve redução */
     font-weight: 700;
@@ -339,6 +368,8 @@
     line-height: 1.1;
   }
 
+  /*
+    text-align: center; Tipo da carteirinha (ex: Passeio) */
   .card-type {
     font-size: 12px;
     color: #3b82f6;
@@ -351,6 +382,7 @@
     gap: 12px; /* reduzido */
   }
 
+  /* Container da foto do estudante */
   .student-photo {
     width: 88px; /* reduzido */
     height: 106px; /* reduzido */
@@ -367,12 +399,14 @@
     object-fit: cover;
   }
 
+  /* Container das informações do estudante */
   .student-info {
     flex: 1;
     display: flex;
     flex-direction: column;
   }
 
+  /* Nome do estudante */
   .student-name {
     font-size: 18px; /* reduzido */
     font-weight: 800;
@@ -384,12 +418,14 @@
     text-overflow: ellipsis;
   }
 
+  /* Detalhes do estudante (idade, tipo sanguíneo, etc.) */
   .student-details {
     font-size: 12px; /* reduzido */
     color: #64748b;
     margin-bottom: 8px;
   }
 
+  /* Badge do evento com localização e data */
   .event-badge {
     background: #fef3c7;
     color: #92400e;
@@ -401,6 +437,7 @@
     margin-bottom: 10px;
   }
 
+  /* Container das condições médicas */
   .medical-conditions {
     display: flex;
     gap: 6px;
@@ -421,6 +458,7 @@
     vertical-align: middle;
   }
 
+  /* Tag das condições médicas */
   .condition-tag {
     padding: 4px 10px; /* ligeiro ajuste */
     border-radius: 14px;
@@ -460,8 +498,19 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    align-items: flex-start;
+    align-items: center;
     flex-shrink: 0;
+  }
+
+  /* Centralizar container de condições (preview e download) abaixo da foto */
+  .card .photo-column .conditions-info,
+  .download-card .photo-column .conditions-info-download {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 6px;
   }
 
   .extra-info {
@@ -482,12 +531,14 @@
     margin-bottom: 3px;
   }
 
+  /* Tipo sanguíneo */
   .blood-type {
     font-size: 20px; /* reduzido */
     font-weight: 800;
     color: #0f172a;
   }
 
+  /* Badge do grupo/turma */
   .group-badge {
     background: #dbeafe;
     color: #1e40af;
@@ -497,21 +548,40 @@
     font-weight: 700;
   }
 
+  /* Rodapé da carteirinha */
   .card-footer {
-    /* posicionamento estático para que o footer seja empurrado para baixo quando o cartão cresce */
-    position: static;
+    /* posicionamento relativo para conter elementos absolutamente posicionados */
+    position: relative;
     margin-top: 12px;
     font-size: 10px; /* reduzido */
     color: #94a3b8;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    min-height: 50px; /* espaço para o logo */
   }
 
+  /* Nota curta (ex: Cada passo é uma descoberta) posicionada acima do rodapé */
+  .card-note {
+    position: relative;
+    height: 0; /* elemento apenas para controle de posicionamento */
+  }
+
+  .card-note h6 {
+    position: relative; /* podemos usar top negativo para subir */
+    top: -18px; /* ajuste: aumenta este valor para subir mais */
+    text-align: center;
+    font-size: 10px;
+    color: rgba(0,0,0,0.6);
+    margin-bottom: -8px; /* reduzir espaço extra abaixo */
+  }
+
+  /* Logo no rodapé da carteirinha */
   .footer-logo {
+     position: absolute;
+    right: 1px; /* movido mais para a direita */
+    bottom: 18px;
     width: 24px;
     height: 24px;
-    opacity: 0.7;
+    opacity: 1;
+    z-index: 2;
   }
 
   /* Verso da carteirinha */
@@ -580,6 +650,7 @@
     height: 1px;
   }
 
+  /* Título da seção de regras */
   .rules-title {
     font-size: 36px; /* aumentado para destaque */
     font-weight: 800;
@@ -587,6 +658,7 @@
     margin-bottom: 20px;
   }
 
+  /* Lista de regras do evento */
   .rules-list {
     list-style: none;
     margin-bottom: 20px;
@@ -623,16 +695,18 @@
     font-size: 22px;
   }
 
+  /* Seção de emergência no verso da carteirinha */
   .emergency-section {
     margin-top: 8px;
     /* espaçamento maior entre linhas dentro desta seção */
-    --emergency-row-gap: 12px; /* reduzido para aproximar as linhas */
+    --emergency-row-gap: 6px; /* reduzido para aproximar as linhas */
     line-height: 1.5; /* ajuste tipográfico solicitado */
   }
 
   /* Aplicar mesmo espaçamento na versão de download/impressão (verso) */
-  .download-card .emergency-section { --emergency-row-gap: 12px; line-height: 1.5; }
+  .download-card .emergency-section { --emergency-row-gap: 6px; line-height: 1.5; }
 
+  /* Título da seção de contato de emergência */
   .emergency-title {
     font-size: 22px; /* destacado */
     font-weight: 700;
@@ -640,6 +714,7 @@
     margin-bottom: 12px;
   }
 
+  /* Campo de emergência no verso */
   .emergency-field {
     border-bottom: 1px solid #e2e8f0;
     padding: 8px 0;
@@ -652,7 +727,7 @@
     display: flex;
     align-items: baseline;
     gap: 0; /* linha começa imediatamente após ':' */
-    padding: 6px 0;
+    padding: 4px 0;
     margin-bottom: var(--emergency-row-gap, 20px);
   }
 
@@ -672,19 +747,40 @@
     height: 1px;
   }
 
+  .emergency-row .value {
+    flex: 1;
+    font-style: italic;
+    color: #1e40af; /* azul escuro, como caneta */
+    border-bottom: 1px solid #cbd5e1;
+    min-height: 16px; /* para simular linha */
+    display: inline-block;
+    padding-left: 4px;
+    font-size: 14px;
+  }
+
   /* garantir estilos também na versão de download/impressão */
   .download-card .emergency-row {
     margin-bottom: var(--emergency-row-gap, 20px);
   }
 
-  /* posicionar logo no canto inferior direito do verso */
+  /* Linha de observações posicionada atrás do logo */
+  .emergency-notes-row {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 56px; /* ajustado para compensar o movimento do logo */
+    z-index: 1;
+  }
+
+  /* Logo com z-index maior para ficar na frente */
   .card-back .footer-logo {
     position: absolute;
-    right: 18px;
+    right: 1px; /* movido mais para a direita */
     bottom: 18px;
     width: 36px;
     height: 36px;
     opacity: 1;
+    z-index: 2;
   }
 
   /* Botões */
@@ -695,6 +791,7 @@
     flex-wrap: wrap;
   }
 
+  /* Estilo base dos botões */
   .btn {
     padding: 16px 32px;
     border: none;
@@ -710,6 +807,7 @@
     letter-spacing: 0.5px;
   }
 
+  /* Botão primário (azul) */
   .btn-primary {
     background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
     color: white;
@@ -721,6 +819,7 @@
     box-shadow: 0 8px 25px rgba(49, 130, 206, 0.5);
   }
 
+  /* Botão secundário (branco com borda azul) */
   .btn-secondary {
     background: white;
     color: #3182ce;
@@ -782,6 +881,17 @@
     right: 0;
     height: 4px;
     background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  }
+  /* Garantir centralização do texto do header também na versão de download */
+  .download-card .card-header { position: relative; }
+  .download-card .logo-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 240px;
+    pointer-events: none;
   }
 </style>
 </head>
@@ -879,6 +989,22 @@
           <option value="TB">TB</option>
         </select>
       </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nomeEmergencia">Nome para Emergência</label>
+          <input type="text" id="nomeEmergencia" placeholder="Ex: Maria Silva" maxlength="41">
+        </div>
+        <div class="form-group">
+          <label for="telefoneEmergencia">Telefone para Emergência</label>
+          <input type="text" id="telefoneEmergencia" placeholder="Ex: (11) 99999-9999" maxlength="20">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="observacoesEmergencia">Observações para Emergência</label>
+        <input type="text" id="observacoesEmergencia" placeholder="Ex: Alérgico a penicilina" maxlength="28">
+      </div>
       
       <div class="form-group">
         <label for="photoInput">Foto do Aluno</label>
@@ -904,7 +1030,7 @@
           <div class="logo-section">
             <img src="https://i.imgur.com/iOLe2dJ.jpeg" alt="Logo" class="logo-img" id="logoImg">
             <div class="logo-text">
-              <div class="org-name">Organização Educacional | RJ- FII</div>
+              <div class="org-name">Fundação / Procuradoria - FII</div>
               <div class="card-type">Carteirinha de Passeio Histórico</div>
             </div>
           </div>
@@ -941,8 +1067,10 @@
         
         <div class="card-footer">
           <span>Id: <span id="footerId">12345</span></span>
-          <span>Cada passo é uma descoberta.</span>
-  <img src="https://i.imgur.com/iOLe2dJ.jpeg" alt="Logo" class="footer-logo">
+         <img src="https://i.imgur.com/iOLe2dJ.jpeg" alt="Logo" class="footer-logo">
+        </div>
+        <div class="card-note">
+          <h6>Cada passo é uma descoberta.</h6>
         </div>
       </div>
 
@@ -958,11 +1086,13 @@
         
         <div class="emergency-section">
           <div class="emergency-title">Contato em caso de emergência</div>
-          <div class="emergency-row"><div class="label">Nome:</div><div class="line"></div></div>
-          <div class="emergency-row"><div class="label">Telefone:</div><div class="line"></div></div>
-          <div class="emergency-row"><div class="label">Observações:</div><div class="line"></div></div>
+          <div class="emergency-row"><div class="label">Nome:</div><span class="value" id="emergencyName"></span></div>
+          <div class="emergency-row"><div class="label">Telefone:</div><span class="value" id="emergencyPhone"></span></div>
         </div>
-        
+        <div class="card-footer">
+          <div class="emergency-row emergency-notes-row"><div class="label">Observações:</div><span class="value" id="emergencyNotes"></span></div>
+          <img src="https://i.imgur.com/wyUjLML.png" alt="Logo" class="footer-logo">
+        </div>
         
     </div>
 
@@ -983,7 +1113,7 @@
         <div class="logo-section">
           <img src="https://i.imgur.com/iOLe2dJ.jpeg" alt="Logo" class="logo-img" id="logoImgDownload">
           <div class="logo-text">
-            <div class="org-name">Organização Educacional | RJ - FII</div>
+            <div class="org-name">Fundação / Procuradoria - FII</div>
             <div class="card-type">Carteirinha de Passeio Histórico</div>
           </div>
         </div>
@@ -1020,9 +1150,11 @@
       
       <div class="card-footer">
         <span>Id: <span id="footerIdDownload">12345</span></span>
-        <span>Cada passo é uma descoberta.</span>
-  <img src="https://i.imgur.com/iOLe2dJ.jpeg" alt="Logo" class="footer-logo">
+       <img src="https://i.imgur.com/iOLe2dJ.jpeg" alt="Logo" class="footer-logo">
       </div>
+      <div class="card-note">
+          <h6>Cada passo é uma descoberta.</h6>
+        </div>
     </div>
     
     <!-- Verso -->
@@ -1037,14 +1169,14 @@
       
       <div class="emergency-section">
         <div class="emergency-title">Contato em caso de emergência</div>
-        <div class="emergency-row"><div class="label">Nome:</div><div class="line"></div></div>
-        <div class="emergency-row"><div class="label">Telefone:</div><div class="line"></div></div>
-        <div class="emergency-row"><div class="label">Observações:</div><div class="line"></div></div>
+        <div class="emergency-row"><div class="label">Nome:</div><span class="value" id="emergencyNameDownload"></span></div>
+        <div class="emergency-row"><div class="label">Telefone:</div><span class="value" id="emergencyPhoneDownload"></span></div>
       </div>
       
       <div class="card-footer">
+        <div class="emergency-row emergency-notes-row"><div class="label">Observações:</div><span class="value" id="emergencyNotesDownload"></span></div>
         <span></span>
-  <img src="https://i.imgur.com/iOLe2dJ.jpeg" alt="Logo" class="footer-logo">
+       <img src="https://i.imgur.com/wyUjLML.png" alt="Logo" class="footer-logo">
       </div>
     </div>
   </div>
@@ -1169,9 +1301,31 @@
     applyGroupColor(groupInfoEl, selectedColor);
     applyGroupColor(groupInfoDlEl, selectedColor);
     
+  // Emergência (truncar para exibição: Nome = 41, Observações = 28; manter tooltip com o texto completo)
+  const emergencyNameFull = form.nomeEmergencia.value || "";
+  const emergencyPhone = form.telefoneEmergencia.value || "";
+  const emergencyNotesFull = form.observacoesEmergencia.value || "";
+  const emergencyName = emergencyNameFull.length > 41 ? emergencyNameFull.slice(0, 40) + '…' : emergencyNameFull;
+  const emergencyNotes = emergencyNotesFull.length > 28 ? emergencyNotesFull.slice(0, 27) + '…' : emergencyNotesFull;
+
+  const emNameEl = document.getElementById("emergencyName");
+  const emPhoneEl = document.getElementById("emergencyPhone");
+  const emNotesEl = document.getElementById("emergencyNotes");
+  const emNameDlEl = document.getElementById("emergencyNameDownload");
+  const emPhoneDlEl = document.getElementById("emergencyPhoneDownload");
+  const emNotesDlEl = document.getElementById("emergencyNotesDownload");
+
+  if (emNameEl) { emNameEl.textContent = emergencyName; emNameEl.title = emergencyNameFull; }
+  if (emPhoneEl) { emPhoneEl.textContent = emergencyPhone; emPhoneEl.title = emergencyPhone; }
+  if (emNotesEl) { emNotesEl.textContent = emergencyNotes; emNotesEl.title = emergencyNotesFull; }
+  if (emNameDlEl) { emNameDlEl.textContent = emergencyName; emNameDlEl.title = emergencyNameFull; }
+  if (emPhoneDlEl) { emPhoneDlEl.textContent = emergencyPhone; emPhoneDlEl.title = emergencyPhone; }
+  if (emNotesDlEl) { emNotesDlEl.textContent = emergencyNotes; emNotesDlEl.title = emergencyNotesFull; }
+    
     // Condições
     updateConditions(form.condicoes.value);
   }
+  // Event listener para atualização em tempo real da carteirinha
   form.addEventListener("input", updateCard);
   
   // Upload de foto
@@ -1179,6 +1333,7 @@
   const photoPreview = document.getElementById("photoPreview");
   const photoUploadContent = document.getElementById("photoUploadContent");
   
+  // Event listener para upload de foto
   photoInput.addEventListener("change", function(e) {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -1202,14 +1357,18 @@
   // Função para carregar logo da pasta
   function loadLogo() {
     // URL padrão (imagem enviada pelo usuário)
-  const defaultLogo = "https://i.imgur.com/iOLe2dJ.jpeg";
+  const defaultLogo = "https://i.imgur.com/iOLe2dJ.jpeg"; // manter padrão original para headers
+  const backFooterLogoUrl = "https://i.imgur.com/wyUjLML.png"; // logo específico para o rodapé do verso
     // definir imediatamente a logo padrão
     const logoEl = document.getElementById("logoImg");
     const logoDlEl = document.getElementById("logoImgDownload");
     if (logoEl) logoEl.src = defaultLogo;
     if (logoDlEl) logoDlEl.src = defaultLogo;
-    const backLogo = document.querySelector(".download-card.card-back .footer-logo");
-    if (backLogo) backLogo.src = defaultLogo;
+    // Aplicar logo específico apenas ao rodapé do verso (preview e download)
+    const backLogoPreview = document.querySelector("#cardBack .footer-logo");
+    const backLogoDownload = document.querySelector(".download-card.card-back .footer-logo");
+    if (backLogoPreview) backLogoPreview.src = backFooterLogoUrl;
+    if (backLogoDownload) backLogoDownload.src = backFooterLogoUrl;
 
     // tentar carregar override local em ./logo/logo.png sem substituir se falhar
     const localPath = "./logo/logo.png";
@@ -1218,7 +1377,8 @@
       // só substituir se o arquivo local existir e carregar corretamente
       if (logoEl) logoEl.src = localPath;
       if (logoDlEl) logoDlEl.src = localPath;
-      if (backLogo) backLogo.src = localPath;
+      if (backLogoPreview) backLogoPreview.src = localPath;
+      if (backLogoDownload) backLogoDownload.src = localPath;
     };
     img.onerror = function() {
       // manter o default (Imgur)
@@ -1275,7 +1435,9 @@
     }
   }
   
+  // Função para baixar PDF
   // Validação do formulário
+  // Função para validar formulário
   function validateForm() {
     const requiredFields = ['nome', 'turma', 'matricula', 'dataPasseio', 'local'];
     let isValid = true;
@@ -1325,11 +1487,13 @@
   }
 
   // Helpers
+  // Função para truncar texto com reticências
   function truncateText(str, max) {
     if (!str) return "";
     return str.length > max ? str.slice(0, max - 1) + "…" : str;
   }
 
+  // Função para escapar caracteres HTML
   function escapeHtml(text) {
     return String(text).replace(/[&<>"']/g, function(m) {
       return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m];
