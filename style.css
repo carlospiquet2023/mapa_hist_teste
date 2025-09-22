@@ -978,6 +978,33 @@ body {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 }
 
+/* ===== Fix: garantir que botões na sidebar fiquem lado a lado ===== */
+/* Classe aplicada ao container que abriga os botões "Gerar Carteirinha" e "História Completa" */
+.btn-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important; /* permite quebrar em telas muito pequenas */
+}
+
+.btn-row .btn {
+    display: inline-flex !important;
+    flex: 0 0 auto !important; /* não cresce para preencher a linha */
+    width: auto !important;     /* anula width:100% de regras conflitantes */
+    min-width: 0 !important;
+}
+
+/* Pequeno ajuste para telas muito pequenas: se necessário, empilhar com espaço */
+@media (max-width: 360px) {
+    .btn-row {
+        gap: 8px !important;
+    }
+    .btn-row .btn {
+        flex: 1 1 auto !important; /* permite ocupar o espaço disponível e ficar legível */
+    }
+}
+
 /* ===== ESTILOS TEMÁTICOS PARA BOTÕES ESPECÍFICOS ===== */
 
 /* Botão Início - Tema Dourado Imperial */
