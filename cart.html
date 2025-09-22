@@ -970,9 +970,6 @@
       <button class="btn btn-primary" onclick="downloadPNG()">
         <span>💾</span> Baixar PNG
       </button>
-      <button class="btn btn-secondary" onclick="downloadPDF()">
-        <span>📄</span> Baixar PDF
-      </button>
     </div>
   </div>
 </div>
@@ -1054,7 +1051,6 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
 <script>
   // Atualização em tempo real
@@ -1279,69 +1275,6 @@
     }
   }
   
-  // Função para baixar PDF
-  async function downloadPDF() {
-    const downloadContainer = document.getElementById("downloadContainer");
-    const wrapper = downloadContainer.querySelector(".download-wrapper");
-    
-    updateCard();
-    
-    const originalDisplayStyle = downloadContainer.style.display;
-    const originalLeft = downloadContainer.style.left;
-    const originalTop = downloadContainer.style.top;
-    const originalOpacity = downloadContainer.style.opacity;
-
-    // tornar visível e posicionar dentro da viewport para captura correta
-    downloadContainer.style.display = 'block';
-    downloadContainer.style.left = '0';
-    downloadContainer.style.top = '0';
-    downloadContainer.style.opacity = '0';
-
-    // garantir que todas as imagens internas foram carregadas/decodificadas
-    await Promise.all(Array.from(downloadContainer.querySelectorAll('img')).map(img => {
-      if (img.complete) return Promise.resolve();
-      return new Promise(res => { img.onload = img.onerror = res; });
-    }));
-
-    try {
-      const canvas = await html2canvas(wrapper, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        useCORS: true
-      });
-      
-      const imgData = canvas.toDataURL("image/png");
-      
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: [88, 125] // Tamanho de página de passaporte
-      });
-      
-      // Calcular dimensões para caber na página
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = pageWidth - 4; // margem de 2mm de cada lado
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      // Adicionar frente
-      pdf.addImage(imgData, "PNG", 2, (pageHeight - imgHeight) / 2, imgWidth, imgHeight);
-      
-      // Adicionar verso em nova página
-      pdf.addPage([88, 125], "portrait");
-      pdf.addImage(imgData, "PNG", 2, (pageHeight - imgHeight) / 2, imgWidth, imgHeight);
-      
-      pdf.save(`carteirinha_${form.nome.value || "aluno"}.pdf`);
-    } finally {
-      // restaurar valores originais
-      downloadContainer.style.display = originalDisplayStyle;
-      downloadContainer.style.left = originalLeft;
-      downloadContainer.style.top = originalTop;
-      downloadContainer.style.opacity = originalOpacity;
-    }
-  }
-  
   // Validação do formulário
   function validateForm() {
     const requiredFields = ['nome', 'turma', 'matricula', 'dataPasseio', 'local'];
@@ -1371,12 +1304,6 @@
     }
   });
   
-  document.querySelector('.btn-secondary').addEventListener('click', function(e) {
-    if (validateForm()) {
-      downloadPDF();
-    }
-  });
-
   // Aplica cor ao elemento do badge, com tratamento para texto branco
   function applyGroupColor(el, color) {
     if (!el) return;
